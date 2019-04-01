@@ -11,6 +11,18 @@ class GlobalAnimator
     {
       perspectives[i] = _perspectives[i];
     }
+    
+    animation = new Animation();
+  }
+
+  void Set(TesseractPerspective[] _perspectives)
+  {
+    perspectives = new TesseractPerspective[_perspectives.length]; 
+
+    for (int i=0; i<_perspectives.length; i++)
+    {
+      perspectives[i] = _perspectives[i];
+    }
   }
 
   void runAnimation(String animationName)//pass in specific animation

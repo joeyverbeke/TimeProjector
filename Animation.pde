@@ -10,6 +10,9 @@ public class Animation
     case "rotatingBox":
       rotatingBox();
       break;
+    case "rotatingBoxes":
+      rotatingBoxes();
+      break;
     default:
       break;
     }
@@ -24,7 +27,23 @@ public class Animation
 
     rotateY(frameCount/_speed);
     box(10, 75, 75);
-
     rotateY(-(frameCount/_speed));
+  }
+
+  void rotatingBoxes()
+  {
+    rotateY(frameCount/60.0);
+
+    fill(255, 0, 255);
+    noStroke();
+    box(5, 75, 75);
+    
+    translate(5,0,0);
+    fill(0, 0, 255);
+    noStroke();
+    box(5, 75, 75);
+    translate(-5,0,0);
+    
+    rotateY(-frameCount/60.0);
   }
 }

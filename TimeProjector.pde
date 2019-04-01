@@ -1,5 +1,6 @@
 OPC opc;
 TesseractPerspective[] tesseractPerspectives;
+GlobalAnimator globalAnimator;
 
 int ledCount = 0;
 
@@ -29,6 +30,15 @@ void setup()
   _height = 300;
   
   tesseractPerspectives = new TesseractPerspective[6];
+  
+  tesseractPerspectives[0] = new TesseractPerspective(padding + _width/6, padding + _height/4, 0, 0, 0, 0);
+  tesseractPerspectives[1] = new TesseractPerspective(50 + _width/2, 25 + _height/4, 0, PI/2, 0, 0);
+  tesseractPerspectives[2] = new TesseractPerspective(width - _width/6 - padding, 25 + _height/4, 0, 0, PI/2, 0);
+  tesseractPerspectives[3] = new TesseractPerspective(padding + _width/6, height - padding - _height/4, 0, 0, PI, 0);
+  tesseractPerspectives[4] = new TesseractPerspective(50 + _width/2, height - 25 - _height/4, 0, -PI/2, 0, 0);
+  tesseractPerspectives[5] = new TesseractPerspective(width - _width/6 - padding, height - 25 - _height/4, 0, 0, 3*PI/2, 0);
+  
+  globalAnimator = new GlobalAnimator(tesseractPerspectives);
 }
 
 
@@ -43,9 +53,10 @@ void draw()
 
   setupTesseractFaces();
 
-  rotatingInsides(10, 75, 75, padding + _width/6, padding + _height/4, 0, 40); 
-  rotatingInsides(10, 75, 75, 50 + _width/2, 25 + _height/4, 0, 40); 
+  //rotatingInsides(10, 75, 75, padding + _width/6, padding + _height/4, 0, 40); 
+  //rotatingInsides(10, 75, 75, 50 + _width/2, 25 + _height/4, 0, 40); 
 
+  globalAnimator.runAnimation("rotatingBoxes");
 
   //drawTesseract();
   //lateralSweep();
@@ -88,9 +99,9 @@ void setupTesseractFaces()
   drawTesseract(25, 50, padding + _width/6, padding + _height/4, 0, 0, 0, 0);
   drawTesseract(25, 50, 50 + _width/2, 25 + _height/4, 0, PI/2, 0, 0);
   drawTesseract(25, 50, width - _width/6 - padding, 25 + _height/4, 0, 0, PI/2, 0);
-  drawTesseract(25, 50, padding + _width/6, height - padding - _height/4, 0, 0, 0, 0);
-  drawTesseract(25, 50, 50 + _width/2, height - 25 - _height/4, 0, 0, PI/4, 0);
-  drawTesseract(25, 50, width - _width/6 - padding, height - 25 - _height/4, 0, 0, PI/2, 0);
+  drawTesseract(25, 50, padding + _width/6, height - padding - _height/4, 0, 0, PI, 0);
+  drawTesseract(25, 50, 50 + _width/2, height - 25 - _height/4, 0, -PI/2, 0, 0);
+  drawTesseract(25, 50, width - _width/6 - padding, height - 25 - _height/4, 0, 0, 3*PI/2, 0);
 }
 
 void drawTesseract(int inside, int outside, int x, int y, int z, float xRot, float yRot, float zRot)
