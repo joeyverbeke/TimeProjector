@@ -7,7 +7,7 @@ int ledCount = 0;
 int faceWidth, faceHeight;
 int squareX, squareY;
 
-boolean reversedLateralSweep = false;
+//boolean reversedLateralSweep = false;
 
 int _width, _height;
 int padding = 25;
@@ -56,7 +56,7 @@ void draw()
   //rotatingInsides(10, 75, 75, padding + _width/6, padding + _height/4, 0, 40); 
   //rotatingInsides(10, 75, 75, 50 + _width/2, 25 + _height/4, 0, 40); 
 
-  globalAnimator.runAnimation("rotatingBoxes");
+  globalAnimator.runAnimation("lateralSweep");
 
   //drawTesseract();
   //lateralSweep();
@@ -79,6 +79,7 @@ void rotatingInsides( int x, int y, int z, int xPos, int yPos, int zPos, float s
   translate(-xPos, -yPos, -zPos);
 }
 
+/*
 void lateralSweep()
 {
   if (frameCount%400==0)
@@ -92,7 +93,7 @@ void lateralSweep()
     translate(200-(frameCount%400), 0, 0);
   box(10, 400, 400);
 }
-
+*/
 
 void setupTesseractFaces()
 {
@@ -107,7 +108,7 @@ void setupTesseractFaces()
 void drawTesseract(int inside, int outside, int x, int y, int z, float xRot, float yRot, float zRot)
 {
 
-  println(x + " " + y + " " + z);
+  //println(x + " " + y + " " + z);
   noFill();
   stroke(0);
   translate(x, y, z);
