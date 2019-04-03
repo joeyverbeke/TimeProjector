@@ -3,7 +3,7 @@ public class Animation
 {
   boolean reversedLateralSweep;
   int sweepTimer;
-  
+
   Animation() {
     reversedLateralSweep = false;
     sweepTimer = 0;
@@ -30,27 +30,44 @@ public class Animation
 
   void lateralSweep()
   {
-    if (frameCount%100==0 && sweepTimer != millis())
+    float speed = 250;
+    
+    if (frameCount%speed==0 && sweepTimer != millis())
     {
       reversedLateralSweep = !reversedLateralSweep;
       sweepTimer = millis();
     }
 
-    fill(255,0,0);
-    noStroke();
+
     if (!reversedLateralSweep)
     {
-      translate(-50+(frameCount%100), 0, 0);
-      box(10, 100, 100);
-      translate(-(-50+(frameCount%100)), 0, 0);
-    }
-    else
+      translate(-50+(frameCount%speed / (speed/100)), 0, 0);
+      
+      fill(255, 255, 0);
+      noStroke();
+      box(5, 100, 100);
+      
+      translate(5,0,0);
+      fill(255, 75, 75);
+      box(5, 100, 100);
+      translate(-5,0,0);
+      
+      translate(-(-50+(frameCount%speed / (speed/100))), 0, 0);
+    } else
     {
-      translate(50-(frameCount%100), 0, 0);
-      box(10, 100, 100);
-      translate(-(50-(frameCount%100)), 0, 0);
+      translate(50-(frameCount%speed / (speed/100)), 0, 0);
+      
+      fill(255, 255, 75);
+      noStroke();
+      box(5, 100, 100);
+      
+      translate(5,0,0);
+      fill(255, 75, 75);
+      box(5, 100, 100);
+      translate(-5,0,0);
+      
+      translate(-(50-(frameCount%speed / (speed/100))), 0, 0);
     }
-    
   }
 
 
@@ -70,12 +87,12 @@ public class Animation
   {
     rotateY(frameCount/60.0);
 
-    fill(255, 0, 255);
+    fill(255, 75, 255);
     noStroke();
     box(5, 75, 75);
 
     translate(5, 0, 0);
-    fill(0, 0, 255);
+    fill(75, 255, 255);
     noStroke();
     box(5, 75, 75);
     translate(-5, 0, 0);

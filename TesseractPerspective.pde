@@ -36,9 +36,9 @@ public class TesseractPerspective {
 
   void resetPerspective()
   {
-    rotateX(-xRot);
-    rotateY(-yRot);
     rotateZ(-zRot);
+    rotateY(-yRot);
+    rotateX(-xRot);
     translate(-x, -y, -z);
   }
 }

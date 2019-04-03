@@ -1,6 +1,7 @@
 OPC opc;
 TesseractPerspective[] tesseractPerspectives;
 GlobalAnimator globalAnimator;
+TimeProjectorForm timeProjectorForm;
 
 int ledCount = 0;
 
@@ -28,17 +29,19 @@ void setup()
   faceHeight = height/8;
   _width = 600;
   _height = 300;
-  
+
   tesseractPerspectives = new TesseractPerspective[6];
-  
-  tesseractPerspectives[0] = new TesseractPerspective(padding + _width/6, padding + _height/4, 0, 0, 0, 0);
+
+  tesseractPerspectives[0] = new TesseractPerspective(padding + _width/6, padding + _height/4, 0, 0, 0, 3*PI/2);
   tesseractPerspectives[1] = new TesseractPerspective(50 + _width/2, 25 + _height/4, 0, PI/2, 0, 0);
   tesseractPerspectives[2] = new TesseractPerspective(width - _width/6 - padding, 25 + _height/4, 0, 0, PI/2, 0);
   tesseractPerspectives[3] = new TesseractPerspective(padding + _width/6, height - padding - _height/4, 0, 0, PI, 0);
   tesseractPerspectives[4] = new TesseractPerspective(50 + _width/2, height - 25 - _height/4, 0, -PI/2, 0, 0);
   tesseractPerspectives[5] = new TesseractPerspective(width - _width/6 - padding, height - 25 - _height/4, 0, 0, 3*PI/2, 0);
-  
+
   globalAnimator = new GlobalAnimator(tesseractPerspectives);
+
+  timeProjectorForm = new TimeProjectorForm();
 }
 
 
@@ -46,54 +49,23 @@ void draw()
 {
   background(255);
   //camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
-  //camera(sin(frameCount/200.0)*200 + 200, height/2, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
+  //camera(sin(frameCount/3.0)*20 + 400, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
   ortho();
 
-  drawFaces();
+  //setupTesseractFaces();
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    
+    tesseractPerspectives[i].setupPerspective();
+    //rotateX(frameCount/200.0);
+    timeProjectorForm.connectAllPoints();
+    //rotateX(-frameCount/200.0);
+    tesseractPerspectives[i].resetPerspective();
+  }
 
-  setupTesseractFaces();
-
-  //rotatingInsides(10, 75, 75, padding + _width/6, padding + _height/4, 0, 40); 
-  //rotatingInsides(10, 75, 75, 50 + _width/2, 25 + _height/4, 0, 40); 
-
-  globalAnimator.runAnimation("lateralSweep");
-
-  //drawTesseract();
-  //lateralSweep();
-  //rotatingInsides(20);
+  //globalAnimator.runAnimation("lateralSweep");
+  //globalAnimator.runAnimation("rotatingBoxes");
 }
-
-void rotatingInsides( int x, int y, int z, int xPos, int yPos, int zPos, float speed)
-{
-  float _speed = 100.0 - speed;
-
-  translate(xPos, yPos, zPos);
-
-  fill(255, 0, 255);
-  stroke(0, 255, 255);
-
-  rotateY(frameCount/_speed);
-  box(x, y, z);
-  
-  rotateY(-(frameCount/_speed));
-  translate(-xPos, -yPos, -zPos);
-}
-
-/*
-void lateralSweep()
-{
-  if (frameCount%400==0)
-    reversedLateralSweep = !reversedLateralSweep;
-
-  fill(255);
-  noStroke();
-  if (!reversedLateralSweep)
-    translate(-200+(frameCount%400), 0, 0);
-  else
-    translate(200-(frameCount%400), 0, 0);
-  box(10, 400, 400);
-}
-*/
 
 void setupTesseractFaces()
 {
@@ -104,6 +76,7 @@ void setupTesseractFaces()
   drawTesseract(25, 50, 50 + _width/2, height - 25 - _height/4, 0, -PI/2, 0, 0);
   drawTesseract(25, 50, width - _width/6 - padding, height - 25 - _height/4, 0, 0, 3*PI/2, 0);
 }
+
 
 void drawTesseract(int inside, int outside, int x, int y, int z, float xRot, float yRot, float zRot)
 {
