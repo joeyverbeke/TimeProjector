@@ -19,7 +19,6 @@ void setup()
 {
   size(700, 400, P3D);
 
-
   // Connect to the local instance of fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
 
@@ -32,12 +31,12 @@ void setup()
 
   tesseractPerspectives = new TesseractPerspective[6];
 
-  tesseractPerspectives[0] = new TesseractPerspective(padding + _width/6, padding + _height/4, 0, 0, 0, 3*PI/2);
+  tesseractPerspectives[0] = new TesseractPerspective(padding + _width/6, padding + _height/4, 0, 0, 0, 0);
   tesseractPerspectives[1] = new TesseractPerspective(50 + _width/2, 25 + _height/4, 0, PI/2, 0, 0);
-  tesseractPerspectives[2] = new TesseractPerspective(width - _width/6 - padding, 25 + _height/4, 0, 0, PI/2, 0);
-  tesseractPerspectives[3] = new TesseractPerspective(padding + _width/6, height - padding - _height/4, 0, 0, PI, 0);
+  tesseractPerspectives[2] = new TesseractPerspective(width - _width/6 - padding, 25 + _height/4, 0, 0, 0, PI/2);
+  tesseractPerspectives[3] = new TesseractPerspective(padding + _width/6, height - padding - _height/4, 0, 0, 0, PI);
   tesseractPerspectives[4] = new TesseractPerspective(50 + _width/2, height - 25 - _height/4, 0, -PI/2, 0, 0);
-  tesseractPerspectives[5] = new TesseractPerspective(width - _width/6 - padding, height - 25 - _height/4, 0, 0, 3*PI/2, 0);
+  tesseractPerspectives[5] = new TesseractPerspective(width - _width/6 - padding, height - 25 - _height/4, 0, 0, 0, 3*PI/2);
 
   globalAnimator = new GlobalAnimator(tesseractPerspectives);
 
@@ -47,24 +46,89 @@ void setup()
 
 void draw()
 {
-  background(255);
+  background(0);
   //camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
-  //camera(sin(frameCount/3.0)*20 + 400, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
+  camera(sin(frameCount/40.0)*200 + 400, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
   ortho();
 
   //setupTesseractFaces();
+
+  //setupTimeProjectorFormFaces();
+
+  drawVertex(1); //outside_bottom_back_left
+  drawVertex(2); //outside_bottom_back_right
+  drawVertex(0); //outside_bottom_front_right
+  drawVertex(7); //outside_bottom_front_left
+
+  drawVertex(14); //outside_top_back_left
+  drawVertex(13); //outside_top_back_right
+  drawVertex(12); //outside_top_front_right
+  drawVertex(15); //outside_top_front_left
+
+  drawVertex(6); //inside_bottom_back_left 
+  drawVertex(5); //inside_bottom_back_right
+  drawVertex(4); //inside_bottom_front_right  
+  drawVertex(3); //inside_bottom_front_left
+
+  drawVertex(11); //inside_top_back_left
+  drawVertex(10); //inside_top_back_right
+  drawVertex(8); //inside_top_front_right 
+  drawVertex(9); //inside_top_front_left
+
+  drawEdges(0, 1, 3, 4, 8);
+  drawEdges(1, 0, 2, 5, 9);
+  drawEdges(2, 1, 3, 6, 10);
+  drawEdges(3, 0, 2, 7, 11);
+  
+  drawEdges(4, 5, 7, 0, 12);
+  drawEdges(5, 4, 6, 1, 13);
+  drawEdges(6, 5, 7, 2, 14);
+  drawEdges(7, 4, 6, 3, 15);
+  
+  drawEdges(8, 9, 11, 12, 0);
+  drawEdges(9, 8, 10, 13, 1);
+  drawEdges(10, 9, 11, 14, 2);
+  drawEdges(11, 8, 10, 15, 3);
+  
+  drawEdges(12, 13, 15, 8, 4);
+  drawEdges(13, 12, 14, 9, 5);
+  drawEdges(14, 13, 15, 10, 6);
+  drawEdges(15, 12, 14, 11, 7);
+
+  //globalAnimator.runAnimation("growingBox");
+}
+
+void drawEdges(int main, int one, int two, int three, int four)
+{
+  stroke(255);
+  strokeWeight(2);
   for (int i=0; i<tesseractPerspectives.length; i++)
   {
-    
     tesseractPerspectives[i].setupPerspective();
-    //rotateX(frameCount/200.0);
-    timeProjectorForm.connectAllPoints();
-    //rotateX(-frameCount/200.0);
+    timeProjectorForm.connectVertexToFour(main, one, two, three, four);
     tesseractPerspectives[i].resetPerspective();
   }
+}
 
-  //globalAnimator.runAnimation("lateralSweep");
-  //globalAnimator.runAnimation("rotatingBoxes");
+void drawVertex(int vertexNum)
+{
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+    timeProjectorForm.drawVertex(vertexNum);
+    tesseractPerspectives[i].resetPerspective();
+  }
+}
+
+void setupTimeProjectorFormFaces()
+{
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+    //timeProjectorForm.connectAllPoints();
+    timeProjectorForm.drawVertices();
+    tesseractPerspectives[i].resetPerspective();
+  }
 }
 
 void setupTesseractFaces()

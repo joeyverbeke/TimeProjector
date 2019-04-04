@@ -27,8 +27,12 @@ public class TesseractPerspective {
   }
 
   void setupPerspective()
-  {
+  { 
     translate(x, y, z);
+
+    rotateX(3*PI/2.0);
+    rotateY(PI);
+
     rotateX(xRot);
     rotateY(yRot);
     rotateZ(zRot);
@@ -39,6 +43,10 @@ public class TesseractPerspective {
     rotateZ(-zRot);
     rotateY(-yRot);
     rotateX(-xRot);
+
+    rotateY(-PI);
+    rotateX(-3*PI/2.0);
+
     translate(-x, -y, -z);
   }
 }
