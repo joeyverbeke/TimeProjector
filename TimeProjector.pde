@@ -13,7 +13,8 @@ int squareX, squareY;
 int _width, _height;
 int padding = 25;
 
-//show every angle
+//test variables
+int currentVertexIndex = 0;
 
 void setup()
 {
@@ -55,6 +56,7 @@ void draw()
 
   //setupTimeProjectorFormFaces();
 
+/*
   drawVertex(1); //outside_bottom_back_left
   drawVertex(2); //outside_bottom_back_right
   drawVertex(0); //outside_bottom_front_right
@@ -74,6 +76,7 @@ void draw()
   drawVertex(10); //inside_top_back_right
   drawVertex(8); //inside_top_front_right 
   drawVertex(9); //inside_top_front_left
+*/
 
   drawEdges(0, 1, 3, 4, 8);
   drawEdges(1, 0, 2, 5, 9);
@@ -96,6 +99,13 @@ void draw()
   drawEdges(15, 12, 14, 11, 7);
 
   //globalAnimator.runAnimation("growingBox");
+  
+  if(frameCount%100 == 0)
+  {
+     currentVertexIndex = timeProjectorForm.Vertices.get(currentVertexIndex).getRandomConnectingVertex().index;
+     println(currentVertexIndex);
+  }
+  drawVertex(currentVertexIndex);
 }
 
 void drawEdges(int main, int one, int two, int three, int four)
