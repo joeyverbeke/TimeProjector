@@ -35,8 +35,6 @@ public class Vertex
   {
     int randVert = (int)random(4);
 
-    println("randVert: " + randVert);
-
     switch(randVert)
     {
     case 0:

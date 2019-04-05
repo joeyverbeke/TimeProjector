@@ -40,6 +40,11 @@ public class Animation
     }
   }
 
+  void snake()
+  {
+      
+  }
+
   void lateralSweep()
   {
     float speed = 250;

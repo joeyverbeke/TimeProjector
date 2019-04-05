@@ -14,7 +14,11 @@ int _width, _height;
 int padding = 25;
 
 //test variables
+int lastVertexIndex = 0;
 int currentVertexIndex = 0;
+int speed = 50;
+
+ArrayList<PVector> snake;
 
 void setup()
 {
@@ -42,70 +46,133 @@ void setup()
   globalAnimator = new GlobalAnimator(tesseractPerspectives);
 
   timeProjectorForm = new TimeProjectorForm();
+
+  snake = new ArrayList<PVector>();
 }
 
 
 void draw()
 {
+  if(frameCount%25==0)
+    println("FrameRate:" + frameRate);
+  
   background(0);
   //camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
-  camera(sin(frameCount/40.0)*200 + 400, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
+  camera(sin(frameCount/80.0)*150 + 350, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
   ortho();
 
   //setupTesseractFaces();
 
   //setupTimeProjectorFormFaces();
 
-/*
+  /*
   drawVertex(1); //outside_bottom_back_left
-  drawVertex(2); //outside_bottom_back_right
-  drawVertex(0); //outside_bottom_front_right
-  drawVertex(7); //outside_bottom_front_left
-
-  drawVertex(14); //outside_top_back_left
-  drawVertex(13); //outside_top_back_right
-  drawVertex(12); //outside_top_front_right
-  drawVertex(15); //outside_top_front_left
-
-  drawVertex(6); //inside_bottom_back_left 
-  drawVertex(5); //inside_bottom_back_right
-  drawVertex(4); //inside_bottom_front_right  
-  drawVertex(3); //inside_bottom_front_left
-
-  drawVertex(11); //inside_top_back_left
-  drawVertex(10); //inside_top_back_right
-  drawVertex(8); //inside_top_front_right 
-  drawVertex(9); //inside_top_front_left
-*/
+   drawVertex(2); //outside_bottom_back_right
+   drawVertex(0); //outside_bottom_front_right
+   drawVertex(7); //outside_bottom_front_left
+   
+   drawVertex(14); //outside_top_back_left
+   drawVertex(13); //outside_top_back_right
+   drawVertex(12); //outside_top_front_right
+   drawVertex(15); //outside_top_front_left
+   
+   drawVertex(6); //inside_bottom_back_left 
+   drawVertex(5); //inside_bottom_back_right
+   drawVertex(4); //inside_bottom_front_right  
+   drawVertex(3); //inside_bottom_front_left
+   
+   drawVertex(11); //inside_top_back_left
+   drawVertex(10); //inside_top_back_right
+   drawVertex(8); //inside_top_front_right 
+   drawVertex(9); //inside_top_front_left
+   */
 
   drawEdges(0, 1, 3, 4, 8);
   drawEdges(1, 0, 2, 5, 9);
   drawEdges(2, 1, 3, 6, 10);
   drawEdges(3, 0, 2, 7, 11);
-  
+
   drawEdges(4, 5, 7, 0, 12);
   drawEdges(5, 4, 6, 1, 13);
   drawEdges(6, 5, 7, 2, 14);
   drawEdges(7, 4, 6, 3, 15);
-  
+
   drawEdges(8, 9, 11, 12, 0);
   drawEdges(9, 8, 10, 13, 1);
   drawEdges(10, 9, 11, 14, 2);
   drawEdges(11, 8, 10, 15, 3);
-  
+
   drawEdges(12, 13, 15, 8, 4);
   drawEdges(13, 12, 14, 9, 5);
   drawEdges(14, 13, 15, 10, 6);
   drawEdges(15, 12, 14, 11, 7);
 
   //globalAnimator.runAnimation("growingBox");
-  
-  if(frameCount%100 == 0)
+
+  if (frameCount%speed == 0)
   {
-     currentVertexIndex = timeProjectorForm.Vertices.get(currentVertexIndex).getRandomConnectingVertex().index;
-     println(currentVertexIndex);
+    lastVertexIndex = currentVertexIndex;
+    currentVertexIndex = timeProjectorForm.Vertices.get(currentVertexIndex).getRandomConnectingVertex().index;
   }
-  drawVertex(currentVertexIndex);
+  //drawVertex(currentVertexIndex);
+
+  //drawMovingVertex();
+
+  addPointToSnake(PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed));
+  drawSnake();
+  
+}
+
+void addPointToSnake(PVector point)
+{
+  //move out of function
+  int maxLength = 255;
+
+  snake.add(point);
+  if (snake.size() > maxLength)
+  {
+    snake.remove(0);
+  }
+}
+
+void drawSnake()
+{
+  noStroke();
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+
+    for (int j=0; j<snake.size(); j++)
+    {
+      //fill((j%255), 255-(j%255), (j%255));
+      fill(255);
+      
+      pushMatrix();
+      translate(snake.get(j).x, snake.get(j).y, snake.get(j).z);
+      box(5);
+      popMatrix();
+    }
+
+    tesseractPerspectives[i].resetPerspective();
+  }
+}
+
+void drawMovingVertex()
+{
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+
+    noStroke();
+    fill(255, 0, 0);
+    pushMatrix();
+    PVector movingVertexPos = PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed);
+    translate(movingVertexPos.x, movingVertexPos.y, movingVertexPos.z);
+    box(10);
+    popMatrix();
+
+    tesseractPerspectives[i].resetPerspective();
+  }
 }
 
 void drawEdges(int main, int one, int two, int three, int four)
