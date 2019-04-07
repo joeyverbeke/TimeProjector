@@ -5,14 +5,29 @@ public class Animation
   int sweepTimer;
   float growingBoxSize;
 
-  //temp
+  //snake
+  int snakeSpeed;
+  int lastVertexIndex;
+  int currentVertexIndex;
+  ArrayList<PVector> snakePoints;
+  int onlyRunOnceCounter;
+
+  //temp for box grow speeds
   float xSpeed = 30.0;
   float zSpeed = 30.0;
+
 
   Animation() {
     reversedLateralSweep = false;
     sweepTimer = 0;
     growingBoxSize = 0.01;
+
+    //snake
+    snakeSpeed = 50;
+    lastVertexIndex = 0;
+    currentVertexIndex = 0;
+    snakePoints = new ArrayList<PVector>();
+    onlyRunOnceCounter = 0;
   }
 
   //add in way to set function parameters, e.g. speed
@@ -35,14 +50,75 @@ public class Animation
     case "growingBox":
       growingBox();
       break;
+    case "snake":
+      snake();
+      break;
     default:
       break;
     }
   }
 
+
+  ////TODO: not working correctly, snake jumping to disconnected point
   void snake()
   {
-      
+    onlyRunOnceCounter++;
+
+    if (onlyRunOnceCounter % 5 == 0)
+    {
+      if (frameCount%snakeSpeed == 0)
+      {
+        int tempIndex;
+        do
+        {
+          tempIndex = timeProjectorForm.Vertices.get(currentVertexIndex).getRandomConnectingVertex().index;
+        }
+        while (tempIndex == lastVertexIndex);
+
+        lastVertexIndex = currentVertexIndex;
+        currentVertexIndex = tempIndex;
+      }
+
+      //drawMovingVertex();
+
+      addPointToSnake(PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%snakeSpeed/(float)snakeSpeed));
+    }
+    
+    drawSnake();
+  }
+
+  void addPointToSnake(PVector point)
+  {
+    //move out of function
+    int maxLength = 255;
+
+    snakePoints.add(point);
+    if (snakePoints.size() > maxLength)
+    {
+      snakePoints.remove(0);
+    }
+  }
+
+  void drawSnake()
+  {
+    noStroke();
+    //    for (int i=0; i<tesseractPerspectives.length; i++)
+    //    {
+    //      tesseractPerspectives[i].setupPerspective();
+
+    for (int j=0; j<snakePoints.size(); j++)
+    {
+      //fill((j%255), 255-(j%255), (j%255));
+      fill(255);
+
+      pushMatrix();
+      translate(snakePoints.get(j).x, snakePoints.get(j).y, snakePoints.get(j).z);
+      box(5);
+      popMatrix();
+    }
+
+    //      tesseractPerspectives[i].resetPerspective();
+    //    }
   }
 
   void lateralSweep()

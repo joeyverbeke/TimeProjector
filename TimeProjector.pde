@@ -1,7 +1,7 @@
 OPC opc;
 TesseractPerspective[] tesseractPerspectives;
 GlobalAnimator globalAnimator;
-TimeProjectorForm timeProjectorForm;
+static TimeProjectorForm timeProjectorForm;
 
 int ledCount = 0;
 
@@ -23,6 +23,7 @@ ArrayList<PVector> snake;
 void setup()
 {
   size(700, 400, P3D);
+  ortho();
 
   // Connect to the local instance of fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
@@ -48,144 +49,59 @@ void setup()
   timeProjectorForm = new TimeProjectorForm();
 
   snake = new ArrayList<PVector>();
+
+
+
+  drawAllTimeProjectorForms();
+  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 27, 0);
+  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 28, 0);
+  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 27, 0);
+  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 27, 0);
 }
 
 
 void draw()
 {
-  if(frameCount%25==0)
+  if (frameCount%25==0)
     println("FrameRate:" + frameRate);
-  
-  background(0);
+
+  println("mouseX:" + mouseX + " mouseY:" + mouseY);
+
+  background(255);
   //camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
-  camera(sin(frameCount/80.0)*150 + 350, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
-  ortho();
+  //camera(sin(frameCount/80.0)*150 + 350, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
 
-  //setupTesseractFaces();
 
-  //setupTimeProjectorFormFaces();
-
-  /*
-  drawVertex(1); //outside_bottom_back_left
-   drawVertex(2); //outside_bottom_back_right
-   drawVertex(0); //outside_bottom_front_right
-   drawVertex(7); //outside_bottom_front_left
-   
-   drawVertex(14); //outside_top_back_left
-   drawVertex(13); //outside_top_back_right
-   drawVertex(12); //outside_top_front_right
-   drawVertex(15); //outside_top_front_left
-   
-   drawVertex(6); //inside_bottom_back_left 
-   drawVertex(5); //inside_bottom_back_right
-   drawVertex(4); //inside_bottom_front_right  
-   drawVertex(3); //inside_bottom_front_left
-   
-   drawVertex(11); //inside_top_back_left
-   drawVertex(10); //inside_top_back_right
-   drawVertex(8); //inside_top_front_right 
-   drawVertex(9); //inside_top_front_left
-   */
-
-  drawEdges(0, 1, 3, 4, 8);
-  drawEdges(1, 0, 2, 5, 9);
-  drawEdges(2, 1, 3, 6, 10);
-  drawEdges(3, 0, 2, 7, 11);
-
-  drawEdges(4, 5, 7, 0, 12);
-  drawEdges(5, 4, 6, 1, 13);
-  drawEdges(6, 5, 7, 2, 14);
-  drawEdges(7, 4, 6, 3, 15);
-
-  drawEdges(8, 9, 11, 12, 0);
-  drawEdges(9, 8, 10, 13, 1);
-  drawEdges(10, 9, 11, 14, 2);
-  drawEdges(11, 8, 10, 15, 3);
-
-  drawEdges(12, 13, 15, 8, 4);
-  drawEdges(13, 12, 14, 9, 5);
-  drawEdges(14, 13, 15, 10, 6);
-  drawEdges(15, 12, 14, 11, 7);
 
   //globalAnimator.runAnimation("growingBox");
 
-  if (frameCount%speed == 0)
-  {
-    lastVertexIndex = currentVertexIndex;
-    currentVertexIndex = timeProjectorForm.Vertices.get(currentVertexIndex).getRandomConnectingVertex().index;
-  }
-  //drawVertex(currentVertexIndex);
+  //snakeAnimation();
 
-  //drawMovingVertex();
+  //globalAnimator.runAnimation("snake");
 
-  addPointToSnake(PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed));
-  drawSnake();
-  
+  drawVertex(10);
+  drawVertex(11);
+  drawVertex(15);
+  drawVertex(14);
+
+  //ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 5, 0);
+
+  //drawAllTimeProjectorForms();
 }
 
-void addPointToSnake(PVector point)
-{
-  //move out of function
-  int maxLength = 255;
 
-  snake.add(point);
-  if (snake.size() > maxLength)
-  {
-    snake.remove(0);
-  }
-}
 
-void drawSnake()
-{
-  noStroke();
-  for (int i=0; i<tesseractPerspectives.length; i++)
-  {
-    tesseractPerspectives[i].setupPerspective();
 
-    for (int j=0; j<snake.size(); j++)
-    {
-      //fill((j%255), 255-(j%255), (j%255));
-      fill(255);
-      
-      pushMatrix();
-      translate(snake.get(j).x, snake.get(j).y, snake.get(j).z);
-      box(5);
-      popMatrix();
-    }
-
-    tesseractPerspectives[i].resetPerspective();
-  }
-}
-
-void drawMovingVertex()
+void drawAllTimeProjectorForms()
 {
   for (int i=0; i<tesseractPerspectives.length; i++)
   {
     tesseractPerspectives[i].setupPerspective();
-
-    noStroke();
-    fill(255, 0, 0);
-    pushMatrix();
-    PVector movingVertexPos = PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed);
-    translate(movingVertexPos.x, movingVertexPos.y, movingVertexPos.z);
-    box(10);
-    popMatrix();
-
+    timeProjectorForm.drawEdges();
     tesseractPerspectives[i].resetPerspective();
   }
 }
 
-void drawEdges(int main, int one, int two, int three, int four)
-{
-  stroke(255);
-  strokeWeight(2);
-  for (int i=0; i<tesseractPerspectives.length; i++)
-  {
-    tesseractPerspectives[i].setupPerspective();
-    timeProjectorForm.connectVertexToFour(main, one, two, three, four);
-    tesseractPerspectives[i].resetPerspective();
-  }
-}
 
 void drawVertex(int vertexNum)
 {
@@ -218,97 +134,6 @@ void setupTesseractFaces()
   drawTesseract(25, 50, width - _width/6 - padding, height - 25 - _height/4, 0, 0, 3*PI/2, 0);
 }
 
-
-void drawTesseract(int inside, int outside, int x, int y, int z, float xRot, float yRot, float zRot)
-{
-
-  //println(x + " " + y + " " + z);
-  noFill();
-  stroke(0);
-  translate(x, y, z);
-  rotateX(xRot);
-  rotateY(yRot);
-  rotateZ(zRot);
-
-  beginShape();
-
-  //inside top
-  vertex(-inside, -inside, -inside);
-  vertex(-inside, -inside, inside);
-  vertex(inside, -inside, inside);
-  vertex(inside, -inside, -inside);
-  vertex(-inside, -inside, -inside);
-
-  //inside bottom
-  vertex(-inside, inside, -inside);
-
-  vertex(-inside, inside, inside);
-  vertex(-inside, -inside, inside);
-  vertex(-inside, inside, inside);
-
-  vertex(inside, inside, inside);
-  vertex(inside, -inside, inside);
-  vertex(inside, inside, inside);
-
-  vertex(inside, inside, -inside);
-  vertex(inside, -inside, -inside);
-  vertex(inside, inside, -inside);
-
-  vertex(-inside, inside, -inside);
-
-  //outside bottom
-  vertex(-outside, outside, -outside);
-
-  vertex(-outside, outside, outside);
-  vertex(-inside, inside, inside);
-  vertex(-outside, outside, outside);
-
-  vertex(outside, outside, outside);
-  vertex(inside, inside, inside);
-  vertex(outside, outside, outside);
-
-  vertex(outside, outside, -outside);
-  vertex(inside, inside, -inside);
-  vertex(outside, outside, -outside);
-
-  vertex(-outside, outside, -outside);
-  vertex(-inside, inside, -inside);
-  vertex(-outside, outside, -outside);
-
-  //outside top
-  vertex(-outside, -outside, -outside);
-
-  vertex(-outside, -outside, outside);
-  vertex(-inside, -inside, inside);
-  vertex(-outside, -outside, outside);
-  vertex(-outside, outside, outside);
-  vertex(-outside, -outside, outside);
-
-  vertex(outside, -outside, outside);
-  vertex(inside, -inside, inside);
-  vertex(outside, -outside, outside);
-  vertex(outside, outside, outside);
-  vertex(outside, -outside, outside);
-
-  vertex(outside, -outside, -outside);
-  vertex(inside, -inside, -inside);
-  vertex(outside, -outside, -outside);
-  vertex(outside, outside, -outside);
-  vertex(outside, -outside, -outside);
-
-  vertex(-outside, -outside, -outside);
-  vertex(-inside, -inside, -inside);
-  vertex(-outside, -outside, -outside);
-  vertex(-outside, outside, -outside);
-  vertex(-outside, -outside, -outside);
-
-  endShape();
-
-  rotateX(-xRot);
-  rotateY(-yRot);
-  rotateZ(-zRot);
-  translate(-x, -y, -z);
-}
 
 void cyclingSquare(int speed)
 {
@@ -343,6 +168,29 @@ void drawFaces()
 
 //-------------------//
 
+void ledStrip(PVector start, PVector end, int numLeds, int perspectiveNum)
+{
+  float stepValue = (float)1/numLeds;
+  PVector pixelVector;
+
+  tesseractPerspectives[perspectiveNum].setupPerspective();
+
+  for (float i=0; i <= 1; i += stepValue)
+  {
+    pixelVector = PVector.lerp(start, end, i);
+
+    fill(255, 0, 255);
+    pushMatrix();
+    translate(pixelVector.x, pixelVector.y, pixelVector.z);
+    pixelVector.set(0, 0, 0);
+    opc.led(ledCount, (int)screenX(pixelVector.x, pixelVector.y, pixelVector.z), (int)screenY(pixelVector.x, pixelVector.y, pixelVector.z));
+    popMatrix();
+
+    ledCount++;
+  }
+
+  tesseractPerspectives[perspectiveNum].resetPerspective();
+}
 
 void ledSquare(int x, int y, int squareWidth, int squareHeight)
 {
@@ -597,4 +445,170 @@ void drawPixels()
    println("ledCount:" + ledCount);
    
    */
+}
+
+void snakeAnimation()
+{
+  if (frameCount%speed == 0)
+  {
+    int tempIndex;
+    do
+    {
+      tempIndex = timeProjectorForm.Vertices.get(currentVertexIndex).getRandomConnectingVertex().index;
+    }
+    while (tempIndex == lastVertexIndex);
+
+    lastVertexIndex = currentVertexIndex;
+    currentVertexIndex = tempIndex;
+  }
+
+  //drawMovingVertex();
+
+  addPointToSnake(PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed));
+  drawSnake();
+}
+
+void addPointToSnake(PVector point)
+{
+  //move out of function
+  int maxLength = 255;
+
+  snake.add(point);
+  if (snake.size() > maxLength)
+  {
+    snake.remove(0);
+  }
+}
+
+void drawSnake()
+{
+  noStroke();
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+
+    for (int j=0; j<snake.size(); j++)
+    {
+      //fill((j%255), 255-(j%255), (j%255));
+      fill(255);
+
+      pushMatrix();
+      translate(snake.get(j).x, snake.get(j).y, snake.get(j).z);
+      box(5);
+      popMatrix();
+    }
+
+    tesseractPerspectives[i].resetPerspective();
+  }
+}
+
+
+void drawMovingVertex()
+{
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+
+    noStroke();
+    fill(255, 0, 0);
+    pushMatrix();
+    PVector movingVertexPos = PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed);
+    translate(movingVertexPos.x, movingVertexPos.y, movingVertexPos.z);
+    box(10);
+    popMatrix();
+
+    tesseractPerspectives[i].resetPerspective();
+  }
+}
+
+
+void drawTesseract(int inside, int outside, int x, int y, int z, float xRot, float yRot, float zRot)
+{
+
+  //println(x + " " + y + " " + z);
+  noFill();
+  stroke(0);
+  translate(x, y, z);
+  rotateX(xRot);
+  rotateY(yRot);
+  rotateZ(zRot);
+
+  beginShape();
+
+  //inside top
+  vertex(-inside, -inside, -inside);
+  vertex(-inside, -inside, inside);
+  vertex(inside, -inside, inside);
+  vertex(inside, -inside, -inside);
+  vertex(-inside, -inside, -inside);
+
+  //inside bottom
+  vertex(-inside, inside, -inside);
+
+  vertex(-inside, inside, inside);
+  vertex(-inside, -inside, inside);
+  vertex(-inside, inside, inside);
+
+  vertex(inside, inside, inside);
+  vertex(inside, -inside, inside);
+  vertex(inside, inside, inside);
+
+  vertex(inside, inside, -inside);
+  vertex(inside, -inside, -inside);
+  vertex(inside, inside, -inside);
+
+  vertex(-inside, inside, -inside);
+
+  //outside bottom
+  vertex(-outside, outside, -outside);
+
+  vertex(-outside, outside, outside);
+  vertex(-inside, inside, inside);
+  vertex(-outside, outside, outside);
+
+  vertex(outside, outside, outside);
+  vertex(inside, inside, inside);
+  vertex(outside, outside, outside);
+
+  vertex(outside, outside, -outside);
+  vertex(inside, inside, -inside);
+  vertex(outside, outside, -outside);
+
+  vertex(-outside, outside, -outside);
+  vertex(-inside, inside, -inside);
+  vertex(-outside, outside, -outside);
+
+  //outside top
+  vertex(-outside, -outside, -outside);
+
+  vertex(-outside, -outside, outside);
+  vertex(-inside, -inside, inside);
+  vertex(-outside, -outside, outside);
+  vertex(-outside, outside, outside);
+  vertex(-outside, -outside, outside);
+
+  vertex(outside, -outside, outside);
+  vertex(inside, -inside, inside);
+  vertex(outside, -outside, outside);
+  vertex(outside, outside, outside);
+  vertex(outside, -outside, outside);
+
+  vertex(outside, -outside, -outside);
+  vertex(inside, -inside, -inside);
+  vertex(outside, -outside, -outside);
+  vertex(outside, outside, -outside);
+  vertex(outside, -outside, -outside);
+
+  vertex(-outside, -outside, -outside);
+  vertex(-inside, -inside, -inside);
+  vertex(-outside, -outside, -outside);
+  vertex(-outside, outside, -outside);
+  vertex(-outside, -outside, -outside);
+
+  endShape();
+
+  rotateX(-xRot);
+  rotateY(-yRot);
+  rotateZ(-zRot);
+  translate(-x, -y, -z);
 }
