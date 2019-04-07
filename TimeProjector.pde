@@ -51,12 +51,25 @@ void setup()
   snake = new ArrayList<PVector>();
 
 
-
-  drawAllTimeProjectorForms();
+  ////setup LED strips
+  
+  //inside front square
   ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 27, 0);
   ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 28, 0);
   ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 27, 0);
   ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 27, 0);
+  
+  //lateral front connections
+  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 22, 0);
+  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 27, 0);
+  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 23, 0);
+  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 23, 0);
+  
+  //outside front square
+  ledStrip(timeProjectorForm.Vertices.get(7).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 54, 0);
+  ledStrip(timeProjectorForm.Vertices.get(6).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 60, 0);
+  ledStrip(timeProjectorForm.Vertices.get(2).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 54, 0);
+  ledStrip(timeProjectorForm.Vertices.get(3).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 54, 0);  
 }
 
 
@@ -79,14 +92,10 @@ void draw()
 
   //globalAnimator.runAnimation("snake");
 
-  drawVertex(10);
-  drawVertex(11);
-  drawVertex(15);
-  drawVertex(14);
 
   //ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 5, 0);
 
-  //drawAllTimeProjectorForms();
+  drawAllTimeProjectorForms();
 }
 
 
@@ -170,12 +179,12 @@ void drawFaces()
 
 void ledStrip(PVector start, PVector end, int numLeds, int perspectiveNum)
 {
-  float stepValue = (float)1/numLeds;
+  float stepValue = (float)0.9/numLeds;
   PVector pixelVector;
 
   tesseractPerspectives[perspectiveNum].setupPerspective();
 
-  for (float i=0; i <= 1; i += stepValue)
+  for (float i=0.05; i <= 0.95; i += stepValue)
   {
     pixelVector = PVector.lerp(start, end, i);
 
