@@ -20,6 +20,8 @@ int speed = 50;
 
 ArrayList<PVector> snake;
 
+ArrayList<Snake> snakes;
+
 void setup()
 {
   size(700, 400, P3D);
@@ -48,28 +50,15 @@ void setup()
 
   timeProjectorForm = new TimeProjectorForm();
 
-  snake = new ArrayList<PVector>();
+  snake = new ArrayList<PVector>(); //old
 
+  //new snakes
+  ////snakes = new ArrayList<ArrayList<PVector>>();
+  snakes = new ArrayList<Snake>();
+  snakes.add(new Snake(0, 25, "rotateRight"));
+  snakes.add(new Snake(8, 50, "rotateLeft"));
 
-  ////setup LED strips
-  
-  //inside front square
-  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 27, 0);
-  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 28, 0);
-  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 27, 0);
-  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 27, 0);
-  
-  //lateral front connections
-  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 22, 0);
-  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 27, 0);
-  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 23, 0);
-  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 23, 0);
-  
-  //outside front square
-  ledStrip(timeProjectorForm.Vertices.get(7).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 54, 0);
-  ledStrip(timeProjectorForm.Vertices.get(6).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 60, 0);
-  ledStrip(timeProjectorForm.Vertices.get(2).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 54, 0);
-  ledStrip(timeProjectorForm.Vertices.get(3).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 54, 0);  
+  setupLedStrings();
 }
 
 
@@ -78,27 +67,29 @@ void draw()
   if (frameCount%25==0)
     println("FrameRate:" + frameRate);
 
-  println("mouseX:" + mouseX + " mouseY:" + mouseY);
+  //println("mouseX:" + mouseX + " mouseY:" + mouseY);
 
   background(255);
   //camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
   //camera(sin(frameCount/80.0)*150 + 350, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
 
-
-
-  //globalAnimator.runAnimation("growingBox");
-
+  ////functional snake
   //snakeAnimation();
 
   //globalAnimator.runAnimation("snake");
 
-
-  //ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 5, 0);
+  //test update snakes, put in function later and probably in Animation class
+  for (int i=0; i<snakes.size(); i++)
+  {
+    snakes.get(i).Update();
+  }
 
   drawAllTimeProjectorForms();
 }
 
-
+void circleSnake()
+{
+}
 
 
 void drawAllTimeProjectorForms()
@@ -177,12 +168,86 @@ void drawFaces()
 
 //-------------------//
 
+void setupLedStrings()
+{
+  ////setup LED strips
+
+  //perspective 0
+
+  //inside front square
+  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 27, 0);
+  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 28, 0);
+  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 27, 0);
+  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 27, 0);
+
+  //lateral front connections
+  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 22, 0);
+  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 27, 0);
+  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 23, 0);
+  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 23, 0);
+
+  //outside front square
+  ledStrip(timeProjectorForm.Vertices.get(7).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 54, 0);
+  ledStrip(timeProjectorForm.Vertices.get(6).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 60, 0);
+  ledStrip(timeProjectorForm.Vertices.get(2).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 54, 0);
+  ledStrip(timeProjectorForm.Vertices.get(3).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 54, 0);
+
+
+  //perspective 1
+
+  ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 32, 1); //inside bottom back left -> outside bottom back left
+  ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 32, 1);
+  ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 24, 1); //inside bottom back left -> inside bottom front left
+  ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 24, 1);
+
+
+  //perspective 3
+
+  //outside back square
+  ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 36, 3);
+  ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 36, 3);
+  ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 36, 3);
+  ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 36, 3);
+
+  //outside back to front connections
+  ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 42, 3);
+  ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 43, 3);
+  ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 42, 3);
+  ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 42, 3);
+
+  //inside back square
+  ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(13).coordinate, 18, 3);
+  ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(9).coordinate, 18, 3);
+  ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(8).coordinate, 18, 3);
+  ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(12).coordinate, 18, 3);
+
+  //perspective 4
+  //inside back square top -> lateral
+  ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 32, 4); //inside top back left -> outside top back left
+  ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 32, 4);
+  ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 24, 4); //inside top back left -> inside top front left
+  ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 24, 4);
+}
+
 void ledStrip(PVector start, PVector end, int numLeds, int perspectiveNum)
 {
+  /*
+  stroke(255,0,0);
+   strokeWeight(1);
+   //debug test to see which edges have been drawn
+   for (int i=0; i<tesseractPerspectives.length; i++)
+   {
+   tesseractPerspectives[i].setupPerspective();
+   line(start.x, start.y, start.z, end.x, end.y, end.z);
+   tesseractPerspectives[i].resetPerspective();
+   }
+   */
+
   float stepValue = (float)0.9/numLeds;
   PVector pixelVector;
 
   tesseractPerspectives[perspectiveNum].setupPerspective();
+
 
   for (float i=0.05; i <= 0.95; i += stepValue)
   {
@@ -498,12 +563,12 @@ void drawSnake()
 
     for (int j=0; j<snake.size(); j++)
     {
-      //fill((j%255), 255-(j%255), (j%255));
-      fill(255);
+      fill((j%255), 255-(j%255), (j%255));
+      //fill(255);
 
       pushMatrix();
       translate(snake.get(j).x, snake.get(j).y, snake.get(j).z);
-      box(5);
+      box(2);
       popMatrix();
     }
 
