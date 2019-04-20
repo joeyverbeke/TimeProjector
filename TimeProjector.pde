@@ -3,6 +3,8 @@ TesseractPerspective[] tesseractPerspectives;
 GlobalAnimator globalAnimator;
 static TimeProjectorForm timeProjectorForm;
 
+boolean ghostFade = false;
+
 int ledCount = 0;
 
 int faceWidth, faceHeight;
@@ -52,11 +54,14 @@ void setup()
 
   snake = new ArrayList<PVector>(); //old
 
+
   //new snakes
   ////snakes = new ArrayList<ArrayList<PVector>>();
   snakes = new ArrayList<Snake>();
-  snakes.add(new Snake(0, 25, "rotateRight"));
-  snakes.add(new Snake(8, 50, "rotateLeft"));
+  snakes.add(new Snake(0, 40, "rotateLeft"));
+  //snakes.add(new Snake(8, 50, "rotateLeft"));
+  //snakes.add(new Snake(12, 15, "rotateRight"));
+
 
   setupLedStrings();
 }
@@ -69,7 +74,18 @@ void draw()
 
   //println("mouseX:" + mouseX + " mouseY:" + mouseY);
 
-  background(255);
+  if (ghostFade)
+  {
+    pushMatrix();
+    fill(0, 10);
+    translate(width/2, height/2, 0);
+    box(1000, 1000, 1000);
+    popMatrix();
+  } else
+  {
+    background(0);
+  }
+
   //camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
   //camera(sin(frameCount/80.0)*150 + 350, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
 
@@ -78,11 +94,23 @@ void draw()
 
   //globalAnimator.runAnimation("snake");
 
-  //test update snakes, put in function later and probably in Animation class
-  for (int i=0; i<snakes.size(); i++)
-  {
-    snakes.get(i).Update();
-  }
+  /*  
+   //test update snakes, put in function later and probably in Animation class
+   for (int i=0; i<snakes.size(); i++)
+   {
+   snakes.get(i).Update();
+   }
+   */
+
+  //globalAnimator.runAnimation("lateralSweep");
+
+
+    for (int i=0; i<tesseractPerspectives.length; i++)
+    {
+      tesseractPerspectives[i].setupPerspective();
+      timeProjectorForm.drawEdge(, color(255));
+      tesseractPerspectives[i].resetPerspective();
+    }
 
   drawAllTimeProjectorForms();
 }

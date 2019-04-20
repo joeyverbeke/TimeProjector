@@ -48,6 +48,7 @@ public class Snake
       case "pivotLateral":
         pivotDirection(3);
         break; 
+        
       default:
         break;
       }
@@ -59,6 +60,8 @@ public class Snake
 
   void rotateAnimation(boolean clockwise)
   {
+    maxLength = speed * 4;
+    
     int tempIndex;
     if (clockwise)
     {
@@ -101,14 +104,24 @@ public class Snake
 
   void addPointToSnake(PVector point)
   {
-    //move out of function
-    int maxLength = 255;
-
     body.add(point);
+
+/*
+    if (body.size() > 1)
+    {
+      println("0: " + body.get(0));
+      println("n: " + body.get(body.size()-1));
+      if (body.get(0) == body.get(body.size()-1))
+      {
+        maxLength = body.size();
+      }
+    }
+*/
+
     if (body.size() > maxLength)
     {
       body.remove(0);
-    }
+    }    
   }
 
   void drawSnake()
@@ -120,8 +133,9 @@ public class Snake
 
       for (int j=0; j<body.size(); j++)
       {
-        fill((j%255), 255-(j%255), (j%255));
-        //fill(255);
+        //fill((j%255), 255-(j%255), (j%255));
+        fill((int)(j*(float)(255/body.size())), 0, (int)(j*(float)(255/body.size())));
+        //fill(random(255), random(255), random(255));
 
         pushMatrix();
         translate(body.get(j).x, body.get(j).y, body.get(j).z);

@@ -1,6 +1,10 @@
-
+ //<>//
 public class Animation
 {
+  boolean ghosting;
+  ArrayList<PImage> ghostFrames;
+  int ghostSize;
+
   boolean reversedLateralSweep;
   int sweepTimer;
   float growingBoxSize;
@@ -18,6 +22,10 @@ public class Animation
 
 
   Animation() {
+    ghostFrames = new ArrayList<PImage>();
+    ghosting = true;
+    ghostSize = 30;
+
     reversedLateralSweep = false;
     sweepTimer = 0;
     growingBoxSize = 0.01;
@@ -47,6 +55,9 @@ public class Animation
     case "lateralSweep":
       lateralSweep();
       break;
+    case "dualLateralSweep":
+      dualLateralSweep();
+      break;
     case "growingBox":
       growingBox();
       break;
@@ -56,6 +67,34 @@ public class Animation
     default:
       break;
     }
+
+/*
+    if (ghosting)
+    {
+      for (int i=0; i<ghostFrames.size(); i++)
+      {  
+        tint(255, 255-(255/ghostSize)*i);
+        image(ghostFrames.get(i), width, height);
+      }
+
+      PImage transfer = get(0, 0, width, height);
+      transfer.loadPixels();
+      for (int i=0; i < width*height; i++)
+      {
+        if (transfer.pixels[i] == color(0, 0, 0))
+        {
+          transfer.pixels[i] = color(0, 0, 0, 0);
+        }
+      }
+
+      ghostFrames.add(transfer);
+      if (ghostFrames.size() > ghostSize)
+      {
+        ghostFrames.remove(0);
+      }
+      noTint();
+    }
+*/
   }
 
 
@@ -83,7 +122,7 @@ public class Animation
 
       addPointToSnake(PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%snakeSpeed/(float)snakeSpeed));
     }
-    
+
     drawSnake();
   }
 
@@ -136,13 +175,45 @@ public class Animation
     {
       translate(-50+(frameCount%speed / (speed/100)), 0, 0);
 
+      fill(255, 255, 255);
+      noStroke();
+      box(5, 125, 125);
+
+      translate(-(-50+(frameCount%speed / (speed/100))), 0, 0);
+    } else
+    {
+      translate(50-(frameCount%speed / (speed/100)), 0, 0);
+
+      fill(255, 255, 255);
+      noStroke();
+      box(5, 125, 125);
+
+      translate(-(50-(frameCount%speed / (speed/100))), 0, 0);
+    }
+  }
+
+  void dualLateralSweep()
+  {
+    float speed = 250;
+
+    if (frameCount%speed==0 && sweepTimer != millis())
+    {
+      reversedLateralSweep = !reversedLateralSweep;
+      sweepTimer = millis();
+    }
+
+
+    if (!reversedLateralSweep)
+    {
+      translate(-50+(frameCount%speed / (speed/100)), 0, 0);
+
       fill(255, 255, 0);
       noStroke();
-      box(5, 100, 100);
+      box(5, 125, 125);
 
       translate(5, 0, 0);
       fill(255, 75, 75);
-      box(5, 100, 100);
+      box(5, 125, 125);
       translate(-5, 0, 0);
 
       translate(-(-50+(frameCount%speed / (speed/100))), 0, 0);
@@ -152,28 +223,41 @@ public class Animation
 
       fill(255, 255, 75);
       noStroke();
-      box(5, 100, 100);
+      box(5, 125, 125);
 
       translate(5, 0, 0);
       fill(255, 75, 75);
-      box(5, 100, 100);
+      box(5, 125, 125);
       translate(-5, 0, 0);
 
       translate(-(50-(frameCount%speed / (speed/100))), 0, 0);
     }
   }
 
-
   void rotatingBox()
   {
     float _speed = 100.0 - 40;
 
     fill(255, 0, 255);
-    stroke(0, 255, 255);
+    noStroke();
+    //stroke(0, 255, 255);
 
-    rotateY(frameCount/_speed);
-    box(10, 75, 75);
-    rotateY(-(frameCount/_speed));
+/*
+    if (ghosting)
+    {
+      for (int i=0; i<ghostSize; i++)
+      {
+        fill(255-((255/ghostSize)*i), 0, 255-((255/ghostSize)*i));
+        rotateZ((frameCount-i)/_speed);
+        box(10, 125, 125);
+        rotateZ(-((frameCount-i)/_speed));
+      }
+    }
+*/
+    rotateZ(frameCount/_speed);
+    box(10, 125, 125);
+    rotateZ(-(frameCount/_speed));
+
   }
 
   void rotatingBoxes()
@@ -230,7 +314,6 @@ public class Animation
       }
     }
 
-
     pushMatrix();
     rotateX(frameCount/xSpeed);
     rotateZ(frameCount/zSpeed);
@@ -247,4 +330,6 @@ public class Animation
       growingBoxSize-=speed;
     }
   }
+  
+  
 }

@@ -6,7 +6,6 @@ abstract public class Form
   Form()
   {
   }
-
 }
 
 public class TimeProjectorForm extends Form
@@ -95,7 +94,7 @@ public class TimeProjectorForm extends Form
   void drawEdges()
   {
     stroke(0);
-    strokeWeight(2);
+    strokeWeight(5);
 
     for (int i=0; i<Vertices.size(); i++)
     {
@@ -107,6 +106,35 @@ public class TimeProjectorForm extends Form
         Vertices.get(i).vertical.coordinate.x, Vertices.get(i).vertical.coordinate.y, Vertices.get(i).vertical.coordinate.z);
       line(Vertices.get(i).coordinate.x, Vertices.get(i).coordinate.y, Vertices.get(i).coordinate.z, 
         Vertices.get(i).lateral.coordinate.x, Vertices.get(i).lateral.coordinate.y, Vertices.get(i).lateral.coordinate.z);
+    }
+  }
+
+
+////TODO : LEFT OFF HERE, finish edges
+  void drawEdge(int edgeNum, color edgeColor)
+  {
+    stroke(edgeColor);
+    strokeWeight(5);
+    switch(edgeNum)
+    {
+    case 0:
+      line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
+        Vertices.get(0).right.coordinate.x, Vertices.get(0).right.coordinate.y, Vertices.get(0).right.coordinate.z);
+      break;
+    case 1:
+      line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
+        Vertices.get(0).vertical.coordinate.x, Vertices.get(0).vertical.coordinate.y, Vertices.get(0).vertical.coordinate.z);
+      break;
+    case 2:
+      line(Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z, 
+        Vertices.get(5).left.coordinate.x, Vertices.get(5).left.coordinate.y, Vertices.get(5).left.coordinate.z);
+      break;
+    case 3:
+      line(Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z, 
+        Vertices.get(5).vertical.coordinate.x, Vertices.get(5).vertical.coordinate.y, Vertices.get(5).vertical.coordinate.z);
+      break;
+    default:
+      break;
     }
   }
 }
