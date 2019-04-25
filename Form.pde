@@ -109,29 +109,144 @@ public class TimeProjectorForm extends Form
     }
   }
 
-
-////TODO : LEFT OFF HERE, finish edges
+  //left off here as well
   void drawEdge(int edgeNum, color edgeColor)
   {
     stroke(edgeColor);
-    strokeWeight(5);
+    strokeWeight(1);
     switch(edgeNum)
     {
-    case 0:
+    case 0: //OBB
       line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
         Vertices.get(0).right.coordinate.x, Vertices.get(0).right.coordinate.y, Vertices.get(0).right.coordinate.z);
       break;
-    case 1:
+    case 1: //OLB
       line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
         Vertices.get(0).vertical.coordinate.x, Vertices.get(0).vertical.coordinate.y, Vertices.get(0).vertical.coordinate.z);
       break;
-    case 2:
+    case 2: //OTB
       line(Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z, 
         Vertices.get(5).left.coordinate.x, Vertices.get(5).left.coordinate.y, Vertices.get(5).left.coordinate.z);
       break;
-    case 3:
+    case 3: //ORB
       line(Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z, 
         Vertices.get(5).vertical.coordinate.x, Vertices.get(5).vertical.coordinate.y, Vertices.get(5).vertical.coordinate.z);
+      break;
+    case 4: //OBF
+      line(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z, 
+        Vertices.get(3).left.coordinate.x, Vertices.get(3).left.coordinate.y, Vertices.get(3).left.coordinate.z);
+      break;
+    case 5: //OLF
+      line(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z, 
+        Vertices.get(3).vertical.coordinate.x, Vertices.get(3).vertical.coordinate.y, Vertices.get(3).vertical.coordinate.z);
+      break;
+    case 6: //ORF
+      line(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z, 
+        Vertices.get(6).vertical.coordinate.x, Vertices.get(6).vertical.coordinate.y, Vertices.get(6).vertical.coordinate.z);
+      break;
+    case 7: //OTF
+      line(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z, 
+        Vertices.get(6).left.coordinate.x, Vertices.get(6).left.coordinate.y, Vertices.get(6).left.coordinate.z);
+      break;
+    case 8: //OTR
+      line(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z, 
+        Vertices.get(6).right.coordinate.x, Vertices.get(6).right.coordinate.y, Vertices.get(6).right.coordinate.z);
+      break;
+    case 9: //OBR
+      line(Vertices.get(1).coordinate.x, Vertices.get(1).coordinate.y, Vertices.get(1).coordinate.z, 
+        Vertices.get(1).right.coordinate.x, Vertices.get(1).right.coordinate.y, Vertices.get(1).right.coordinate.z);
+      break;
+    case 10: //OTL
+      line(Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z, 
+        Vertices.get(7).right.coordinate.x, Vertices.get(7).right.coordinate.y, Vertices.get(7).right.coordinate.z);
+      break;
+    case 11: //OBL
+      line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
+        Vertices.get(0).left.coordinate.x, Vertices.get(0).left.coordinate.y, Vertices.get(0).left.coordinate.z);
+      break;
+    case 12: //IBB
+      line(Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z, 
+        Vertices.get(8).right.coordinate.x, Vertices.get(8).right.coordinate.y, Vertices.get(8).right.coordinate.z);
+      break;
+    case 13: //IBL
+      line(Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z, 
+        Vertices.get(8).left.coordinate.x, Vertices.get(8).left.coordinate.y, Vertices.get(8).left.coordinate.z);
+      break;
+    case 14: //IBR
+      line(Vertices.get(10).coordinate.x, Vertices.get(10).coordinate.y, Vertices.get(10).coordinate.z, 
+        Vertices.get(10).right.coordinate.x, Vertices.get(10).right.coordinate.y, Vertices.get(10).right.coordinate.z);
+      break;
+    case 15: //IBF
+      line(Vertices.get(10).coordinate.x, Vertices.get(10).coordinate.y, Vertices.get(10).coordinate.z, 
+        Vertices.get(10).left.coordinate.x, Vertices.get(10).left.coordinate.y, Vertices.get(10).left.coordinate.z);
+      break;
+    case 16: //ITB
+      line(Vertices.get(12).coordinate.x, Vertices.get(12).coordinate.y, Vertices.get(12).coordinate.z, 
+        Vertices.get(12).right.coordinate.x, Vertices.get(12).right.coordinate.y, Vertices.get(12).right.coordinate.z);
+      break;
+    case 17: //ITL
+      line(Vertices.get(12).coordinate.x, Vertices.get(12).coordinate.y, Vertices.get(12).coordinate.z, 
+        Vertices.get(12).left.coordinate.x, Vertices.get(12).left.coordinate.y, Vertices.get(12).left.coordinate.z);
+      break;
+    case 18: //ITR
+      line(Vertices.get(14).coordinate.x, Vertices.get(14).coordinate.y, Vertices.get(14).coordinate.z, 
+        Vertices.get(14).right.coordinate.x, Vertices.get(14).right.coordinate.y, Vertices.get(14).right.coordinate.z);
+      break;
+    case 19: //IBF
+      line(Vertices.get(14).coordinate.x, Vertices.get(14).coordinate.y, Vertices.get(14).coordinate.z, 
+        Vertices.get(14).left.coordinate.x, Vertices.get(14).left.coordinate.y, Vertices.get(14).left.coordinate.z);
+      break;
+    case 20: //IBB
+      line(Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z, 
+        Vertices.get(8).right.coordinate.x, Vertices.get(8).right.coordinate.y, Vertices.get(8).right.coordinate.z);
+      break;
+    case 21: //IRB
+      line(Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z, 
+        Vertices.get(8).vertical.coordinate.x, Vertices.get(8).vertical.coordinate.y, Vertices.get(8).vertical.coordinate.z);
+      break;
+    case 22: //ILB
+      line(Vertices.get(9).coordinate.x, Vertices.get(9).coordinate.y, Vertices.get(9).coordinate.z, 
+        Vertices.get(9).vertical.coordinate.x, Vertices.get(9).vertical.coordinate.y, Vertices.get(9).vertical.coordinate.z);
+      break;
+    case 23: //IRF
+      line(Vertices.get(10).coordinate.x, Vertices.get(10).coordinate.y, Vertices.get(10).coordinate.z, 
+        Vertices.get(10).vertical.coordinate.x, Vertices.get(10).vertical.coordinate.y, Vertices.get(10).vertical.coordinate.z);
+      break;
+    case 24: //ILF
+      line(Vertices.get(11).coordinate.x, Vertices.get(11).coordinate.y, Vertices.get(11).coordinate.z, 
+        Vertices.get(11).vertical.coordinate.x, Vertices.get(11).vertical.coordinate.y, Vertices.get(11).vertical.coordinate.z);
+      break;
+    case 25: //LBBR
+      line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
+        Vertices.get(0).lateral.coordinate.x, Vertices.get(0).lateral.coordinate.y, Vertices.get(0).lateral.coordinate.z);
+      break;
+    case 26: //LBBL
+      line(Vertices.get(1).coordinate.x, Vertices.get(1).coordinate.y, Vertices.get(1).coordinate.z, 
+        Vertices.get(1).lateral.coordinate.x, Vertices.get(1).lateral.coordinate.y, Vertices.get(1).lateral.coordinate.z);
+      break;
+    case 27: //LFBR
+      line(Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z, 
+        Vertices.get(2).lateral.coordinate.x, Vertices.get(2).lateral.coordinate.y, Vertices.get(2).lateral.coordinate.z);
+      break;
+    case 28: //LFBL
+      line(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z, 
+        Vertices.get(3).lateral.coordinate.x, Vertices.get(3).lateral.coordinate.y, Vertices.get(3).lateral.coordinate.z);
+      break;
+    case 29: //LBTR
+      line(Vertices.get(4).coordinate.x, Vertices.get(4).coordinate.y, Vertices.get(4).coordinate.z, 
+        Vertices.get(4).lateral.coordinate.x, Vertices.get(4).lateral.coordinate.y, Vertices.get(4).lateral.coordinate.z);
+      break;
+    case 30: //LBTL
+      line(Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z, 
+        Vertices.get(5).lateral.coordinate.x, Vertices.get(5).lateral.coordinate.y, Vertices.get(5).lateral.coordinate.z);
+      break;
+    case 31: //LFTR
+      line(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z, 
+        Vertices.get(6).lateral.coordinate.x, Vertices.get(6).lateral.coordinate.y, Vertices.get(6).lateral.coordinate.z);
+      break;
+    case 32: //LFTL
+      line(Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z, 
+        Vertices.get(7).lateral.coordinate.x, Vertices.get(7).lateral.coordinate.y, Vertices.get(7).lateral.coordinate.z);
       break;
     default:
       break;

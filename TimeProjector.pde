@@ -69,6 +69,8 @@ void setup()
 
 void draw()
 {
+  drawAllTimeProjectorForms();
+
   if (frameCount%25==0)
     println("FrameRate:" + frameRate);
 
@@ -104,15 +106,18 @@ void draw()
 
   //globalAnimator.runAnimation("lateralSweep");
 
+  drawVertex(0);
 
+  ///left off here
+  for (int j=0; j<33; j++)
+  {
     for (int i=0; i<tesseractPerspectives.length; i++)
     {
       tesseractPerspectives[i].setupPerspective();
-      timeProjectorForm.drawEdge(, color(255));
+      timeProjectorForm.drawEdge(j, color(255, 0, 0));
       tesseractPerspectives[i].resetPerspective();
     }
-
-  drawAllTimeProjectorForms();
+  }
 }
 
 void circleSnake()
