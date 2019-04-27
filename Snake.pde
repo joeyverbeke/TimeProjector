@@ -4,11 +4,13 @@ public class Snake
   int maxLength = 255;
   ArrayList<PVector> body;
   String animationMode; //change to enum
+  ArrayList<String> directions;
 
   Snake()
   {
     lastIndex = currentIndex = 0;
     body = new ArrayList<PVector>();
+    directions = new ArrayList<String>();
   }
 
   Snake(int startingIndex, int _speed, String _animationMode)
@@ -17,17 +19,30 @@ public class Snake
     speed = _speed;
     body = new ArrayList<PVector>(); 
     animationMode = _animationMode;
+    directions = new ArrayList<String>();
   }
 
   void setSpeed(int _speed)
   {
     speed = _speed;
   }
+  
+  void addDirection(String direction)
+  {
+    directions.add(direction);
+  }
 
   void Update()
   {
     if (frameCount%speed == 0)
     {
+      if (directions.size() != 0)
+      {
+        directions.add(directions.get(0));
+        directions.remove(0);
+        animationMode = directions.get(0);
+        println(speed + " " + frameCount + " " + animationMode);
+      }
       switch(animationMode)
       {
       case "rotateRight":
@@ -48,7 +63,7 @@ public class Snake
       case "pivotLateral":
         pivotDirection(3);
         break; 
-        
+
       default:
         break;
       }
@@ -61,7 +76,7 @@ public class Snake
   void rotateAnimation(boolean clockwise)
   {
     maxLength = speed * 4;
-    
+
     int tempIndex;
     if (clockwise)
     {
@@ -106,22 +121,22 @@ public class Snake
   {
     body.add(point);
 
-/*
+    /*
     if (body.size() > 1)
-    {
-      println("0: " + body.get(0));
-      println("n: " + body.get(body.size()-1));
-      if (body.get(0) == body.get(body.size()-1))
-      {
-        maxLength = body.size();
-      }
-    }
-*/
+     {
+     println("0: " + body.get(0));
+     println("n: " + body.get(body.size()-1));
+     if (body.get(0) == body.get(body.size()-1))
+     {
+     maxLength = body.size();
+     }
+     }
+     */
 
     if (body.size() > maxLength)
     {
       body.remove(0);
-    }    
+    }
   }
 
   void drawSnake()

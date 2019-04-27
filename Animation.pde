@@ -16,6 +16,10 @@ public class Animation
   ArrayList<PVector> snakePoints;
   int onlyRunOnceCounter;
 
+  //flashingVertPlane
+  int vertPlane = 0;
+  int vert_onlyRunOnceCounter;
+
   //temp for box grow speeds
   float xSpeed = 30.0;
   float zSpeed = 30.0;
@@ -64,39 +68,92 @@ public class Animation
     case "snake":
       snake();
       break;
+    case "flashingVerticalPlanes":
+      flashingVerticalPlanes();
+      //    case "randomRectangularPrisms":
+      //      randomRectangularPrisms();
+      break;
     default:
       break;
     }
 
-/*
+    /*
     if (ghosting)
-    {
-      for (int i=0; i<ghostFrames.size(); i++)
-      {  
-        tint(255, 255-(255/ghostSize)*i);
-        image(ghostFrames.get(i), width, height);
-      }
-
-      PImage transfer = get(0, 0, width, height);
-      transfer.loadPixels();
-      for (int i=0; i < width*height; i++)
-      {
-        if (transfer.pixels[i] == color(0, 0, 0))
-        {
-          transfer.pixels[i] = color(0, 0, 0, 0);
-        }
-      }
-
-      ghostFrames.add(transfer);
-      if (ghostFrames.size() > ghostSize)
-      {
-        ghostFrames.remove(0);
-      }
-      noTint();
-    }
-*/
+     {
+     for (int i=0; i<ghostFrames.size(); i++)
+     {  
+     tint(255, 255-(255/ghostSize)*i);
+     image(ghostFrames.get(i), width, height);
+     }
+     
+     PImage transfer = get(0, 0, width, height);
+     transfer.loadPixels();
+     for (int i=0; i < width*height; i++)
+     {
+     if (transfer.pixels[i] == color(0, 0, 0))
+     {
+     transfer.pixels[i] = color(0, 0, 0, 0);
+     }
+     }
+     
+     ghostFrames.add(transfer);
+     if (ghostFrames.size() > ghostSize)
+     {
+     ghostFrames.remove(0);
+     }
+     noTint();
+     }
+     */
   }
 
+  void flashingVerticalPlanes()
+  {
+    vert_onlyRunOnceCounter++;
+
+   // println(onlyRunOnceCounter);
+
+    if (vert_onlyRunOnceCounter % 5 == 0)
+    {
+      int speed_flashingVertical = 60;
+
+      if (frameCount%speed_flashingVertical == 0)
+      {
+        vertPlane++;
+        println(frameCount);
+      }
+    }
+
+    switch(vertPlane%3)
+    {
+    case 0:
+      timeProjectorForm.drawEdge(0, color(255));
+      timeProjectorForm.drawEdge(4, color(255));
+      timeProjectorForm.drawEdge(9, color(255));
+      timeProjectorForm.drawEdge(11, color(255));
+      break;
+
+    case 1:
+      timeProjectorForm.drawEdge(12, color(255));
+      timeProjectorForm.drawEdge(13, color(255));
+      timeProjectorForm.drawEdge(14, color(255));
+      timeProjectorForm.drawEdge(15, color(255));
+      break;
+
+    case 2:
+      timeProjectorForm.drawEdge(16, color(255));
+      timeProjectorForm.drawEdge(17, color(255));
+      timeProjectorForm.drawEdge(18, color(255));
+      timeProjectorForm.drawEdge(19, color(255));
+      break;
+
+    case 3:
+      timeProjectorForm.drawEdge(2, color(255));
+      timeProjectorForm.drawEdge(7, color(255));
+      timeProjectorForm.drawEdge(8, color(255));
+      timeProjectorForm.drawEdge(10, color(255));
+      break;
+    }
+  }
 
   ////TODO: not working correctly, snake jumping to disconnected point
   void snake()
@@ -242,22 +299,21 @@ public class Animation
     noStroke();
     //stroke(0, 255, 255);
 
-/*
+    /*
     if (ghosting)
-    {
-      for (int i=0; i<ghostSize; i++)
-      {
-        fill(255-((255/ghostSize)*i), 0, 255-((255/ghostSize)*i));
-        rotateZ((frameCount-i)/_speed);
-        box(10, 125, 125);
-        rotateZ(-((frameCount-i)/_speed));
-      }
-    }
-*/
+     {
+     for (int i=0; i<ghostSize; i++)
+     {
+     fill(255-((255/ghostSize)*i), 0, 255-((255/ghostSize)*i));
+     rotateZ((frameCount-i)/_speed);
+     box(10, 125, 125);
+     rotateZ(-((frameCount-i)/_speed));
+     }
+     }
+     */
     rotateZ(frameCount/_speed);
     box(10, 125, 125);
     rotateZ(-(frameCount/_speed));
-
   }
 
   void rotatingBoxes()
@@ -330,6 +386,4 @@ public class Animation
       growingBoxSize-=speed;
     }
   }
-  
-  
 }

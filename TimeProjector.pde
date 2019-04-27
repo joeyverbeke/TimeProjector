@@ -59,8 +59,24 @@ void setup()
   ////snakes = new ArrayList<ArrayList<PVector>>();
   snakes = new ArrayList<Snake>();
   snakes.add(new Snake(0, 40, "rotateLeft"));
-  //snakes.add(new Snake(8, 50, "rotateLeft"));
-  //snakes.add(new Snake(12, 15, "rotateRight"));
+  snakes.add(new Snake(8, 50, "rotateLeft"));
+  //snakes.add(new Snake(12, 15, "pivotLateral"));
+
+  snakes.get(0).addDirection("pivotLeft");
+  snakes.get(0).addDirection("pivotLeft");
+  snakes.get(0).addDirection("pivotLeft");
+  snakes.get(0).addDirection("pivotLeft");
+  snakes.get(0).addDirection("pivotLeft");
+  snakes.get(0).addDirection("pivotLateral");
+
+  snakes.get(1).addDirection("pivotVertical");
+  snakes.get(1).addDirection("pivotRight");
+  snakes.get(1).addDirection("pivotVertical");
+  snakes.get(1).addDirection("pivotLeft");
+  snakes.get(1).addDirection("pivotLeft");
+  snakes.get(1).addDirection("pivotLateral");
+
+
 
 
   setupLedStrings();
@@ -96,28 +112,20 @@ void draw()
 
   //globalAnimator.runAnimation("snake");
 
-  /*  
-   //test update snakes, put in function later and probably in Animation class
-   for (int i=0; i<snakes.size(); i++)
-   {
-   snakes.get(i).Update();
-   }
-   */
+
+  //test update snakes, put in function later and probably in Animation class
+  for (int i=0; i<snakes.size(); i++)
+  {
+    snakes.get(i).Update();
+  }
+
 
   //globalAnimator.runAnimation("lateralSweep");
 
-  drawVertex(0);
+  //TODO: fix vertical planes
+  //globalAnimator.runAnimation("flashingVerticalPlanes");
 
-  ///left off here
-  for (int j=0; j<33; j++)
-  {
-    for (int i=0; i<tesseractPerspectives.length; i++)
-    {
-      tesseractPerspectives[i].setupPerspective();
-      timeProjectorForm.drawEdge(j, color(255, 0, 0));
-      tesseractPerspectives[i].resetPerspective();
-    }
-  }
+  //globalAnimator.runAnimation("growingBox");
 }
 
 void circleSnake()
@@ -339,219 +347,6 @@ void drawPixels()
   ledSquare(width/2 - 35, 225, 20, 20);
   ledSquare(width/2 - 10, 250, 20, 20);
   ledSquare(width/2 - 10, 275, 20, 20);
-
-
-
-  //ledStrip(int index, int count, float x, float y, float spacing, float angle, boolean reversed)
-  //  opc.ledStrip(0, 30, width/2, 10, 2, 0, false);
-  //  opc.ledStrip(30, 30, width/2 + 30, 40, 2, PI/2, false);
-  //  opc.ledStrip(60, 30, width/2, 70, 2, 0, true);
-  //  opc.ledStrip(90, 30, width/2 - 30, 40, 2, PI/2, true);
-
-  /*
-  //green
-   for (int y = 0; y < 14; y++)
-   {
-   opc.led(ledCount, left + spacing * 2, (bottom - 5 * spacing) - y * spacing);
-   ledCount++;
-   }
-   
-   for (int y = 0; y < 5; y++)
-   {
-   opc.led(ledCount, left + spacing, (bottom - 19 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 5; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 2, (bottom - 18 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<5; y++)
-   {
-   opc.led(ledCount, left + spacing * 3, (bottom - 18 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 4; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 4, (bottom - 17 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<3; y++)
-   {
-   opc.led(ledCount, left + spacing * 5, (bottom - 18 * spacing) - y * spacing);
-   ledCount++;
-   }
-   
-   
-   //blue
-   for (int y = 0; y < 14; y++)
-   {
-   opc.led(ledCount, left + spacing * 3, (bottom - 4 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 5; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 4, (bottom - 12 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<5; y++)
-   {
-   opc.led(ledCount, left + spacing * 5, (bottom - 13 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 5; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 6, (bottom - 12 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<5; y++)
-   {
-   opc.led(ledCount, left + spacing * 7, (bottom - 13 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 6; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 8, (bottom - 11 * spacing) - y * spacing);
-   ledCount++;
-   }
-   
-   
-   //purple
-   for (int y = 0; y<10; y++)
-   {
-   opc.led(ledCount, left + spacing * 4, (bottom - 3 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 9; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 5, (bottom - spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<9; y++)
-   {
-   opc.led(ledCount, left + spacing * 6, (bottom - spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 8; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 7, (bottom) - y * spacing);
-   ledCount++;
-   }
-   
-   
-   //orange
-   for (int y = 0; y<11; y++)
-   {
-   opc.led(ledCount, left + spacing * 8, (bottom - spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<7; y++)
-   {
-   opc.led(ledCount, left + spacing * 9, (bottom - 11 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 7; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 10, (bottom - 10 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<5; y++)
-   {
-   opc.led(ledCount, left + spacing * 11, (bottom - 13 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 5; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 12, (bottom - 12 * spacing) - y * spacing);
-   ledCount++;
-   }
-   
-   //red (new)
-   for (int y = 0; y<10; y++)
-   {
-   opc.led(ledCount, left + spacing * 9, (bottom - spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 10; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 10, (bottom ) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y < 8; y++)
-   {
-   opc.led(ledCount, left + spacing * 11, (bottom - spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 9; y > 0; y--)
-   {
-   opc.led(ledCount, left + spacing * 12, (bottom) - y * spacing);
-   ledCount++;
-   }
-   
-   //pink
-   for (int y = 0; y<9; y++)
-   {
-   opc.led(ledCount, left + spacing * 13, (bottom - 2 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 9; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 14, (bottom - 2 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<14; y++)
-   {
-   opc.led(ledCount, left + spacing * 15, (bottom - 4 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 6; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 14, (bottom - 11 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<5; y++)
-   {
-   opc.led(ledCount, left + spacing * 13, (bottom - 13 * spacing) - y * spacing);
-   ledCount++;
-   }
-   
-   
-   
-   //grayish
-   for (int y = 0; y<14; y++)
-   {
-   opc.led(ledCount, left + spacing * 16, (bottom - 5 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y < 5; y++)
-   {
-   opc.led(ledCount, left + spacing * 17, (bottom - 19 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 5; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 16, (bottom - 18 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<5; y++)
-   {
-   opc.led(ledCount, left + spacing * 15, (bottom - 18 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 4; y>0; y--)
-   {
-   opc.led(ledCount, left + spacing * 14, (bottom - 17 * spacing) - y * spacing);
-   ledCount++;
-   }
-   for (int y = 0; y<3; y++)
-   {
-   opc.led(ledCount, left + spacing * 13, (bottom - 18 * spacing) - y * spacing);
-   ledCount++;
-   }
-   
-   println("ledCount:" + ledCount);
-   
-   */
 }
 
 void snakeAnimation()
