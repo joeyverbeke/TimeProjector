@@ -2,6 +2,7 @@
 abstract public class Form
 {
   ArrayList<Vertex> Vertices;
+  ArrayList<PShape> Planes;
 
   Form()
   {
@@ -14,6 +15,7 @@ public class TimeProjectorForm extends Form
   TimeProjectorForm()
   {
 
+    //Set up vertices
     Vertices = new ArrayList<Vertex>();
 
     Vertices.add(new Vertex(new PVector(28.41984197, -36.73388232, -29.91562312), 0));     //outside_bottom_back_left
@@ -52,6 +54,114 @@ public class TimeProjectorForm extends Form
     Vertices.get(13).addConnections(Vertices.get(14), Vertices.get(12), Vertices.get(9), Vertices.get(5));//inside_top_back_right
     Vertices.get(14).addConnections(Vertices.get(15), Vertices.get(13), Vertices.get(10), Vertices.get(6));//inside_top_front_right
     Vertices.get(15).addConnections(Vertices.get(12), Vertices.get(14), Vertices.get(11), Vertices.get(7));//inside_top_front_left
+
+    //Set up planes
+    Planes = new ArrayList<PShape>();
+
+    Planes.add(createPlane(Vertices.get(10).coordinate, Vertices.get(11).coordinate, Vertices.get(15).coordinate, Vertices.get(14).coordinate)); //0
+    Planes.add(createPlane(Vertices.get(10).coordinate, Vertices.get(14).coordinate, Vertices.get(13).coordinate, Vertices.get(9).coordinate));  //1
+    Planes.add(createPlane(Vertices.get(8).coordinate, Vertices.get(9).coordinate, Vertices.get(13).coordinate, Vertices.get(12).coordinate));   //2
+    Planes.add(createPlane(Vertices.get(11).coordinate, Vertices.get(15).coordinate, Vertices.get(12).coordinate, Vertices.get(8).coordinate));  //3
+    Planes.add(createPlane(Vertices.get(12).coordinate, Vertices.get(13).coordinate, Vertices.get(14).coordinate, Vertices.get(15).coordinate)); //4
+    Planes.add(createPlane(Vertices.get(8).coordinate, Vertices.get(9).coordinate, Vertices.get(10).coordinate, Vertices.get(11).coordinate));   //5
+
+    //6 is weird >_*
+    PShape plane6 = createShape(GROUP); //7-3-2-6-7
+
+    PVector threeToTwo = PVector.lerp(Vertices.get(3).coordinate, Vertices.get(2).coordinate, 0.1);
+    PVector sevenToSix = PVector.lerp(Vertices.get(7).coordinate, Vertices.get(6).coordinate, 0.1);
+    PVector twoToSix = PVector.lerp(Vertices.get(2).coordinate, Vertices.get(6).coordinate, 0.1);
+    PVector threeToSeven = PVector.lerp(Vertices.get(3).coordinate, Vertices.get(7).coordinate, 0.1);
+    PVector sixToSeven = PVector.lerp(Vertices.get(6).coordinate, Vertices.get(7).coordinate, 0.1);
+    PVector twoToThree = PVector.lerp(Vertices.get(2).coordinate, Vertices.get(3).coordinate, 0.1);
+    PVector sevenToThree = PVector.lerp(Vertices.get(7).coordinate, Vertices.get(3).coordinate, 0.1);
+    PVector sixToTwo = PVector.lerp(Vertices.get(6).coordinate, Vertices.get(2).coordinate, 0.1);
+
+    PShape plane6_left = createShape();
+    plane6_left.beginShape();
+    noStroke();
+    plane6_left.vertex(Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z);
+    plane6_left.vertex(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z);
+    plane6_left.vertex(threeToTwo.x, threeToTwo.y, threeToTwo.z);
+    plane6_left.vertex(sevenToSix.x, sevenToSix.y, sevenToSix.z);
+    plane6_left.vertex(Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z);
+    plane6_left.endShape();
+
+    PShape plane6_bottom = createShape();
+    plane6_bottom.beginShape();
+    noStroke();
+    plane6_bottom.vertex(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z);
+    plane6_bottom.vertex(Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z);
+    plane6_bottom.vertex(twoToSix.x, twoToSix.y, twoToSix.z);
+    plane6_bottom.vertex(threeToSeven.x, threeToSeven.y, threeToSeven.z);
+    plane6_bottom.vertex(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z);
+    plane6_bottom.endShape();
+
+    PShape plane6_right = createShape();
+    plane6_right.beginShape();
+    noStroke();
+    plane6_right.vertex(Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z);
+    plane6_right.vertex(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z);
+    plane6_right.vertex(sixToSeven.x, sixToSeven.y, sixToSeven.z);
+    plane6_right.vertex(twoToThree.x, twoToThree.y, twoToThree.z);
+    plane6_right.vertex(Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z);
+    plane6_right.endShape();
+
+    PShape plane6_top = createShape();
+    plane6_top.beginShape();
+    noStroke();
+    plane6_top.vertex(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z);
+    plane6_top.vertex(Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z);
+    plane6_top.vertex(sevenToThree.x, sevenToThree.y, sevenToThree.z);
+    plane6_top.vertex(sixToTwo.x, sixToTwo.y, sixToTwo.z);
+    plane6_top.vertex(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z);
+    plane6_top.endShape();
+
+    plane6.addChild(plane6_left);
+    plane6.addChild(plane6_bottom);
+    plane6.addChild(plane6_right);
+    plane6.addChild(plane6_top);
+
+    Planes.add(plane6); //6
+
+    //end wtf plane 6
+
+    Planes.add(createPlane(Vertices.get(6).coordinate, Vertices.get(2).coordinate, Vertices.get(1).coordinate, Vertices.get(5).coordinate));   //7
+    Planes.add(createPlane(Vertices.get(0).coordinate, Vertices.get(1).coordinate, Vertices.get(5).coordinate, Vertices.get(4).coordinate));   //8
+    Planes.add(createPlane(Vertices.get(3).coordinate, Vertices.get(0).coordinate, Vertices.get(4).coordinate, Vertices.get(7).coordinate));   //9
+    Planes.add(createPlane(Vertices.get(4).coordinate, Vertices.get(5).coordinate, Vertices.get(6).coordinate, Vertices.get(7).coordinate));   //10
+    Planes.add(createPlane(Vertices.get(0).coordinate, Vertices.get(1).coordinate, Vertices.get(2).coordinate, Vertices.get(3).coordinate));   //11
+    Planes.add(createPlane(Vertices.get(10).coordinate, Vertices.get(11).coordinate, Vertices.get(3).coordinate, Vertices.get(2).coordinate));   //12
+    Planes.add(createPlane(Vertices.get(10).coordinate, Vertices.get(14).coordinate, Vertices.get(6).coordinate, Vertices.get(2).coordinate));   //13
+    Planes.add(createPlane(Vertices.get(14).coordinate, Vertices.get(15).coordinate, Vertices.get(7).coordinate, Vertices.get(6).coordinate));   //14
+    Planes.add(createPlane(Vertices.get(11).coordinate, Vertices.get(15).coordinate, Vertices.get(7).coordinate, Vertices.get(3).coordinate));   //15
+    Planes.add(createPlane(Vertices.get(5).coordinate, Vertices.get(6).coordinate, Vertices.get(14).coordinate, Vertices.get(13).coordinate));   //16
+    Planes.add(createPlane(Vertices.get(12).coordinate, Vertices.get(13).coordinate, Vertices.get(5).coordinate, Vertices.get(4).coordinate));   //17
+    Planes.add(createPlane(Vertices.get(12).coordinate, Vertices.get(15).coordinate, Vertices.get(7).coordinate, Vertices.get(4).coordinate));   //18
+    Planes.add(createPlane(Vertices.get(5).coordinate, Vertices.get(1).coordinate, Vertices.get(9).coordinate, Vertices.get(13).coordinate));   //19
+    Planes.add(createPlane(Vertices.get(4).coordinate, Vertices.get(0).coordinate, Vertices.get(8).coordinate, Vertices.get(12).coordinate));   //20
+    Planes.add(createPlane(Vertices.get(9).coordinate, Vertices.get(10).coordinate, Vertices.get(2).coordinate, Vertices.get(1).coordinate));   //21
+    Planes.add(createPlane(Vertices.get(8).coordinate, Vertices.get(11).coordinate, Vertices.get(3).coordinate, Vertices.get(0).coordinate));   //22
+    Planes.add(createPlane(Vertices.get(8).coordinate, Vertices.get(9).coordinate, Vertices.get(1).coordinate, Vertices.get(0).coordinate));   //22
+
+
+
+  }
+
+  PShape createPlane(PVector one, PVector two, PVector three, PVector four)
+  {
+    PShape plane = createShape();
+
+    plane.beginShape();
+    noStroke();
+    plane.vertex(one.x, one.y, one.z);
+    plane.vertex(two.x, two.y, two.z);
+    plane.vertex(three.x, three.y, three.z);
+    plane.vertex(four.x, four.y, four.z);
+    plane.vertex(one.x, one.y, one.z);
+    plane.endShape();
+
+    return plane;
   }
 
   void connectVertexToFour(int main, int one, int two, int three, int four)
@@ -249,6 +359,27 @@ public class TimeProjectorForm extends Form
         Vertices.get(7).lateral.coordinate.x, Vertices.get(7).lateral.coordinate.y, Vertices.get(7).lateral.coordinate.z);
       break;
     default:
+      break;
+    }
+  }
+
+  void drawPlane(int planeNum, color planeColor)
+  {
+    noStroke();
+    fill(planeColor);
+
+    switch(planeNum)
+    {
+    case 0:
+
+      break;
+
+    case 1:
+
+      break;
+
+    default:
+
       break;
     }
   }

@@ -5,6 +5,7 @@ public class Snake
   ArrayList<PVector> body;
   String animationMode; //change to enum
   ArrayList<String> directions;
+  int snakeColor = 255;
 
   Snake()
   {
@@ -13,20 +14,21 @@ public class Snake
     directions = new ArrayList<String>();
   }
 
-  Snake(int startingIndex, int _speed, String _animationMode)
+  Snake(int startingIndex, int _speed, String _animationMode, int _snakeColor)
   {
     lastIndex = currentIndex = startingIndex;
     speed = _speed;
     body = new ArrayList<PVector>(); 
     animationMode = _animationMode;
     directions = new ArrayList<String>();
+    snakeColor = _snakeColor;
   }
 
   void setSpeed(int _speed)
   {
     speed = _speed;
   }
-  
+
   void addDirection(String direction)
   {
     directions.add(direction);
@@ -151,6 +153,9 @@ public class Snake
         //fill((j%255), 255-(j%255), (j%255));
         fill((int)(j*(float)(255/body.size())), 0, (int)(j*(float)(255/body.size())));
         //fill(random(255), random(255), random(255));
+
+        fill(snakeColor, 360, (int)(j*(float)(100/body.size())));
+
 
         pushMatrix();
         translate(body.get(j).x, body.get(j).y, body.get(j).z);

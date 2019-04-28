@@ -1,3 +1,6 @@
+boolean controlCameraWithMouse = true;
+
+
 OPC opc;
 TesseractPerspective[] tesseractPerspectives;
 GlobalAnimator globalAnimator;
@@ -28,6 +31,7 @@ void setup()
 {
   size(700, 400, P3D);
   ortho();
+  colorMode(HSB, 360, 100, 100);
 
   // Connect to the local instance of fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
@@ -58,8 +62,8 @@ void setup()
   //new snakes
   ////snakes = new ArrayList<ArrayList<PVector>>();
   snakes = new ArrayList<Snake>();
-  snakes.add(new Snake(0, 40, "rotateLeft"));
-  snakes.add(new Snake(8, 50, "rotateLeft"));
+  snakes.add(new Snake(0, 40, "rotateLeft", 255));
+  snakes.add(new Snake(8, 50, "rotateLeft", 127));
   //snakes.add(new Snake(12, 15, "pivotLateral"));
 
   snakes.get(0).addDirection("pivotLeft");
@@ -104,7 +108,11 @@ void draw()
     background(0);
   }
 
-  //camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
+  if (controlCameraWithMouse)
+  {
+    camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
+  }
+
   //camera(sin(frameCount/80.0)*150 + 350, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
 
   ////functional snake
@@ -112,13 +120,46 @@ void draw()
 
   //globalAnimator.runAnimation("snake");
 
-
+  /*
   //test update snakes, put in function later and probably in Animation class
-  for (int i=0; i<snakes.size(); i++)
-  {
-    snakes.get(i).Update();
-  }
+   for (int i=0; i<snakes.size(); i++)
+   {
+   snakes.get(i).Update();
+   }
+   */
 
+  drawPlane(0, color(300, 100, 100));
+  drawPlane(1, color(100, 100, 100));
+  drawPlane(2, color(200, 100, 100));
+  drawPlane(3, color(50, 100, 100));
+  drawPlane(4, color(0, 100, 100));
+  drawPlane(5, color(150, 100, 100));
+  drawPlane(6, color(150, 0, 100));
+
+  drawPlane(7, color(250, 50, 100));
+  drawPlane(8, color(350, 50, 100));
+
+  drawPlane(9, color(75, 50, 100));
+  drawPlane(10, color(125, 50, 100));
+  drawPlane(11, color(175, 50, 100));
+  drawPlane(12, color(225, 75, 75));
+  drawPlane(13, color(325, 75, 75));
+  drawPlane(14, color(25, 75, 75));
+  drawPlane(15, color(75, 75, 75));
+
+  drawPlane(16, color(100, 75, 75));
+  drawPlane(17, color(300, 75, 75));
+  drawPlane(18, color(150, 75, 75));
+  drawPlane(19, color(250, 75, 75));
+  drawPlane(20, color(200, 0, 100));
+  drawPlane(21, color(200, 50, 100));
+  drawPlane(22, color(0, 50, 100));
+  drawPlane(23, color(150, 50, 100));
+
+
+
+
+  drawBlockers();
 
   //globalAnimator.runAnimation("lateralSweep");
 
@@ -128,10 +169,51 @@ void draw()
   //globalAnimator.runAnimation("growingBox");
 }
 
+void drawBlockers()
+{
+  PShape verticalSlice = createShape();
+  verticalSlice.beginShape();
+  fill(0);
+  noStroke();
+
+  PVector topLeft = PVector.lerp(timeProjectorForm.Vertices.get(7).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 0.5);
+  PVector topRight = PVector.lerp(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 0.5);
+  PVector bottomLeft = PVector.lerp(timeProjectorForm.Vertices.get(3).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 0.5);
+  PVector bottomRight = PVector.lerp(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 0.5);
+
+  verticalSlice.vertex(topLeft.x, topLeft.y, topLeft.z);
+  verticalSlice.vertex(topRight.x, topRight.y, topRight.z);
+  verticalSlice.vertex(bottomRight.x, bottomRight.y, bottomRight.z);
+  verticalSlice.vertex(bottomLeft.x, bottomLeft.y, bottomLeft.z);
+  verticalSlice.vertex(topLeft.x, topLeft.y, topLeft.z);
+
+  verticalSlice.endShape();
+
+  tesseractPerspectives[0].setupPerspective();
+  shape(verticalSlice);
+  tesseractPerspectives[0].resetPerspective();
+
+  tesseractPerspectives[3].setupPerspective();
+  shape(verticalSlice);
+  tesseractPerspectives[3].resetPerspective();
+}
+
 void circleSnake()
 {
 }
 
+//move to animation
+void drawPlane(int planeNum, color planeColor)
+{
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+    timeProjectorForm.Planes.get(planeNum).setFill(planeColor);
+    timeProjectorForm.Planes.get(planeNum).setStroke(planeColor);
+    shape(timeProjectorForm.Planes.get(planeNum));
+    tesseractPerspectives[i].resetPerspective();
+  }
+}
 
 void drawAllTimeProjectorForms()
 {
@@ -143,7 +225,7 @@ void drawAllTimeProjectorForms()
   }
 }
 
-
+//move to animation?
 void drawVertex(int vertexNum)
 {
   for (int i=0; i<tesseractPerspectives.length; i++)
@@ -209,7 +291,7 @@ void drawFaces()
 
 //-------------------//
 
-void setupLedStrings()
+void setupLedStrings() ////TODO: Fix front and back squares
 {
   ////setup LED strips
 
