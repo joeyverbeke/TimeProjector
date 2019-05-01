@@ -1,4 +1,4 @@
-boolean controlCameraWithMouse = true;
+boolean controlCameraWithMouse = false;
 
 
 OPC opc;
@@ -84,6 +84,8 @@ void setup()
 
 
   setupLedStrings();
+
+  println("LED count: " + ledCount);
 }
 
 
@@ -91,8 +93,8 @@ void draw()
 {
   drawAllTimeProjectorForms();
 
-  if (frameCount%25==0)
-    println("FrameRate:" + frameRate);
+//  if (frameCount%25==0)
+//    println("FrameRate:" + frameRate);
 
   //println("mouseX:" + mouseX + " mouseY:" + mouseY);
 
@@ -120,53 +122,73 @@ void draw()
 
   //globalAnimator.runAnimation("snake");
 
-  /*
-  //test update snakes, put in function later and probably in Animation class
+  /*  
+   //test update snakes, put in function later and probably in Animation class
    for (int i=0; i<snakes.size(); i++)
    {
    snakes.get(i).Update();
    }
    */
 
+  //planes test
+  /*
   drawPlane(0, color(300, 100, 100));
-  drawPlane(1, color(100, 100, 100));
-  drawPlane(2, color(200, 100, 100));
-  drawPlane(3, color(50, 100, 100));
-  drawPlane(4, color(0, 100, 100));
-  drawPlane(5, color(150, 100, 100));
-  drawPlane(6, color(150, 0, 100));
+   drawPlane(1, color(100, 100, 100));
+   drawPlane(2, color(200, 100, 100));
+   drawPlane(3, color(50, 100, 100));
+   drawPlane(4, color(0, 100, 100));
+   drawPlane(5, color(150, 100, 100));
+   drawPlane(6, color(150, 0, 100));
+   
+   drawPlane(7, color(250, 50, 100));
+   drawPlane(8, color(350, 50, 100));
+   
+   drawPlane(9, color(75, 50, 100));
+   drawPlane(10, color(125, 50, 100));
+   drawPlane(11, color(175, 50, 100));
+   drawPlane(12, color(225, 75, 75));
+   drawPlane(13, color(325, 75, 75));
+   drawPlane(14, color(25, 75, 75));
+   drawPlane(15, color(75, 75, 75));
+   
+   drawPlane(16, color(100, 75, 75));
+   drawPlane(17, color(300, 75, 75));
+   drawPlane(18, color(150, 75, 75));
+   drawPlane(19, color(250, 75, 75));
+   drawPlane(20, color(200, 0, 100));
+   drawPlane(21, color(200, 50, 100));
+   drawPlane(22, color(0, 50, 100));
+   drawPlane(23, color(150, 50, 100));
+   */
 
-  drawPlane(7, color(250, 50, 100));
-  drawPlane(8, color(350, 50, 100));
+//mouseTest
+/*
+  pushMatrix();
+  fill(200,0,100);
+  translate(mouseX, mouseY);
+  box(10);
+  popMatrix();
+*/
 
-  drawPlane(9, color(75, 50, 100));
-  drawPlane(10, color(125, 50, 100));
-  drawPlane(11, color(175, 50, 100));
-  drawPlane(12, color(225, 75, 75));
-  drawPlane(13, color(325, 75, 75));
-  drawPlane(14, color(25, 75, 75));
-  drawPlane(15, color(75, 75, 75));
+  //drawBlockers();
 
-  drawPlane(16, color(100, 75, 75));
-  drawPlane(17, color(300, 75, 75));
-  drawPlane(18, color(150, 75, 75));
-  drawPlane(19, color(250, 75, 75));
-  drawPlane(20, color(200, 0, 100));
-  drawPlane(21, color(200, 50, 100));
-  drawPlane(22, color(0, 50, 100));
-  drawPlane(23, color(150, 50, 100));
-
-
-
-
-  drawBlockers();
-
-  //globalAnimator.runAnimation("lateralSweep");
+  //globalAnimator.runAnimation("dualLateralSweep");
 
   //TODO: fix vertical planes
   //globalAnimator.runAnimation("flashingVerticalPlanes");
 
   //globalAnimator.runAnimation("growingBox");
+
+// all on test
+
+  for (int i=0; i<tesseractPerspectives.length; i++)
+  {
+    tesseractPerspectives[i].setupPerspective();
+    fill(300,100,100);
+    box(150);
+    tesseractPerspectives[i].resetPerspective();
+  }
+
 }
 
 void drawBlockers()
@@ -295,6 +317,70 @@ void setupLedStrings() ////TODO: Fix front and back squares
 {
   ////setup LED strips
 
+  /*
+  //perspective 0
+   ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 27, 0);
+   */
+
+  //perspective 0
+
+  //inside front square
+  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 14, 0);
+  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 14, 0);
+  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 14, 0);
+  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 12, 0); //ILF -2
+
+  //lateral front connections
+  ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 10, 0);
+  ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 14, 0);
+  ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 11, 0);
+  ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 11, 0);
+
+  //outside front square
+  ledStrip(timeProjectorForm.Vertices.get(7).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 29, 0);
+  ledStrip(timeProjectorForm.Vertices.get(6).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 33, 0);
+  ledStrip(timeProjectorForm.Vertices.get(2).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 30, 0);
+  ledStrip(timeProjectorForm.Vertices.get(3).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 30, 0);
+
+
+  //perspective 1
+
+  ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 17, 1); //inside bottom back left -> outside bottom back left
+  ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 16, 1);
+  ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 12, 1); //inside bottom back left -> inside bottom front left
+  ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 12, 1);
+
+
+  //perspective 3
+
+  //outside back square
+  ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 19, 3);
+  ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 19, 3);
+  ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 19, 3);
+  ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 19, 3);
+
+  //outside back to front connections
+  ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 21, 3);
+  ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 23, 3);
+  ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 23, 3);
+  ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 22, 3); //OBR -1
+
+  //inside back square
+  ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(13).coordinate, 6, 3); //ITB -2
+  ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(9).coordinate, 8, 3);
+  ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(8).coordinate, 8, 3);
+  ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(12).coordinate, 8, 3);
+
+  //perspective 4
+  //inside back square top -> lateral
+  ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 16, 4); //inside top back left -> outside top back left
+  ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 17, 4);
+  ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 10, 4); //ITL -2
+  ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 11, 4); //ITR -1
+
+
+/*
+  ////old
   //perspective 0
 
   //inside front square
@@ -350,6 +436,7 @@ void setupLedStrings() ////TODO: Fix front and back squares
   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 32, 4);
   ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 24, 4); //inside top back left -> inside top front left
   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 24, 4);
+  */
 }
 
 void ledStrip(PVector start, PVector end, int numLeds, int perspectiveNum)
@@ -387,6 +474,8 @@ void ledStrip(PVector start, PVector end, int numLeds, int perspectiveNum)
   }
 
   tesseractPerspectives[perspectiveNum].resetPerspective();
+
+  println("ledcount: " + ledCount);
 }
 
 void ledSquare(int x, int y, int squareWidth, int squareHeight)
