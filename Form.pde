@@ -203,7 +203,7 @@ public class TimeProjectorForm extends Form
 
   void drawEdges()
   {
-    stroke(0,0,100);
+    stroke(0,0,0);
     strokeWeight(2);
 
     for (int i=0; i<Vertices.size(); i++)
@@ -223,7 +223,8 @@ public class TimeProjectorForm extends Form
   void drawEdge(int edgeNum, color edgeColor)
   {
     stroke(edgeColor);
-    strokeWeight(1);
+    strokeWeight(2);
+    noFill();
     switch(edgeNum)
     {
     case 0: //OBB

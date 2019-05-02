@@ -59,6 +59,9 @@ public class Animation
     case "lateralSweep":
       lateralSweep();
       break;
+    case "lateralSweep2":
+      lateralSweep2();
+      break;
     case "dualLateralSweep":
       dualLateralSweep();
       break;
@@ -110,7 +113,7 @@ public class Animation
   {
     vert_onlyRunOnceCounter++;
 
-   // println(onlyRunOnceCounter);
+    // println(onlyRunOnceCounter);
 
     if (vert_onlyRunOnceCounter % 5 == 0)
     {
@@ -219,7 +222,7 @@ public class Animation
 
   void lateralSweep()
   {
-    float speed = 250;
+    float speed = 100;
 
     if (frameCount%speed==0 && sweepTimer != millis())
     {
@@ -232,7 +235,7 @@ public class Animation
     {
       translate(-50+(frameCount%speed / (speed/100)), 0, 0);
 
-      fill(255, 255, 255);
+      fill(0, 100, 100);
       noStroke();
       box(5, 125, 125);
 
@@ -241,11 +244,43 @@ public class Animation
     {
       translate(50-(frameCount%speed / (speed/100)), 0, 0);
 
-      fill(255, 255, 255);
+      fill(0, 100, 100);
       noStroke();
       box(5, 125, 125);
 
       translate(-(50-(frameCount%speed / (speed/100))), 0, 0);
+    }
+  }
+
+  void lateralSweep2()
+  {
+    float speed = 100;
+
+    if (frameCount%speed==0 && sweepTimer != millis())
+    {
+      reversedLateralSweep = !reversedLateralSweep;
+      sweepTimer = millis();
+    }
+
+
+    if (!reversedLateralSweep)
+    {
+      translate(0, -50+(frameCount%speed / (speed/100)), 0);
+
+      fill(0, 100, 100);
+      noStroke();
+      box(125, 5, 125);
+
+      translate(0, -(-50+(frameCount%speed / (speed/100))), 0);
+    } else
+    {
+      translate(0, 50-(frameCount%speed / (speed/100)), 0);
+
+      fill(0, 100, 100);
+      noStroke();
+      box(125, 5, 125);
+
+      translate(0, -(50-(frameCount%speed / (speed/100))), 0);
     }
   }
 
@@ -295,7 +330,7 @@ public class Animation
   {
     float _speed = 100.0 - 40;
 
-    fill(255, 0, 255);
+    fill(0, 100, 100);
     noStroke();
     //stroke(0, 255, 255);
 
