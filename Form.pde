@@ -203,8 +203,8 @@ public class TimeProjectorForm extends Form
 
   void drawEdges()
   {
-    stroke(0);
-    strokeWeight(5);
+    stroke(0,0,100);
+    strokeWeight(2);
 
     for (int i=0; i<Vertices.size(); i++)
     {
