@@ -1,7 +1,7 @@
 public class Snake
 {
   int lastIndex, currentIndex, speed;
-  int maxLength = 255;
+  int maxLength = 50;
   ArrayList<PVector> body;
   String animationMode; //change to enum
   ArrayList<String> directions;
@@ -36,10 +36,12 @@ public class Snake
 
   void Update()
   {
+    
+    println(body.size());
     if (frameCount%speed == 0)
     {
       if (directions.size() != 0)
-      {
+      {        
         directions.add(directions.get(0));
         directions.remove(0);
         animationMode = directions.get(0);
@@ -77,7 +79,7 @@ public class Snake
 
   void rotateAnimation(boolean clockwise)
   {
-    maxLength = speed * 4;
+    //maxLength = speed * 4;
 
     int tempIndex;
     if (clockwise)
@@ -151,11 +153,10 @@ public class Snake
       for (int j=0; j<body.size(); j++)
       {
         //fill((j%255), 255-(j%255), (j%255));
-        fill((int)(j*(float)(255/body.size())), 0, (int)(j*(float)(255/body.size())));
+        //fill((int)(j*(float)(255/body.size())), 0, (int)(j*(float)(255/body.size())));
         //fill(random(255), random(255), random(255));
 
-        fill(snakeColor, 360, (int)(j*(float)(100/body.size())));
-
+        fill(snakeColor, 100, (int)(j*(float)(100/body.size())));
 
         pushMatrix();
         translate(body.get(j).x, body.get(j).y, body.get(j).z);

@@ -24,6 +24,16 @@ int lastVertexIndex = 0;
 int currentVertexIndex = 0;
 int speed = 50;
 
+//color fade
+float colorFadePos = 0;
+ArrayList<Integer> fadeColors;
+int b1 = 0;
+int b2 = 1;
+
+//edges fade
+int[] edges = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};//new int[11];// [0,1,2,3,4,5,6,7,8,9,10,11];
+EdgeFader smallCubeEdgeFader;
+
 ArrayList<PVector> snake;
 
 ArrayList<Snake> snakes;
@@ -63,25 +73,42 @@ void setup()
   //new snakes
   ////snakes = new ArrayList<ArrayList<PVector>>();
   snakes = new ArrayList<Snake>();
-  snakes.add(new Snake(0, 40, "rotateLeft", 255));
-  snakes.add(new Snake(8, 50, "rotateLeft", 127));
+  //snakes.add(new Snake(0, 40, "rotateLeft", 255));
+  snakes.add(new Snake(8, 50, "rotateRight", 127));
   //snakes.add(new Snake(12, 15, "pivotLateral"));
 
+  snakes.get(0).addDirection("pivotVertical");
+  snakes.get(0).addDirection("pivotRight");
+  snakes.get(0).addDirection("pivotVertical");
   snakes.get(0).addDirection("pivotLeft");
-  snakes.get(0).addDirection("pivotLeft");
-  snakes.get(0).addDirection("pivotLeft");
-  snakes.get(0).addDirection("pivotLeft");
-  snakes.get(0).addDirection("pivotLeft");
-  snakes.get(0).addDirection("pivotLateral");
 
-  snakes.get(1).addDirection("pivotVertical");
-  snakes.get(1).addDirection("pivotRight");
-  snakes.get(1).addDirection("pivotVertical");
-  snakes.get(1).addDirection("pivotLeft");
-  snakes.get(1).addDirection("pivotLeft");
-  snakes.get(1).addDirection("pivotLateral");
+  /*  
+   snakes.get(0).addDirection("pivotLeft");
+   snakes.get(0).addDirection("pivotLeft");
+   snakes.get(0).addDirection("pivotLeft");
+   snakes.get(0).addDirection("pivotLeft");
+   snakes.get(0).addDirection("pivotLeft");
+   snakes.get(0).addDirection("pivotLateral");
+   
+   snakes.get(1).addDirection("pivotVertical");
+   snakes.get(1).addDirection("pivotRight");
+   snakes.get(1).addDirection("pivotVertical");
+   snakes.get(1).addDirection("pivotLeft");
+   snakes.get(1).addDirection("pivotLeft");
+   snakes.get(1).addDirection("pivotLateral");
+   */
 
+  fadeColors = new ArrayList<Integer>();
+  fadeColors.add(color(0, 100, 100));
+  fadeColors.add(color(180, 100, 100));
+  fadeColors.add(color(90, 100, 100));
+  fadeColors.add(color(270, 100, 100));
 
+  int[] edges1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+  color[] colors1 = {color(0, 0, 0), color(0, 100, 100), color(0, 0, 0), color(240, 100, 100)};
+  smallCubeEdgeFader = new EdgeFader(edges1, 0.005, colors1);
+
+  //  EdgeFader(int _edgeNums[], float _fadeSpeed, color _colors[])
 
 
   setupLedStrings();
@@ -92,13 +119,13 @@ void setup()
 
 void draw()
 {
-  if(!ghostFade) {
+  if (!ghostFade) {
     background(0, 0, 0);
   }
   drawAllTimeProjectorForms();
 
-  if (frameCount%25==0)
-    println("FrameRate:" + frameRate);
+  //  if (frameCount%25==0)
+  //    println("FrameRate:" + frameRate);
 
   //println("mouseX:" + mouseX + " mouseY:" + mouseY);
 
@@ -107,67 +134,57 @@ void draw()
     camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
   }
 
-  //camera(sin(frameCount/80.0)*150 + 350, sin(frameCount/70.0)*100 + 200, (height/2.0) / tan(PI*30.0 / 180.0), width/2, height/2, 0, 0, 1, 0);
-
-  ////functional snake
-  //snakeAnimation();
-
-  //globalAnimator.runAnimation("snake");
-
-  /*    
-   //test update snakes, put in function later and probably in Animation class
+  /*
+  //test update snakes, put in function later and probably in Animation class
    for (int i=0; i<snakes.size(); i++)
    {
    snakes.get(i).Update();
    }
    */
 
-  //planes test
-  /*  
-   drawPlane(0, color(300, 100, 100));
-   drawPlane(1, color(100, 100, 100));
-   drawPlane(2, color(200, 100, 100));
-   drawPlane(3, color(50, 100, 100));
-   drawPlane(4, color(0, 100, 100));
-   drawPlane(5, color(150, 100, 100));
-   drawPlane(6, color(150, 0, 100));
+  /*
+  if (frameCount%7==0)
+   {
+   looper++;
+   println(looper);
    
-   drawPlane(7, color(250, 50, 100));
-   drawPlane(8, color(350, 50, 100));
-   
-   drawPlane(9, color(75, 50, 100));
-   drawPlane(10, color(125, 50, 100));
-   drawPlane(11, color(175, 50, 100));
-   drawPlane(12, color(225, 75, 75));
-   drawPlane(13, color(325, 75, 75));
-   drawPlane(14, color(25, 75, 75));
-   drawPlane(15, color(75, 75, 75));
-   
-   drawPlane(16, color(100, 75, 75));
-   drawPlane(17, color(300, 75, 75));
-   drawPlane(18, color(150, 75, 75));
-   drawPlane(19, color(250, 75, 75));
-   drawPlane(20, color(200, 0, 100));
-   drawPlane(21, color(200, 50, 100));
-   drawPlane(22, color(0, 50, 100));
-   drawPlane(23, color(150, 50, 100));
+   drawEdge((int)random(31), color(0, 0, 100));
+   }
    */
 
-for(int i=13; i<=24; i++)
-{
-   drawEdge(i, color(0, 100, 100));  
-}
 
-for(int i=0; i<=12; i++)
-{
-   drawEdge(i, color(150, 100, 100));  
-}
+  /*
+  if (looper%2==0)
+   {
+   for (int i=0; i<=11; i++)
+   {
+   drawEdge(i, color(0, 100, 100));
+   }
+   } else
+   {
+   for (int i=12; i<=23; i++)
+   {
+   drawEdge(i, color(240, 100, 100));
+   }
+   }
+   */
 
   //globalAnimator.runAnimation("rotatingBox");
 
   //drawBlockers();
 
-  //globalAnimator.runAnimation("lateralSweep2");
+  //globalAnimator.runAnimation("lateralSweep");
+
+  //fadingEdges(edges, colorFadePos, 0.005, fadeColors.get(0), fadeColors.get(1));
+  smallCubeEdgeFader.Update();
+
+  noStroke();
+  //fill(fadeToColor(color(0,100,100), color(200,100,100), 0.0005));
+  fill(lerpColor(color(0, 100, 100), color(200, 100, 100), (float)frameCount/1000));
+  translate(width/2, height/2, 0);
+  box(100, 100, 100);
+  translate(-width/2, -height/2, 0);
+
 
   //TODO: fix vertical planes
   //globalAnimator.runAnimation("flashingVerticalPlanes");
@@ -184,7 +201,6 @@ for(int i=0; i<=12; i++)
    tesseractPerspectives[i].resetPerspective();
    }
    */
-  looper++;
 
   //mouseTest
 
@@ -205,6 +221,128 @@ for(int i=0; i<=12; i++)
   }
 }
 
+public class EdgeFader {
+  int edgeNums[];
+  float fadePos;
+  float fadeSpeed;
+  color colors[];
+
+  int pos;
+  boolean toFromBlack = false;
+
+  EdgeFader(int _edgeNums[], float _fadeSpeed, color _colors[])
+  {
+    edgeNums = new int[_edgeNums.length];
+    edgeNums = _edgeNums.clone();
+    fadeSpeed = _fadeSpeed;
+    colors = new color[_colors.length];
+    colors = _colors.clone();
+
+    fadePos = 0;
+    pos = 0;
+
+    println(hue(colors[0]));
+    println(hue(colors[1]));
+    println(hue(colors[2]));
+    println(hue(colors[3]));
+  }
+
+  void Update()
+  {    
+    if (brightness(colors[pos % (colors.length)]) == 0 || brightness(colors[(pos+1) % (colors.length)]) == 0)
+    {
+      toFromBlack = true;
+    }
+
+    fadePos += fadeSpeed;
+
+    color c;
+    if (!toFromBlack)
+    {
+      c = lerpColor(colors[pos % (colors.length)], colors[(pos+1) % (colors.length)], fadePos);
+    } else
+    {
+      float brightnessPos = fadePos * 100;
+
+      //from black
+      if (brightness(colors[pos % (colors.length)]) == 0)
+      {
+        c = color(hue(colors[(pos+1) % (colors.length)]), saturation(colors[(pos+1) % (colors.length)]), brightnessPos);
+      } else
+      {
+        c = color(hue(colors[(pos) % (colors.length)]), saturation(colors[(pos) % (colors.length)]), 100-brightnessPos);
+      }
+    }
+
+    for (int i=0; i < edges.length; i++)
+    {
+      timeProjectorForm.drawEdge(edges[i], c);
+    }
+
+    //next color
+    if (fadePos >= 1)
+    {
+      fadePos = 0;
+      pos++;
+    }
+  }
+}
+
+//returns true when finished --- should change to ms based not framerate but i dont have time
+boolean fadingEdges(int[] edges, float fadePos, float fadeSpeed, color from, color to)
+{
+  fadePos += fadeSpeed;
+
+  if (fadePos >= 1)
+  {
+    fadePos = 0;
+    return true;
+  }
+
+  color c = lerpColor(from, to, fadePos);
+
+  for (int i=0; i < edges.length-1; i++)
+  {
+    timeProjectorForm.drawEdge(edges[i], c);
+  }
+
+  return false;
+}
+
+void fadingBoxes(float fadeSpeed)
+{
+  colorFadePos += fadeSpeed;
+
+  color c = fadeToColor(color(0, 100, 100), color(200, 100, 100), colorFadePos);
+
+  for (int i=0; i<=11; i++)
+  {
+    //timeProjectorForm.drawEdge(i, fadeToColor(fadeColors.get(b1%fadeColors.size()), fadeColors.get((b1+1)%fadeColors.size()), 0.05));
+
+    timeProjectorForm.drawEdge(i, c);
+  }
+  /*
+  for (int i=12; i<=23; i++)
+   {
+   timeProjectorForm.drawEdge(i, fadeToColor(fadeColors.get(b2%fadeColors.size()), fadeColors.get((b2+1)%fadeColors.size()), 0.05));
+   }
+   
+   */
+}
+
+color fadeToColor(color from, color to, float colorFadePos)
+{
+
+  if (colorFadePos >= 1)
+  {
+    colorFadePos = 0;
+    b1++;
+    b2++;
+  }
+
+  return lerpColor(from, to, colorFadePos);
+}
+
 
 void drawBlockers()
 {
@@ -223,7 +361,7 @@ void drawBlockers()
   verticalSlice.vertex(topLeft.x, topLeft.y, topLeft.z);
 
   verticalSlice.endShape();
-  verticalSlice.setFill(color(0,0,0));
+  verticalSlice.setFill(color(0, 0, 0));
   verticalSlice.setStroke(false);
 
   tesseractPerspectives[0].setupPerspective();
@@ -234,6 +372,8 @@ void drawBlockers()
   shape(verticalSlice);
   tesseractPerspectives[3].resetPerspective();
 }
+
+
 
 void circleSnake()
 {
@@ -265,12 +405,7 @@ void drawAllTimeProjectorForms()
 //move to animation?
 void drawEdge(int edgeNum, color _color)
 {
-  for (int i=0; i<tesseractPerspectives.length; i++)
-  {
-    tesseractPerspectives[i].setupPerspective();
-    timeProjectorForm.drawEdge(edgeNum, _color);
-    tesseractPerspectives[i].resetPerspective();
-  }
+  timeProjectorForm.drawEdge(edgeNum, _color);
 }
 
 //move to animation?

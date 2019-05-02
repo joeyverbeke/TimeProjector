@@ -24,7 +24,6 @@ public class Animation
   float xSpeed = 30.0;
   float zSpeed = 30.0;
 
-
   Animation() {
     ghostFrames = new ArrayList<PImage>();
     ghosting = true;
@@ -40,6 +39,7 @@ public class Animation
     currentVertexIndex = 0;
     snakePoints = new ArrayList<PVector>();
     onlyRunOnceCounter = 0;
+
   }
 
   //add in way to set function parameters, e.g. speed
@@ -75,6 +75,9 @@ public class Animation
       flashingVerticalPlanes();
       //    case "randomRectangularPrisms":
       //      randomRectangularPrisms();
+      break;
+    case "extendingBox":
+      extendingBox();
       break;
     default:
       break;
@@ -220,6 +223,37 @@ public class Animation
     //    }
   }
 
+  void extendingBox()
+  {
+    float speed = 100;
+
+    if (frameCount%speed==0 && sweepTimer != millis())
+    {
+      reversedLateralSweep = !reversedLateralSweep;
+      sweepTimer = millis();
+    }
+
+    noStroke();
+    fill(0, 100, 100);
+    if (!reversedLateralSweep)
+    {
+      pushMatrix();
+      translate(-50, 0, 0);
+      for (int i=0; i < frameCount%speed; i++)
+      {
+        translate(1, 0, 0);
+        fill(0, 100, i);
+        box(1, 125, 125);
+      }
+      popMatrix();
+
+      //box(frameCount%speed, 125, 125);
+    } else
+    {
+      box(speed-(frameCount%speed), 125, 125);
+    }
+  }
+
   void lateralSweep()
   {
     float speed = 100;
@@ -237,7 +271,7 @@ public class Animation
 
       fill(0, 100, 100);
       noStroke();
-      box(5, 125, 125);
+      box(10, 125, 125);
 
       translate(-(-50+(frameCount%speed / (speed/100))), 0, 0);
     } else
@@ -246,7 +280,7 @@ public class Animation
 
       fill(0, 100, 100);
       noStroke();
-      box(5, 125, 125);
+      box(10, 125, 125);
 
       translate(-(50-(frameCount%speed / (speed/100))), 0, 0);
     }
