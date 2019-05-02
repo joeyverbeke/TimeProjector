@@ -31,8 +31,10 @@ int b1 = 0;
 int b2 = 1;
 
 //edges fade
-int[] edges = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};//new int[11];// [0,1,2,3,4,5,6,7,8,9,10,11];
+int[] edges = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 EdgeFader smallCubeEdgeFader;
+EdgeFader largeCubeEdgeFader;
+
 
 ArrayList<PVector> snake;
 
@@ -108,6 +110,10 @@ void setup()
   color[] colors1 = {color(0, 0, 0), color(0, 100, 100), color(0, 0, 0), color(240, 100, 100)};
   smallCubeEdgeFader = new EdgeFader(edges1, 0.005, colors1);
 
+  int[] edges2 = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+  color[] colors2 = {color(0, 100, 100), color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
+  largeCubeEdgeFader = new EdgeFader(edges2, 0.005, colors2);
+
   //  EdgeFader(int _edgeNums[], float _fadeSpeed, color _colors[])
 
 
@@ -177,6 +183,7 @@ void draw()
 
   //fadingEdges(edges, colorFadePos, 0.005, fadeColors.get(0), fadeColors.get(1));
   smallCubeEdgeFader.Update();
+  largeCubeEdgeFader.Update();
 
   noStroke();
   //fill(fadeToColor(color(0,100,100), color(200,100,100), 0.0005));
@@ -240,11 +247,6 @@ public class EdgeFader {
 
     fadePos = 0;
     pos = 0;
-
-    println(hue(colors[0]));
-    println(hue(colors[1]));
-    println(hue(colors[2]));
-    println(hue(colors[3]));
   }
 
   void Update()
@@ -274,9 +276,9 @@ public class EdgeFader {
       }
     }
 
-    for (int i=0; i < edges.length; i++)
+    for (int i=0; i < edgeNums.length; i++)
     {
-      timeProjectorForm.drawEdge(edges[i], c);
+      timeProjectorForm.drawEdge(edgeNums[i], c);
     }
 
     //next color
