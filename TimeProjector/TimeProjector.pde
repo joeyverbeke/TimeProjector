@@ -35,6 +35,13 @@ int[] edges = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 EdgeFader smallCubeEdgeFader;
 EdgeFader largeCubeEdgeFader;
 
+GradientLine gradientLineTest;  
+
+ArrayList<SingleEdgeFader> planeToVolume;
+
+int p2v_pos = 0;
+
+
 
 ArrayList<PVector> snake;
 
@@ -106,15 +113,82 @@ void setup()
   fadeColors.add(color(90, 100, 100));
   fadeColors.add(color(270, 100, 100));
 
-  int[] edges1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  color[] colors1 = {color(0, 0, 0), color(0, 100, 100), color(0, 0, 0), color(240, 100, 100)};
-  smallCubeEdgeFader = new EdgeFader(edges1, 0.005, colors1);
+  //int[] edges1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+  String[] edges1_string = {"ORB", "OTL", "LBTR", "IRB", "IBL", "LFBL", "OLF", "OBL", "LFTL", "ILF", "LBBR", "ITL"}; 
+  color[] colors1 = {color(0, 100, 100), color(50, 100, 0), color(0, 0, 0), color(240, 100, 100), color(170, 100, 100)};
+  smallCubeEdgeFader = new EdgeFader(edges1_string, 0.0005, colors1);
 
   int[] edges2 = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
   color[] colors2 = {color(0, 100, 100), color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
   largeCubeEdgeFader = new EdgeFader(edges2, 0.005, colors2);
 
-  //  EdgeFader(int _edgeNums[], float _fadeSpeed, color _colors[])
+  gradientLineTest = new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(6), "fadeOnAcross", color(0, 0, 100), 0.001, 100, 0);
+
+
+  //setup plane to volume
+  planeToVolume = new ArrayList<SingleEdgeFader>();
+  color[] bwb = {color(0, 0, 0), color(0, 0, 100), color(0, 0, 0)};
+  color[] bBb = {color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
+  color[] wBb = {color(0, 0, 100), color(240, 100, 100), color(0, 0, 0)};
+  float p2v_speed = 0.005;
+
+
+  //1
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, bwb, true));
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, bwb, true));    
+
+  //2
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, bwb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("ILB", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, bwb, true)); 
+
+  //3
+  planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("OTF", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("ITF", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("ITB", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, wBb, true));
+
+  //4
+  planeToVolume.add(new SingleEdgeFader("OBB", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("OBF", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("IBB", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("IBF", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBR",p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBL",p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBL",p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBR",p2v_speed, wBb, true));
+
 
 
   setupLedStrings();
@@ -133,20 +207,10 @@ void draw()
   //  if (frameCount%25==0)
   //    println("FrameRate:" + frameRate);
 
-  //println("mouseX:" + mouseX + " mouseY:" + mouseY);
-
   if (controlCameraWithMouse)
   {
     camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
   }
-
-  /*
-  //test update snakes, put in function later and probably in Animation class
-   for (int i=0; i<snakes.size(); i++)
-   {
-   snakes.get(i).Update();
-   }
-   */
 
   /*
   if (frameCount%7==0)
@@ -159,22 +223,6 @@ void draw()
    */
 
 
-  /*
-  if (looper%2==0)
-   {
-   for (int i=0; i<=11; i++)
-   {
-   drawEdge(i, color(0, 100, 100));
-   }
-   } else
-   {
-   for (int i=12; i<=23; i++)
-   {
-   drawEdge(i, color(240, 100, 100));
-   }
-   }
-   */
-
   //globalAnimator.runAnimation("rotatingBox");
 
   //drawBlockers();
@@ -182,42 +230,31 @@ void draw()
   //globalAnimator.runAnimation("lateralSweep");
 
   //fadingEdges(edges, colorFadePos, 0.005, fadeColors.get(0), fadeColors.get(1));
-  smallCubeEdgeFader.Update();
-  largeCubeEdgeFader.Update();
+  //smallCubeEdgeFader.Update();
+  //largeCubeEdgeFader.Update();
 
-  noStroke();
-  //fill(fadeToColor(color(0,100,100), color(200,100,100), 0.0005));
-  fill(lerpColor(color(0, 100, 100), color(200, 100, 100), (float)frameCount/1000));
-  translate(width/2, height/2, 0);
-  box(100, 100, 100);
-  translate(-width/2, -height/2, 0);
+  //gradientLineTest.Update();
 
 
-  //TODO: fix vertical planes
-  //globalAnimator.runAnimation("flashingVerticalPlanes");
-
-  //globalAnimator.runAnimation("growingBox");
-
-  // all on test
-  /*
-  for (int i=0; i<tesseractPerspectives.length; i++)
-   {
-   tesseractPerspectives[i].setupPerspective();
-   fill(150, 100, 100);
-   box(150);
-   tesseractPerspectives[i].resetPerspective();
-   }
-   */
+  for (int i=0; i<=p2v_pos; i++)
+  {
+    planeToVolume.get(i).Update();
+    if (planeToVolume.get(p2v_pos).finished == true && (p2v_pos+1) < planeToVolume.size())
+    {
+      println(planeToVolume.get(p2v_pos).edgeName);
+      p2v_pos++;
+    }
+  }
 
   //mouseTest
-
+  /*
   noStroke();
-  pushMatrix();
-  fill(0, 0, 100);
-  translate(mouseX, mouseY, 500);
-  box(10, 10, 1000);
-  popMatrix();
-
+   pushMatrix();
+   fill(0, 0, 100);
+   translate(mouseX, mouseY, 500);
+   box(10, 10, 1000);
+   popMatrix();
+   */
   if (ghostFade)
   {
     pushMatrix();
@@ -228,8 +265,193 @@ void draw()
   }
 }
 
+public class GradientLine {
+
+  Vertex start;
+  Vertex end;
+
+  String mode;
+  color lineColor;
+
+  float lineSize;
+  ArrayList<PVector> lineBoxes;
+  ArrayList<Float> boxFadePos;  
+
+  float pos;
+  float speed;
+
+  int perspective;
+
+  GradientLine(Vertex _start, Vertex _end, String _mode, color _lineColor, float _speed, int numBoxes, int _perspective)
+  {
+    start=_start;
+    end=_end;
+    mode=_mode;
+    lineColor=_lineColor;
+    speed=_speed;
+
+    lineSize = PVector.dist(start.coordinate, end.coordinate);
+    lineBoxes = new ArrayList<PVector>();
+    boxFadePos = new ArrayList<Float>();
+
+    perspective = _perspective;
+
+    for (int i=0; i<numBoxes; i++)
+    {
+      lineBoxes.add(PVector.lerp(start.coordinate, end.coordinate, (float)i/numBoxes));
+      boxFadePos.add(0.0);
+    }
+  }
+
+  //there should always be more boxes than the length
+
+  void Update()
+  {
+    switch(mode)
+    {
+    case "fadeOnAcross":
+      pos += speed;
+
+      for (int i=0; i<lineBoxes.size(); i++)
+      {
+        tesseractPerspectives[perspective].setupPerspective();
+
+        //if pos has passed the point in which this box's index should turn on
+        if (pos >= ((float)1/lineBoxes.size() * i))
+        {
+
+          boxFadePos.set(i, boxFadePos.get(i) + speed);
+          //if(boxFadePos.get(i) > 0 && boxFadePos.get(i) < 0.1)
+          //  boxFadePos.set(i, 0.11);
+
+          pushMatrix();
+
+          translate(lineBoxes.get(i).x, lineBoxes.get(i).y, lineBoxes.get(i).z);
+          noStroke();
+          fill(color(hue(lineColor), saturation(lineColor), boxFadePos.get(i)*100));
+          box(2);
+
+          popMatrix();
+
+          tesseractPerspectives[perspective].resetPerspective();
+        }
+      }
+
+      break;
+    default:
+
+      break;
+    }
+  }
+}
+
+public class SingleEdgeFader {
+  String edgeName;
+  float fadePos;
+  float fadeSpeed;
+  color[] colors;
+
+  boolean stayOn;
+  int pos;
+
+  boolean finished;
+  boolean toFromBlack;
+  boolean whiteToColor;
+
+  SingleEdgeFader(String _edgeName, float _fadeSpeed, color[] _colors, boolean _stayOn)
+  {
+    edgeName = _edgeName;
+    fadeSpeed = _fadeSpeed;
+    colors = new color[_colors.length];
+    colors = _colors.clone();
+
+    fadePos = 0;
+    stayOn = _stayOn;
+
+    pos = 0;
+
+    finished = false;
+    toFromBlack = false;
+    whiteToColor = false;
+  }
+
+  void next()
+  {
+    pos++;
+    fadePos = 0;
+  }
+
+  void Update()
+  {    
+    fadePos += fadeSpeed;
+    color c;
+
+    if (brightness(colors[pos % (colors.length)]) == 0 || brightness(colors[(pos+1) % (colors.length)]) == 0)
+    {
+      toFromBlack = true;
+    } else
+    {
+      toFromBlack = false;
+    }
+
+    if ( (saturation(colors[pos % (colors.length)]) == 0 && brightness(colors[pos % (colors.length)]) != 0) || 
+      (saturation(colors[(pos+1) % (colors.length)]) == 0 && brightness(colors[(pos+1) % (colors.length)]) != 0) )
+    {
+      whiteToColor = true;
+    } else
+    {
+      whiteToColor = false;
+    }
+
+     if (toFromBlack)
+    {
+      float brightnessPos = fadePos * 100;
+
+      //from black
+      if (brightness(colors[pos % (colors.length)]) == 0)
+      {
+        if (brightnessPos <= 5)
+        {
+          brightnessPos = 5;
+        }
+        c = color(hue(colors[(pos+1) % (colors.length)]), saturation(colors[(pos+1) % (colors.length)]), brightnessPos);
+        
+      } else
+      {
+        if (brightnessPos >= 95)
+        {
+          brightnessPos = 100;
+        }
+        c = color(hue(colors[(pos) % (colors.length)]), saturation(colors[(pos) % (colors.length)]), 100-brightnessPos);
+        
+      }
+    } else if (whiteToColor)
+    {
+      float saturationPos = fadePos * 100;
+      
+      c = color(hue(colors[(pos+1) % (colors.length)]), saturationPos, brightness(colors[(pos+1) % (colors.length)]));
+    } else
+    {
+      c = lerpColor(colors[pos % (colors.length)], colors[(pos+1) % (colors.length)], fadePos);
+    }
+
+    timeProjectorForm.drawEdge(edgeName, c);
+
+    if (fadePos >= 1 && !stayOn)
+    {
+      fadePos = 0;
+      finished = false;
+      pos++;
+    } else if (fadePos >= 1)
+    {
+      finished = true;
+    }
+  }
+}
+
 public class EdgeFader {
   int edgeNums[];
+  String edgeNames[];
   float fadePos;
   float fadeSpeed;
   color colors[];
@@ -239,8 +461,22 @@ public class EdgeFader {
 
   EdgeFader(int _edgeNums[], float _fadeSpeed, color _colors[])
   {
+    edgeNames = new String[0];
     edgeNums = new int[_edgeNums.length];
     edgeNums = _edgeNums.clone();
+    fadeSpeed = _fadeSpeed;
+    colors = new color[_colors.length];
+    colors = _colors.clone();
+
+    fadePos = 0;
+    pos = 0;
+  }
+
+  EdgeFader(String _edgeNames[], float _fadeSpeed, color _colors[])
+  {
+    edgeNums = new int[0];
+    edgeNames = new String[_edgeNames.length];
+    edgeNames = _edgeNames.clone();
     fadeSpeed = _fadeSpeed;
     colors = new color[_colors.length];
     colors = _colors.clone();
@@ -254,6 +490,9 @@ public class EdgeFader {
     if (brightness(colors[pos % (colors.length)]) == 0 || brightness(colors[(pos+1) % (colors.length)]) == 0)
     {
       toFromBlack = true;
+    } else
+    {
+      toFromBlack = false;
     }
 
     fadePos += fadeSpeed;
@@ -269,16 +508,33 @@ public class EdgeFader {
       //from black
       if (brightness(colors[pos % (colors.length)]) == 0)
       {
+        if (brightnessPos <= 5)
+        {
+          brightnessPos = 5;
+        }
         c = color(hue(colors[(pos+1) % (colors.length)]), saturation(colors[(pos+1) % (colors.length)]), brightnessPos);
       } else
       {
+        if (brightnessPos >= 95)
+        {
+          brightnessPos = 100;
+        }
         c = color(hue(colors[(pos) % (colors.length)]), saturation(colors[(pos) % (colors.length)]), 100-brightnessPos);
       }
     }
 
-    for (int i=0; i < edgeNums.length; i++)
+    if (edgeNums.length > 0)
     {
-      timeProjectorForm.drawEdge(edgeNums[i], c);
+      for (int i=0; i < edgeNums.length; i++)
+      {
+        timeProjectorForm.drawEdge(edgeNums[i], c);
+      }
+    } else
+    {
+      for (int i=0; i < edgeNames.length; i++)
+      {
+        timeProjectorForm.drawEdge(edgeNames[i], c);
+      }
     }
 
     //next color
@@ -408,6 +664,12 @@ void drawAllTimeProjectorForms()
 void drawEdge(int edgeNum, color _color)
 {
   timeProjectorForm.drawEdge(edgeNum, _color);
+}
+
+//move to animation?
+void drawEdge(String edgeName, color _color)
+{
+  timeProjectorForm.drawEdge(edgeName, _color);
 }
 
 //move to animation?

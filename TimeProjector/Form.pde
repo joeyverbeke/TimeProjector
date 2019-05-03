@@ -418,6 +418,209 @@ public class TimeProjectorForm extends Form
       break;
     }
   }
+  
+  void drawEdge(String edgeName, color edgeColor)
+  {
+    stroke(edgeColor);
+    strokeWeight(2);
+    noFill();
+
+    switch(edgeName)
+    {
+    case "ITF":  //ITF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(15).coordinate.x, Vertices.get(15).coordinate.y, Vertices.get(15).coordinate.z, 
+        Vertices.get(14).coordinate.x, Vertices.get(14).coordinate.y, Vertices.get(14).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "IRF":  //IRF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(14).coordinate.x, Vertices.get(14).coordinate.y, Vertices.get(14).coordinate.z, 
+        Vertices.get(10).coordinate.x, Vertices.get(10).coordinate.y, Vertices.get(10).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "IBF":  //IBF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(10).coordinate.x, Vertices.get(10).coordinate.y, Vertices.get(10).coordinate.z, 
+        Vertices.get(11).coordinate.x, Vertices.get(11).coordinate.y, Vertices.get(11).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "ILF":  //ILF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(11).coordinate.x, Vertices.get(11).coordinate.y, Vertices.get(11).coordinate.z, 
+        Vertices.get(15).coordinate.x, Vertices.get(15).coordinate.y, Vertices.get(15).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "ITL":  //IBL
+      tesseractPerspectives[4].setupPerspective();
+      line(Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z, 
+        Vertices.get(11).coordinate.x, Vertices.get(11).coordinate.y, Vertices.get(11).coordinate.z);
+      tesseractPerspectives[4].resetPerspective();
+      break;
+    case "ITR":  //IBR 
+      tesseractPerspectives[4].setupPerspective();
+      line(Vertices.get(9).coordinate.x, Vertices.get(9).coordinate.y, Vertices.get(9).coordinate.z, 
+        Vertices.get(10).coordinate.x, Vertices.get(10).coordinate.y, Vertices.get(10).coordinate.z);
+      tesseractPerspectives[4].resetPerspective();
+      break;
+    case "ITB":  //ITB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(12).coordinate.x, Vertices.get(12).coordinate.y, Vertices.get(12).coordinate.z, 
+        Vertices.get(13).coordinate.x, Vertices.get(13).coordinate.y, Vertices.get(13).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "ILB":  //ILB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(13).coordinate.x, Vertices.get(13).coordinate.y, Vertices.get(13).coordinate.z, 
+        Vertices.get(9).coordinate.x, Vertices.get(9).coordinate.y, Vertices.get(9).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "IBB":  //IBB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(9).coordinate.x, Vertices.get(9).coordinate.y, Vertices.get(9).coordinate.z, 
+        Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "IRB":  //IRB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z, 
+        Vertices.get(12).coordinate.x, Vertices.get(12).coordinate.y, Vertices.get(12).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "IBL":  //ITL
+      tesseractPerspectives[1].setupPerspective();
+      line(Vertices.get(12).coordinate.x, Vertices.get(12).coordinate.y, Vertices.get(12).coordinate.z, 
+        Vertices.get(15).coordinate.x, Vertices.get(15).coordinate.y, Vertices.get(15).coordinate.z);
+      tesseractPerspectives[1].resetPerspective();
+      break;
+    case "IBR":  //ITR
+      tesseractPerspectives[1].setupPerspective();
+      line(Vertices.get(13).coordinate.x, Vertices.get(13).coordinate.y, Vertices.get(13).coordinate.z, 
+        Vertices.get(14).coordinate.x, Vertices.get(14).coordinate.y, Vertices.get(14).coordinate.z);
+      tesseractPerspectives[1].resetPerspective();
+      break;
+    case "ORF":  //ORF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z, 
+        Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "OBF":  //OBF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z, 
+        Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "OLF":  //OLF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z, 
+        Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "OTF":  //OTF
+      tesseractPerspectives[0].setupPerspective();
+      line(Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z, 
+        Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z);
+      tesseractPerspectives[0].resetPerspective();
+      break;
+    case "OTL":  //OTL
+      tesseractPerspectives[5].setupPerspective();
+      line(Vertices.get(4).coordinate.x, Vertices.get(4).coordinate.y, Vertices.get(4).coordinate.z, 
+        Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z);
+      tesseractPerspectives[5].resetPerspective();
+      break;
+    case "OTR":  //OTR
+      tesseractPerspectives[2].setupPerspective();
+      line(Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z, 
+        Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z);
+      tesseractPerspectives[2].resetPerspective();
+      break;
+    case "OBL":  //OBL
+      tesseractPerspectives[5].setupPerspective();
+      line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
+        Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z);
+      tesseractPerspectives[5].resetPerspective();
+      break;
+    case "OBR":  //OBR
+      tesseractPerspectives[2].setupPerspective();
+      line(Vertices.get(1).coordinate.x, Vertices.get(1).coordinate.y, Vertices.get(1).coordinate.z, 
+        Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z);
+      tesseractPerspectives[2].resetPerspective();
+      break;
+    case "OTB":  //OTB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(4).coordinate.x, Vertices.get(4).coordinate.y, Vertices.get(4).coordinate.z, 
+        Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "OLB":  //OLB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z, 
+        Vertices.get(1).coordinate.x, Vertices.get(1).coordinate.y, Vertices.get(1).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "OBB":  //OBB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
+        Vertices.get(1).coordinate.x, Vertices.get(1).coordinate.y, Vertices.get(1).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "ORB":  //ORB
+      tesseractPerspectives[3].setupPerspective();
+      line(Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z, 
+        Vertices.get(4).coordinate.x, Vertices.get(4).coordinate.y, Vertices.get(4).coordinate.z);
+      tesseractPerspectives[3].resetPerspective();
+      break;
+    case "LFTL":  //LFTL
+      tesseractPerspectives[5].setupPerspective();
+      line(Vertices.get(15).coordinate.x, Vertices.get(15).coordinate.y, Vertices.get(15).coordinate.z, 
+        Vertices.get(7).coordinate.x, Vertices.get(7).coordinate.y, Vertices.get(7).coordinate.z);
+      tesseractPerspectives[5].resetPerspective();
+      break;
+    case "LFTR":  //LFTR
+      tesseractPerspectives[2].setupPerspective();
+      line(Vertices.get(14).coordinate.x, Vertices.get(14).coordinate.y, Vertices.get(14).coordinate.z, 
+        Vertices.get(6).coordinate.x, Vertices.get(6).coordinate.y, Vertices.get(6).coordinate.z);
+      tesseractPerspectives[2].resetPerspective();
+      break;
+    case "LFBR":  //LFBR
+      tesseractPerspectives[2].setupPerspective();
+      line(Vertices.get(10).coordinate.x, Vertices.get(10).coordinate.y, Vertices.get(10).coordinate.z, 
+        Vertices.get(2).coordinate.x, Vertices.get(2).coordinate.y, Vertices.get(2).coordinate.z);
+      tesseractPerspectives[2].resetPerspective();
+      break;
+    case "LFBL":  //LFBL
+      tesseractPerspectives[5].setupPerspective();
+      line(Vertices.get(11).coordinate.x, Vertices.get(11).coordinate.y, Vertices.get(11).coordinate.z, 
+        Vertices.get(3).coordinate.x, Vertices.get(3).coordinate.y, Vertices.get(3).coordinate.z);
+      tesseractPerspectives[5].resetPerspective();
+      break;
+    case "LBTR":  //LBBR 
+      tesseractPerspectives[4].setupPerspective();
+      line(Vertices.get(8).coordinate.x, Vertices.get(8).coordinate.y, Vertices.get(8).coordinate.z, 
+        Vertices.get(0).coordinate.x, Vertices.get(0).coordinate.y, Vertices.get(0).coordinate.z);
+      tesseractPerspectives[4].resetPerspective();
+      break;
+    case "LBTL":  //LBBL
+      tesseractPerspectives[4].setupPerspective();
+      line(Vertices.get(9).coordinate.x, Vertices.get(9).coordinate.y, Vertices.get(9).coordinate.z, 
+        Vertices.get(1).coordinate.x, Vertices.get(1).coordinate.y, Vertices.get(1).coordinate.z);
+      tesseractPerspectives[4].resetPerspective();
+      break;
+    case "LBBR":  //LBTR
+      tesseractPerspectives[1].setupPerspective();
+      line(Vertices.get(12).coordinate.x, Vertices.get(12).coordinate.y, Vertices.get(12).coordinate.z, 
+        Vertices.get(4).coordinate.x, Vertices.get(4).coordinate.y, Vertices.get(4).coordinate.z);
+      tesseractPerspectives[1].resetPerspective();
+      break;
+    case "LBBL":  //LBTL
+      tesseractPerspectives[1].setupPerspective();
+      line(Vertices.get(13).coordinate.x, Vertices.get(13).coordinate.y, Vertices.get(13).coordinate.z, 
+        Vertices.get(5).coordinate.x, Vertices.get(5).coordinate.y, Vertices.get(5).coordinate.z);
+      tesseractPerspectives[1].resetPerspective();
+      break;
+    }
+  }
 
   void drawPlane(int planeNum, color planeColor)
   {
