@@ -1,3 +1,5 @@
+//DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run
+
 boolean controlCameraWithMouse = false;
 
 int looper = 0;
@@ -130,14 +132,18 @@ void setup()
   color[] bwb = {color(0, 0, 0), color(0, 0, 100), color(0, 0, 0)};
   color[] bBb = {color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
   color[] wBb = {color(0, 0, 100), color(240, 100, 100), color(0, 0, 0)};
-  float p2v_speed = 0.005;
+  color[] Brb = {color(240, 100, 100), color(0, 0, 100), color(0, 100, 100)};
+  color[] wrb = {color(0, 0, 100), color(0, 100, 100), color(0, 0, 0)};
+
+
+  float p2v_speed = 0.05;
 
 
   //1
-  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, bwb, true));
-  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bwb, true)); 
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, bwb, true));   
   planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, bwb, true));    
   planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, bwb, true));    
   planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, bwb, true));    
   planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bwb, true));    
@@ -184,11 +190,26 @@ void setup()
   planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, wBb, true));
   planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, wBb, true));
   planeToVolume.add(new SingleEdgeFader("IBF", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LBBR",p2v_speed, wBb, true));
-  planeToVolume.add(new SingleEdgeFader("LBBL",p2v_speed, wBb, true));
-  planeToVolume.add(new SingleEdgeFader("LFBL",p2v_speed, wBb, true));
-  planeToVolume.add(new SingleEdgeFader("LFBR",p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, wBb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, wBb, true));
 
+/*
+  //5
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, Brb, true));
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, Brb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, Brb, true));    
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, Brb, true));    
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, Brb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, Brb, true));    
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, Brb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, Brb, true));    
+  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, wrb, true));    
+  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, wrb, true));    
+  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, wrb, true));    
+  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, wrb, true));  
+*/
 
 
   setupLedStrings();
@@ -212,23 +233,6 @@ void draw()
     camera(mouseX, mouseY, (height/2) / tan(PI/6), width/2, height/2, 0, 0, 1, 0);
   }
 
-  /*
-  if (frameCount%7==0)
-   {
-   looper++;
-   println(looper);
-   
-   drawEdge((int)random(31), color(0, 0, 100));
-   }
-   */
-
-
-  //globalAnimator.runAnimation("rotatingBox");
-
-  //drawBlockers();
-
-  //globalAnimator.runAnimation("lateralSweep");
-
   //fadingEdges(edges, colorFadePos, 0.005, fadeColors.get(0), fadeColors.get(1));
   //smallCubeEdgeFader.Update();
   //largeCubeEdgeFader.Update();
@@ -243,7 +247,16 @@ void draw()
     {
       println(planeToVolume.get(p2v_pos).edgeName);
       p2v_pos++;
-    }
+    } 
+    /*
+    else if (planeToVolume.get(p2v_pos).finished && (p2v_pos+1) == planeToVolume.size()) //white->blue, now red
+     {
+     for (int j=0; j<=p2v_pos; j++)
+     {
+     planeToVolume.get(j).next();
+     }
+     }
+     */
   }
 
   //mouseTest
@@ -403,7 +416,7 @@ public class SingleEdgeFader {
       whiteToColor = false;
     }
 
-     if (toFromBlack)
+    if (toFromBlack)
     {
       float brightnessPos = fadePos * 100;
 
@@ -415,7 +428,6 @@ public class SingleEdgeFader {
           brightnessPos = 5;
         }
         c = color(hue(colors[(pos+1) % (colors.length)]), saturation(colors[(pos+1) % (colors.length)]), brightnessPos);
-        
       } else
       {
         if (brightnessPos >= 95)
@@ -423,16 +435,17 @@ public class SingleEdgeFader {
           brightnessPos = 100;
         }
         c = color(hue(colors[(pos) % (colors.length)]), saturation(colors[(pos) % (colors.length)]), 100-brightnessPos);
-        
       }
     } else if (whiteToColor)
     {
       float saturationPos = fadePos * 100;
-      
+
       c = color(hue(colors[(pos+1) % (colors.length)]), saturationPos, brightness(colors[(pos+1) % (colors.length)]));
     } else
     {
       c = lerpColor(colors[pos % (colors.length)], colors[(pos+1) % (colors.length)], fadePos);
+      c = color(hue(c), abs(sin(fadePos*PI + PI/2)), 100);
+      println(hue(c), saturation(c), brightness(c));
     }
 
     timeProjectorForm.drawEdge(edgeName, c);
