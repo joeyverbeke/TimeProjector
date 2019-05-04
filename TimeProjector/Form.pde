@@ -28,8 +28,8 @@ public class TimeProjectorForm extends Form
     Vertices.add(new Vertex(new PVector(-46.31939798, 29.08048856, 54.51102379), 6));      //outside_top_front_right
     Vertices.add(new Vertex(new PVector(40.38775181, 29.08048856, 44.82361682), 7));       //outside_top_front_left
 
-    Vertices.add(new Vertex(new PVector(14.95781156, 11.13111468, -14.95781156), 8));      //inside_bottom_back_left
-    Vertices.add(new Vertex(new PVector(-14.96312547, 11.12845773, -14.96279335), 9));     //inside_bottom_back_right
+    Vertices.add(new Vertex(new PVector(14.95781156, 11.13111468, -14.95781156), 8));      //inside_bottom_back_left    //PROBLEM
+    Vertices.add(new Vertex(new PVector(-14.96312547, 11.12845773, -14.96279335), 9));     //inside_bottom_back_right    
     Vertices.add(new Vertex(new PVector(-22.43671734, 50.02142474, -24.23165473), 10));    //inside_bottom_front_right
     Vertices.add(new Vertex(new PVector(22.43671734, 50.02142474, -22.43671734), 11));     //inside_bottom_front_left
 
