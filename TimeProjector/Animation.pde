@@ -1,4 +1,4 @@
- //<>// //<>//
+ //<>//
 public class Animation
 {
   boolean ghosting;

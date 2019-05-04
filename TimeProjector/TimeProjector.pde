@@ -1,6 +1,7 @@
-//DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run
+//DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run //<>// //<>//
 
 boolean controlCameraWithMouse = false;
+String SCENE = "4D_Rotation";
 
 int looper = 0;
 
@@ -39,11 +40,17 @@ EdgeFader largeCubeEdgeFader;
 
 GradientLine gradientLineTest;  
 
+
+////planeToVolume
 ArrayList<SingleEdgeFader> planeToVolume;
-
 int p2v_pos = 0;
+////
 
-
+////4dRotation
+ArrayList<EdgeFader> fourDeeSquares;
+int fourD_pos = 0;
+ArrayList<GradientLine> fourDeeEdges;
+float fourD_speed;
 
 ArrayList<PVector> snake;
 
@@ -116,15 +123,15 @@ void setup()
   fadeColors.add(color(270, 100, 100));
 
   //int[] edges1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  String[] edges1_string = {"ORB", "OTL", "LBTR", "IRB", "IBL", "LFBL", "OLF", "OBL", "LFTL", "ILF", "LBBR", "ITL"}; 
-  color[] colors1 = {color(0, 100, 100), color(50, 100, 0), color(0, 0, 0), color(240, 100, 100), color(170, 100, 100)};
-  smallCubeEdgeFader = new EdgeFader(edges1_string, 0.0005, colors1);
+  //  String[] edges1_string = {"ORB", "OTL", "LBTR", "IRB", "IBL", "LFBL", "OLF", "OBL", "LFTL", "ILF", "LBBR", "ITL"}; 
+  //  color[] colors1 = {color(0, 100, 100), color(50, 100, 0), color(0, 0, 0), color(240, 100, 100), color(170, 100, 100)};
+  //  smallCubeEdgeFader = new EdgeFader(edges1_string, 0.0005, colors1);
 
   int[] edges2 = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
   color[] colors2 = {color(0, 100, 100), color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
   largeCubeEdgeFader = new EdgeFader(edges2, 0.005, colors2);
 
-  gradientLineTest = new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(6), "fadeOnAcross", color(0, 0, 100), 0.001, 100, 0);
+  gradientLineTest = new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(6), "fadeOn", color(0, 0, 100), 0.001, 100, 0);
 
 
   //setup plane to volume
@@ -135,8 +142,7 @@ void setup()
   color[] Brb = {color(240, 100, 100), color(0, 0, 100), color(0, 100, 100)};
   color[] wrb = {color(0, 0, 100), color(0, 100, 100), color(0, 0, 0)};
 
-
-  float p2v_speed = 0.05;
+  float p2v_speed = 0.005;
 
 
   //1
@@ -195,22 +201,83 @@ void setup()
   planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, wBb, true));
   planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, wBb, true));
 
-/*
+  /*
   //5
-  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, Brb, true));
-  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, Brb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, Brb, true));    
-  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, Brb, true));    
-  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, Brb, true));    
-  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, Brb, true));    
-  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, Brb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, Brb, true));    
-  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, wrb, true));    
-  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, wrb, true));    
-  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, wrb, true));    
-  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, wrb, true));  
-*/
+   planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, Brb, true));
+   planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, Brb, true));    
+   planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, Brb, true));    
+   planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, Brb, true));    
+   planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, Brb, true));    
+   planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, Brb, true));    
+   planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, Brb, true));    
+   planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, Brb, true));    
+   planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, wrb, true));    
+   planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, wrb, true));    
+   planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, wrb, true));    
+   planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, wrb, true));  
+   */
 
+
+  //setup 4d rotation
+  fourDeeSquares = new ArrayList<EdgeFader>();
+  //color[] bwb = {color(0, 0, 0), color(0, 0, 100), color(0, 0, 0)};
+
+  fourD_speed = 0.01;
+
+  String[] innerBack = {"ITB", "ILB", "IBB", "IRB"}; 
+  String[] innerFront = {"ITF", "ILF", "IBF", "IRF"}; 
+  String[] outerFront = {"OTF", "OLF", "OBF", "ORF"}; 
+  String[] outerBack = {"OTB", "OLB", "OBB", "ORB"}; 
+
+  color[] bw = {color(0, 0, 0), color(0, 0, 100)};
+
+
+  fourDeeSquares.add(new EdgeFader(innerBack, fourD_speed-0.002, bwb, true));
+  fourDeeSquares.add(new EdgeFader(innerFront, fourD_speed-0.002, bwb, true));
+  fourDeeSquares.add(new EdgeFader(outerFront, fourD_speed-0.002, bwb, true));
+  fourDeeSquares.add(new EdgeFader(outerBack, fourD_speed-0.002, bwb, true));
+
+  fourDeeEdges = new ArrayList<GradientLine>();
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(12), timeProjectorForm.Vertices.get(15), "fadeOn", color(0, 0, 100), fourD_speed, 1)); //ITL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(13), timeProjectorForm.Vertices.get(14), "fadeOn", color(0, 0, 100), fourD_speed, 1)); //ITR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(8), timeProjectorForm.Vertices.get(11), "fadeOn", color(0, 0, 100), fourD_speed, 4));  //IBL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(9), timeProjectorForm.Vertices.get(10), "fadeOn", color(0, 0, 100), fourD_speed, 4));  //IBR
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(12), timeProjectorForm.Vertices.get(15), "fadeOff", color(0, 0, 100), fourD_speed, 1)); //ITL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(13), timeProjectorForm.Vertices.get(14), "fadeOff", color(0, 0, 100), fourD_speed, 1)); //ITR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(8), timeProjectorForm.Vertices.get(11), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //IBL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(9), timeProjectorForm.Vertices.get(10), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //IBR
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(15), timeProjectorForm.Vertices.get(7), "fadeOn", color(0, 0, 100), fourD_speed, 5)); //LFTL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(14), timeProjectorForm.Vertices.get(6), "fadeOn", color(0, 0, 100), fourD_speed, 2)); //LFTR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(11), timeProjectorForm.Vertices.get(3), "fadeOn", color(0, 0, 100), fourD_speed, 5));  //LFBL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(10), timeProjectorForm.Vertices.get(2), "fadeOn", color(0, 0, 100), fourD_speed, 2));  //LFBR
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(15), timeProjectorForm.Vertices.get(7), "fadeOff", color(0, 0, 100), fourD_speed, 5)); //LFTL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(14), timeProjectorForm.Vertices.get(6), "fadeOff", color(0, 0, 100), fourD_speed, 2)); //LFTR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(11), timeProjectorForm.Vertices.get(3), "fadeOff", color(0, 0, 100), fourD_speed, 5));  //LFBL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(10), timeProjectorForm.Vertices.get(2), "fadeOff", color(0, 0, 100), fourD_speed, 2));  //LFBR
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(4), "fadeOn", color(0, 0, 100), fourD_speed, 5)); //OTL 
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(6), timeProjectorForm.Vertices.get(5), "fadeOn", color(0, 0, 100), fourD_speed, 2)); //OTR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(3), timeProjectorForm.Vertices.get(0), "fadeOn", color(0, 0, 100), fourD_speed, 5));  //OBL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(2), timeProjectorForm.Vertices.get(1), "fadeOn", color(0, 0, 100), fourD_speed, 2));  //OBR
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(4), "fadeOff", color(0, 0, 100), fourD_speed, 5)); //OTL 
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(6), timeProjectorForm.Vertices.get(5), "fadeOff", color(0, 0, 100), fourD_speed, 2)); //OTR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(3), timeProjectorForm.Vertices.get(0), "fadeOff", color(0, 0, 100), fourD_speed, 5));  //OBL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(2), timeProjectorForm.Vertices.get(1), "fadeOff", color(0, 0, 100), fourD_speed, 2));  //OBR
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(4), timeProjectorForm.Vertices.get(12), "fadeOn", color(0, 0, 100), fourD_speed, 1)); //LBTR 
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(5), timeProjectorForm.Vertices.get(13), "fadeOn", color(0, 0, 100), fourD_speed, 1)); //LBTL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(8), "fadeOn", color(0, 0, 100), fourD_speed, 4));  //LBBR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(9), "fadeOn", color(0, 0, 100), fourD_speed, 4));  //LBBL
+
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(4), timeProjectorForm.Vertices.get(12), "fadeOff", color(0, 0, 100), fourD_speed, 1)); //LBTR 
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(5), timeProjectorForm.Vertices.get(13), "fadeOff", color(0, 0, 100), fourD_speed, 1)); //LBTL
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(8), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //LBBR
+  fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(9), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //LBBL
 
   setupLedStrings();
 
@@ -239,24 +306,210 @@ void draw()
 
   //gradientLineTest.Update();
 
-
-  for (int i=0; i<=p2v_pos; i++)
+  switch(SCENE)
   {
-    planeToVolume.get(i).Update();
-    if (planeToVolume.get(p2v_pos).finished == true && (p2v_pos+1) < planeToVolume.size())
+  case "PlaneToVolume":
+    for (int i=0; i<=p2v_pos; i++)
     {
-      println(planeToVolume.get(p2v_pos).edgeName);
-      p2v_pos++;
-    } 
-    /*
+      planeToVolume.get(i).Update();
+      if (planeToVolume.get(p2v_pos).finished == true && (p2v_pos+1) < planeToVolume.size())
+      {
+        println(planeToVolume.get(p2v_pos).edgeName);
+        p2v_pos++;
+      } 
+      /*
     else if (planeToVolume.get(p2v_pos).finished && (p2v_pos+1) == planeToVolume.size()) //white->blue, now red
-     {
-     for (int j=0; j<=p2v_pos; j++)
-     {
-     planeToVolume.get(j).next();
-     }
-     }
-     */
+       {
+       for (int j=0; j<=p2v_pos; j++)
+       {
+       planeToVolume.get(j).next();
+       }
+       }
+       */
+    }
+    break;
+
+  case "4D_Rotation":
+
+    switch(fourD_pos)
+    {
+    case 0: //innerBack
+      fourDeeSquares.get(0).Update();
+      if (fourDeeSquares.get(0).finished == true)
+      {
+        fourD_pos++;
+      }
+      break;
+
+    case 1: //innerBack -> innerFront
+      fourDeeSquares.get(0).Update();
+      for (int i=0; i<4; i++)
+      {
+        fourDeeEdges.get(i).Update();
+      }
+      if (fourDeeEdges.get(0).finished == true)
+      {
+        fourD_pos++;
+        fourDeeSquares.get(0).next();
+      }
+      break;
+
+    case 2: //innerFront
+      fourDeeSquares.get(0).Update();
+      fourDeeSquares.get(1).Update();
+      for (int i=0; i<4; i++)
+      {
+        fourDeeEdges.get(i).Update();
+      }
+
+      if (fourDeeSquares.get(1).finished == true)
+      {
+        fourD_pos++;
+        for (int i=0; i<4; i++)
+        {
+          fourDeeEdges.get(i).reset();
+          fourDeeSquares.get(0).reset();
+        }
+      }
+      break;
+
+    case 3: //innerFront -> outerFront
+      fourDeeSquares.get(1).Update();
+      for (int i=4; i<12; i++) 
+      {
+        fourDeeEdges.get(i).Update();
+      }
+      if (fourDeeEdges.get(4).finished == true)
+      {
+        fourD_pos++;
+        fourDeeSquares.get(1).next();
+        for (int i=4; i<8; i++)
+        {
+          fourDeeEdges.get(i).reset();
+        }
+      }
+      break;
+
+    case 4: //outerFront
+      fourDeeSquares.get(1).Update();
+      fourDeeSquares.get(2).Update();
+      for (int i=8; i<12; i++)
+      {
+        fourDeeEdges.get(i).Update();
+      }
+
+      if (fourDeeSquares.get(2).finished == true)
+      {
+        fourD_pos++;
+        for (int i=8; i<12; i++)
+        {
+          fourDeeEdges.get(i).reset();
+          fourDeeSquares.get(1).reset();
+        }
+      }
+      break;
+
+    case 5: //outerFront -> outerBack
+      fourDeeSquares.get(2).Update();
+      for (int i=12; i<20; i++) 
+      {
+        fourDeeEdges.get(i).Update();
+      }
+      if (fourDeeEdges.get(12).finished == true)
+      {
+        fourD_pos++;
+        fourDeeSquares.get(2).next();
+        for (int i=12; i<16; i++)
+        {
+          fourDeeEdges.get(i).reset();
+        }
+      }
+      break;
+
+    case 6: //outerBack
+      fourDeeSquares.get(2).Update();
+      fourDeeSquares.get(3).Update();
+      for (int i=16; i<20; i++)
+      {
+        fourDeeEdges.get(i).Update();
+      }
+
+      if (fourDeeSquares.get(3).finished == true)
+      {
+        fourD_pos++;
+        for (int i=16; i<20; i++)
+        {
+          fourDeeEdges.get(i).reset();
+          fourDeeSquares.get(2).reset();
+        }
+      }
+      break;
+
+    case 7: //outerBack -> innerBack
+      fourDeeSquares.get(3).Update();
+      for (int i=20; i<28; i++) 
+      {
+        fourDeeEdges.get(i).Update();
+      }
+      if (fourDeeEdges.get(24).finished == true)
+      {
+        fourD_pos++;
+        fourDeeSquares.get(3).next();
+        for (int i=20; i<24; i++)
+        {
+          fourDeeEdges.get(i).reset();
+        }
+
+        //increase ze shpeeeeeed
+        fourD_speed += 0.01;
+      }
+      break;
+
+    case 8: //innerBack
+      fourDeeSquares.get(3).Update();
+      fourDeeSquares.get(0).Update();
+      for (int i=24; i<28; i++)
+      {
+        fourDeeEdges.get(i).Update();
+      }
+
+      if (fourDeeSquares.get(0).finished == true)
+      {
+        fourD_pos++;
+        for (int i=24; i<28; i++)
+        {
+          fourDeeEdges.get(i).reset();
+          fourDeeSquares.get(3).reset();
+        }
+      }
+      break;
+
+    case 9: //innerBack -> innerFront
+      fourDeeSquares.get(0).Update();
+      for (int i=28; i<32; i++) 
+      {
+        fourDeeEdges.get(i).Update();
+      }
+      for (int i=0; i<4; i++) 
+      {
+        fourDeeEdges.get(i).Update();
+      }
+
+      if (fourDeeEdges.get(28).finished == true)
+      {
+        fourD_pos = 2;
+        fourDeeSquares.get(0).next();
+        for (int i=28; i<32; i++)
+        {
+          fourDeeEdges.get(i).reset();
+        }
+      }
+      break;
+    }
+
+    break;
+  default:
+    break;
   }
 
   //mouseTest
@@ -295,6 +548,9 @@ public class GradientLine {
 
   int perspective;
 
+  boolean finished = false;
+
+  //with numBoxes
   GradientLine(Vertex _start, Vertex _end, String _mode, color _lineColor, float _speed, int numBoxes, int _perspective)
   {
     start=_start;
@@ -316,13 +572,49 @@ public class GradientLine {
     }
   }
 
-  //there should always be more boxes than the length
+  //without numBoxes
+  GradientLine(Vertex _start, Vertex _end, String _mode, color _lineColor, float _speed, int _perspective)
+  {
+    start=_start;
+    end=_end;
+    mode=_mode;
+    lineColor=_lineColor;
+    speed=_speed;
 
+    lineSize = PVector.dist(start.coordinate, end.coordinate);
+    lineBoxes = new ArrayList<PVector>();
+    boxFadePos = new ArrayList<Float>();
+
+    perspective = _perspective;
+
+    for (int i=0; i<(int)lineSize; i++)
+    {
+      lineBoxes.add(PVector.lerp(start.coordinate, end.coordinate, (float)i/((int)lineSize)));
+      boxFadePos.add(0.0);
+    }
+  }
+
+  void setSpeed(float _speed)
+  {
+    speed = _speed;
+  }
+
+  void reset()
+  {
+    for (int i=0; i < boxFadePos.size(); i++)
+    {
+      boxFadePos.set(i, 0.0);
+      finished = false;
+      pos = 0;
+    }
+  }
+
+  //there should always be more boxes than the length
   void Update()
   {
     switch(mode)
     {
-    case "fadeOnAcross":
+    case "fadeOn":
       pos += speed;
 
       for (int i=0; i<lineBoxes.size(); i++)
@@ -348,6 +640,44 @@ public class GradientLine {
 
           tesseractPerspectives[perspective].resetPerspective();
         }
+      }
+
+      if (boxFadePos.get(boxFadePos.size()-1) >= 1)
+      {
+        finished = true;
+      }
+
+      break;
+
+    case "fadeOff":
+      pos += speed;
+
+      for (int i=0; i<lineBoxes.size(); i++)
+      {
+        tesseractPerspectives[perspective].setupPerspective();
+
+        //if pos has passed the point in which this box's index should turn off
+        if (pos >= ((float)1/lineBoxes.size() * i))
+        {
+          boxFadePos.set(i, boxFadePos.get(i) + speed);
+        }
+
+
+        pushMatrix();
+
+        translate(lineBoxes.get(i).x, lineBoxes.get(i).y, lineBoxes.get(i).z);
+        noStroke();
+        fill(color(hue(lineColor), saturation(lineColor), 100 - (boxFadePos.get(i)*100) ));
+        box(2);
+
+        popMatrix();
+
+        tesseractPerspectives[perspective].resetPerspective();
+      }
+
+      if (boxFadePos.get(boxFadePos.size()-1) >= 1)
+      {
+        finished = true;
       }
 
       break;
@@ -388,10 +718,17 @@ public class SingleEdgeFader {
     whiteToColor = false;
   }
 
+  void setSpeed(float _speed)
+  {
+    fadeSpeed = _speed;
+  }
+
+
   void next()
   {
     pos++;
     fadePos = 0;
+    finished = false;
   }
 
   void Update()
@@ -471,6 +808,8 @@ public class EdgeFader {
 
   int pos;
   boolean toFromBlack = false;
+  boolean stayOn;
+  boolean finished = false;
 
   EdgeFader(int _edgeNums[], float _fadeSpeed, color _colors[])
   {
@@ -485,7 +824,7 @@ public class EdgeFader {
     pos = 0;
   }
 
-  EdgeFader(String _edgeNames[], float _fadeSpeed, color _colors[])
+  EdgeFader(String _edgeNames[], float _fadeSpeed, color _colors[], boolean _stayOn)
   {
     edgeNums = new int[0];
     edgeNames = new String[_edgeNames.length];
@@ -496,6 +835,26 @@ public class EdgeFader {
 
     fadePos = 0;
     pos = 0;
+    stayOn = _stayOn;
+  }
+
+  void setSpeed(float _speed)
+  {
+    fadeSpeed = _speed;
+  }
+
+  void next()
+  {
+    pos++;
+    fadePos = 0.0;
+    finished = false;
+  }
+
+  void reset()
+  {
+    pos = 0;
+    fadePos = 0.0;
+    finished = false;
   }
 
   void Update()
@@ -550,11 +909,14 @@ public class EdgeFader {
       }
     }
 
-    //next color
-    if (fadePos >= 1)
+    if (fadePos >= 1 && !stayOn)
     {
       fadePos = 0;
+      finished = false;
       pos++;
+    } else if (fadePos >= 1)
+    {
+      finished = true;
     }
   }
 }
