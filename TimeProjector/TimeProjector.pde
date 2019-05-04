@@ -38,6 +38,9 @@ float fourD_speed;
 ////movingPointTest
 ArrayList<GradientLine> rotatingLight_bottom;
 ArrayList<GradientLine> rotatingLight_top;
+ArrayList<GradientLine> rotatingLight_innerBottom;
+ArrayList<GradientLine> rotatingLight_innerTop;
+
 
 ArrayList<ArrayList<GradientLine>> rotatingLights;
 
@@ -68,15 +71,6 @@ void setup()
 
 
   timeProjectorForm = new TimeProjectorForm();
-
-  //String[] smallCubeEdges = {"ORB", "OTL", "LBTR", "IRB", "IBL", "LFBL", "OLF", "OBL", "LFTL", "ILF", "LBBR", "ITL"}; 
-  //color[] colors1 = {color(0, 100, 100), color(50, 100, 0), color(0, 0, 0), color(240, 100, 100), color(170, 100, 100)};
-  //smallCubeEdgeFader = new EdgeFader(edges1_string, 0.0005, colors1);
-
-  //int[] edges2 = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
-  //color[] colors2 = {color(0, 100, 100), color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
-  //largeCubeEdgeFader = new EdgeFader(edges2, 0.005, colors2);
-
 
   //setup plane to volume
   planeToVolume = new ArrayList<SingleEdgeFader>();
@@ -351,25 +345,40 @@ void setup()
 
 
   //fadingPointTest
-  rotatingLight_bottom = new ArrayList<GradientLine>();
+  float rotatingLight_speed = 0.01;
 
-  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(1), "fadingPoint", color(0, 0, 100), 0.02, 3)); //OBB
-  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(2), "fadingPoint", color(0, 0, 100), 0.02, 2)); //OBR
-  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(2), timeProjectorForm.Vertices.get(3), "fadingPoint", color(0, 0, 100), 0.02, 0)); //OBF
-  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(3), timeProjectorForm.Vertices.get(0), "fadingPoint", color(0, 0, 100), 0.02, 5)); //OBL
+  rotatingLight_bottom = new ArrayList<GradientLine>();
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(1), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 3)); //OBB
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(2), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 2)); //OBR
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(2), timeProjectorForm.Vertices.get(3), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 0)); //OBF
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(3), timeProjectorForm.Vertices.get(0), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 5)); //OBL
 
   rotatingLight_top = new ArrayList<GradientLine>();
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(4), timeProjectorForm.Vertices.get(5), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 3)); //OTB
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(5), timeProjectorForm.Vertices.get(6), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 2)); //OTR
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(6), timeProjectorForm.Vertices.get(7), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 0)); //OTF
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(4), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 5)); //OTL
 
-  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(4), timeProjectorForm.Vertices.get(5), "fadingPoint", color(0, 0, 100), 0.02, 3)); //OTB
-  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(3), timeProjectorForm.Vertices.get(6), "fadingPoint", color(0, 0, 100), 0.02, 2)); //OTR
-  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(6), timeProjectorForm.Vertices.get(7), "fadingPoint", color(0, 0, 100), 0.02, 0)); //OTF
-  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(4), "fadingPoint", color(0, 0, 100), 0.02, 5)); //OTL
+  rotatingLight_innerBottom = new ArrayList<GradientLine>();
+  rotatingLight_innerBottom.add(new GradientLine(timeProjectorForm.Vertices.get(9), timeProjectorForm.Vertices.get(8), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 3)); //IBB
+  rotatingLight_innerBottom.add(new GradientLine(timeProjectorForm.Vertices.get(8), timeProjectorForm.Vertices.get(11), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 4)); //IBL
+  rotatingLight_innerBottom.add(new GradientLine(timeProjectorForm.Vertices.get(11), timeProjectorForm.Vertices.get(10), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 0)); //IBF
+  rotatingLight_innerBottom.add(new GradientLine(timeProjectorForm.Vertices.get(10), timeProjectorForm.Vertices.get(9), "fadingPoint", color(0, 100, 100), rotatingLight_speed, 50, 4)); //IBR
+
+  rotatingLight_innerTop = new ArrayList<GradientLine>();
+  rotatingLight_innerTop.add(new GradientLine(timeProjectorForm.Vertices.get(13), timeProjectorForm.Vertices.get(12), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 3)); //ITL
+  rotatingLight_innerTop.add(new GradientLine(timeProjectorForm.Vertices.get(12), timeProjectorForm.Vertices.get(15), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 1)); //ITB 
+  rotatingLight_innerTop.add(new GradientLine(timeProjectorForm.Vertices.get(15), timeProjectorForm.Vertices.get(14), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 0)); //ITR
+  rotatingLight_innerTop.add(new GradientLine(timeProjectorForm.Vertices.get(14), timeProjectorForm.Vertices.get(13), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 1)); //ITF
+
+
 
   rotatingLights = new ArrayList<ArrayList<GradientLine>>();
 
   rotatingLights.add(rotatingLight_bottom);
   rotatingLights.add(rotatingLight_top);
-
+  rotatingLights.add(rotatingLight_innerBottom);
+  rotatingLights.add(rotatingLight_innerTop);
 
   setupLedStrings();
   println("LED count: " + ledCount);
@@ -401,51 +410,91 @@ void draw()
   {
   case "RotatingLight":
 
+    drawEdge(
+
     switch(rotatingLight_pos)
     {
     case 0:
-      rotatingLight.get(0).Update();
-      if (rotatingLight.get(0).finished)
-        rotatingLight_pos++;
+      println("0");
+
+      for (int i=0; i<rotatingLights.size(); i++)
+      {
+        rotatingLights.get(i).get(0).Update();
+
+        if (rotatingLights.get(rotatingLights.size()-1).get(0).finished)
+          rotatingLight_pos++;
+      }  
       break;
 
     case 1:
-      rotatingLight.get(0).Update();
-      rotatingLight.get(1).Update();
-      if (rotatingLight.get(1).finished)
+      println("1");
+
+      for (int i=0; i<rotatingLights.size(); i++)
       {
-        rotatingLight.get(0).reset();
-        rotatingLight_pos++;
+        rotatingLights.get(i).get(0).Update();
+        rotatingLights.get(i).get(1).Update();
+        if (rotatingLights.get(rotatingLights.size()-1).get(1).finished)
+        {
+          for (int j=0; j<rotatingLights.size(); j++)
+          {
+            rotatingLights.get(j).get(0).reset();
+          }
+          rotatingLight_pos++;
+        }
       }
       break;
 
     case 2:
-      rotatingLight.get(1).Update();
-      rotatingLight.get(2).Update();
-      if (rotatingLight.get(2).finished)
+      println("2");
+
+      for (int i=0; i<rotatingLights.size(); i++)
       {
-        rotatingLight.get(1).reset();
-        rotatingLight_pos++;
+        rotatingLights.get(i).get(1).Update();
+        rotatingLights.get(i).get(2).Update();
+        if (rotatingLights.get(rotatingLights.size()-1).get(2).finished)
+        {
+          for (int j=0; j<rotatingLights.size(); j++)
+          {
+            rotatingLights.get(j).get(1).reset();
+          }
+          rotatingLight_pos++;
+        }
       }
       break;
 
     case 3:
-      rotatingLight.get(2).Update();
-      rotatingLight.get(3).Update();
-      if (rotatingLight.get(3).finished)
+      println("3");
+
+      for (int i=0; i<rotatingLights.size(); i++)
       {
-        rotatingLight.get(2).reset();
-        rotatingLight_pos++;
+        rotatingLights.get(i).get(2).Update();
+        rotatingLights.get(i).get(3).Update();
+        if (rotatingLights.get(rotatingLights.size()-1).get(3).finished)
+        {
+          for (int j=0; j<rotatingLights.size(); j++)
+          {
+            rotatingLights.get(j).get(2).reset();
+          }
+          rotatingLight_pos++;
+        }
       }
       break;
 
     case 4:
-      rotatingLight.get(3).Update();
-      rotatingLight.get(0).Update();
-      if (rotatingLight.get(0).finished)
+      println("4");
+
+      for (int i=0; i<rotatingLights.size(); i++)
       {
-        rotatingLight.get(3).reset();
-        rotatingLight_pos=1;
+        rotatingLights.get(i).get(3).Update();
+        rotatingLights.get(i).get(0).Update();
+        if (rotatingLights.get(rotatingLights.size()-1).get(0).finished)
+        {
+          for (int j=0; j<rotatingLights.size(); j++)
+          {
+            rotatingLights.get(j).get(3).reset();
+          }
+          rotatingLight_pos=1;
+        }
       }
       break;
     }
