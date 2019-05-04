@@ -1,7 +1,7 @@
 //DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run //<>// //<>// //<>//
 
 boolean controlCameraWithMouse = false;
-String SCENE = "4D_Rotation";
+String SCENE = "RotatingLight";
 //4D_Rotation, PlaneToVolume, RotatingLight
 
 boolean increaseFourDeeSpeed = true;
@@ -32,6 +32,8 @@ int p2v_timestamp = 0;
 ArrayList<EdgeFader> fourDeeSquares;
 int fourD_pos = 0;
 ArrayList<GradientLine> fourDeeEdges;
+ArrayList<EdgeFader> fourDeeFinale;
+
 float fourD_speed;
 float fourD_sat = 0.0;
 int fourD_counter = 0;
@@ -96,60 +98,60 @@ void setup()
 
 
   //1
-  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bwb, true)); 
-  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, bwb, true));   
-  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, bwb, true));    
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bPb, true)); 
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, bPb, true));   
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, bPb, true));    
+  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, bPb, true));    
 
   //2
-  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, bwb, true));
-  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("ILB", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, bwb, true));    
-  planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, bwb, true)); 
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("ILB", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, bTb, true));    
+  planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, bTb, true)); 
 
   //1-off
-  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, wb, true)); 
-  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, wb, true));   
-  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, wb, true));    
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, Pb, true)); 
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, Pb, true));   
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, Pb, true));    
+  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, Pb, true));    
 
   //2-off
-  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, wb, true));
-  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("ILB", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, wb, true));    
-  planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, wb, true)); 
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("ILB", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, Tb, true));    
+  planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, Tb, true)); 
 
   //3
   planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, bPb, true));
@@ -346,8 +348,20 @@ void setup()
   fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(8), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //LBBR
   fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(9), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //LBBL
 
+  fourDeeFinale = new ArrayList<EdgeFader>();
 
-  //fadingPointTest
+  String[] alreadyOn = {"OTB", "OLB", "OBB", "ORB", "LBTR", "LBTL", "LBBL", "LBBL"};
+  String[] notOnYet = {"ITB", "ITL", "ITF", "ITR", "IBB", "IBL", "IBF", "IBR", "IRB", "ILB", "IRF", "ILF", "OTL", "OTR", "OBR", "OBL", "OLF", "ORF", "LFTL", "LFTR", "LFBR", "LFBL", "OTF", "OBF"};
+
+  //WB BWB
+  color[] rbwb = { color(0, 100, 100), color(0, 0, 0), color(0, 0, 100), color(0, 0, 0)};
+
+  fourDeeFinale.add(new EdgeFader(alreadyOn, fourD_speed, rbwb, true));
+  fourDeeFinale.add(new EdgeFader(notOnYet, fourD_speed, bwb, true));
+
+
+
+  //rotatingLight
   float rotatingLight_speed = 0.01;
 
 
@@ -488,13 +502,13 @@ void draw()
           rotatingLight_pos++;
           rotatingLight_counter++;
 
-          if (rotatingLight_counter >= 1 && rotatingLight_numRotators == 2)
+          if (rotatingLight_counter >= 5 && rotatingLight_numRotators == 2)
           {
             rotatingLight_transition = true;
             rotatingLight_pos = 0;
             rotatingLight_numRotators = 4;
             rotatingLight_checkIndex = 3;
-          } else if (rotatingLight_counter >= 3 && rotatingLight_numRotators == 4)
+          } else if (rotatingLight_counter >= 10 && rotatingLight_numRotators == 4)
           {
             rotatingLight_pos = 99;
           }
@@ -665,7 +679,7 @@ void draw()
 
         if (planeToVolume.get(143).finished == true)
         {
-          p2v_scene++;
+          p2v_scene = 0;
           p2v_pos = 0;
 
           for (int j=0; j<planeToVolume.size(); j++)
@@ -811,7 +825,7 @@ void draw()
         }
 
         //////////increase ze shpeeeeeed
-        if (increaseFourDeeSpeed)
+        if (increaseFourDeeSpeed && fourD_counter >= 5)
         {
           if (fourD_speed < 0.2)
             fourD_speed += 0.005;
@@ -824,9 +838,10 @@ void draw()
 
         fourD_counter++;
 
-        if (fourD_counter >= 50)
+        if (fourD_counter >= 60)
         {
           fourD_pos = 99;
+          fourDeeFinale.get(0).setSpeed(fourD_speed);
         }
 
         for (int i=0; i<fourDeeEdges.size(); i++)
@@ -882,16 +897,77 @@ void draw()
       }
       break;
 
-    case 99:
+    case 99: //fade out remaining lights
 
-      left off here
-      
-      i think we should fade on every edge to full white
-      or maybe have a combination of colors
+      fourDeeFinale.get(0).Update();
+
+      if (fourDeeFinale.get(0).finished)
+      {
+        fourD_pos++; 
+        fourDeeFinale.get(0).next();
+
+        fourDeeFinale.get(0).setSpeed(0.01);
+        fourDeeFinale.get(1).setSpeed(0.01);
+      }
+      break;
+
+
+    case 100: //fade all lights on
+
+      fourDeeFinale.get(0).Update();
+      fourDeeFinale.get(1).Update();
+
+      if (fourDeeFinale.get(0).finished)
+      {
+        p2v_timestamp = millis();
+        fourD_pos++;
+      }
+
+      break;
+
+
+    case 101:  //hold on for 5 seconds
+      fourDeeFinale.get(0).Update();
+      fourDeeFinale.get(1).Update();
+
+      if (millis() - p2v_timestamp >= 5000)
+      {
+        fourD_pos++;
+        fourDeeFinale.get(0).next();
+        fourDeeFinale.get(1).next();
+      }
+
+      break;
+
+    case 102:  //fade out all lights
+
+      fourDeeFinale.get(0).Update();
+      fourDeeFinale.get(1).Update();
+
+      if (fourDeeFinale.get(0).finished)
+      {
+        SCENE = "RotatingLight";
+
+        fourD_pos = 0;
+        fourD_counter = 0;
+        fourD_speed = 0.01;
+
+        for (int i=0; i < fourDeeFinale.size(); i++)
+        {
+          fourDeeFinale.get(i).reset();
+        }
+        for (int i=0; i < fourDeeEdges.size(); i++)
+        {
+          fourDeeEdges.get(i).reset();
+        }
+        for (int i=0; i < fourDeeSquares.size(); i++)
+        {
+          fourDeeSquares.get(i).reset();
+        }
+      }
 
       break;
     }
-
     break;
   default:
     break;
