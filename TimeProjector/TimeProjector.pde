@@ -2,13 +2,12 @@
 
 boolean controlCameraWithMouse = false;
 String SCENE = "PlaneToVolume";
-boolean increaseFourDeeSpeed = false;
+//4D_Rotation, PlaneToVolume
 
-int looper = 0;
+boolean increaseFourDeeSpeed = false;
 
 OPC opc;
 TesseractPerspective[] tesseractPerspectives;
-GlobalAnimator globalAnimator;
 static TimeProjectorForm timeProjectorForm;
 
 boolean ghostFade = false;
@@ -18,28 +17,8 @@ int ledCount = 0;
 int faceWidth, faceHeight;
 int squareX, squareY;
 
-//boolean reversedLateralSweep = false;
-
 int _width, _height;
 int padding = 25;
-
-//test variables
-int lastVertexIndex = 0;
-int currentVertexIndex = 0;
-int speed = 50;
-
-//color fade
-float colorFadePos = 0;
-ArrayList<Integer> fadeColors;
-int b1 = 0;
-int b2 = 1;
-
-//edges fade
-int[] edges = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-EdgeFader smallCubeEdgeFader;
-EdgeFader largeCubeEdgeFader;
-
-GradientLine gradientLineTest;  
 
 
 ////planeToVolume
@@ -55,9 +34,6 @@ int fourD_pos = 0;
 ArrayList<GradientLine> fourDeeEdges;
 float fourD_speed;
 
-ArrayList<PVector> snake;
-
-ArrayList<Snake> snakes;
 
 void setup()
 {
@@ -67,8 +43,6 @@ void setup()
 
   // Connect to the local instance of fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
-
-  //drawPixels();
 
   faceWidth = width/3;
   faceHeight = height/8;
@@ -84,57 +58,17 @@ void setup()
   tesseractPerspectives[4] = new TesseractPerspective(50 + _width/2, height - 25 - _height/4, 0, -PI/2, 0, 0);
   tesseractPerspectives[5] = new TesseractPerspective(width - _width/6 - padding, height - 25 - _height/4, 0, 0, 0, 3*PI/2);
 
-  globalAnimator = new GlobalAnimator(tesseractPerspectives);
 
   timeProjectorForm = new TimeProjectorForm();
-
-  snake = new ArrayList<PVector>(); //old
-
-
-  //new snakes
-  ////snakes = new ArrayList<ArrayList<PVector>>();
-  snakes = new ArrayList<Snake>();
-  //snakes.add(new Snake(0, 40, "rotateLeft", 255));
-  snakes.add(new Snake(8, 50, "rotateRight", 127));
-  //snakes.add(new Snake(12, 15, "pivotLateral"));
-
-  snakes.get(0).addDirection("pivotVertical");
-  snakes.get(0).addDirection("pivotRight");
-  snakes.get(0).addDirection("pivotVertical");
-  snakes.get(0).addDirection("pivotLeft");
-
-  /*  
-   snakes.get(0).addDirection("pivotLeft");
-   snakes.get(0).addDirection("pivotLeft");
-   snakes.get(0).addDirection("pivotLeft");
-   snakes.get(0).addDirection("pivotLeft");
-   snakes.get(0).addDirection("pivotLeft");
-   snakes.get(0).addDirection("pivotLateral");
-   
-   snakes.get(1).addDirection("pivotVertical");
-   snakes.get(1).addDirection("pivotRight");
-   snakes.get(1).addDirection("pivotVertical");
-   snakes.get(1).addDirection("pivotLeft");
-   snakes.get(1).addDirection("pivotLeft");
-   snakes.get(1).addDirection("pivotLateral");
-   */
-
-  fadeColors = new ArrayList<Integer>();
-  fadeColors.add(color(0, 100, 100));
-  fadeColors.add(color(180, 100, 100));
-  fadeColors.add(color(90, 100, 100));
-  fadeColors.add(color(270, 100, 100));
 
   //int[] edges1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
   //  String[] edges1_string = {"ORB", "OTL", "LBTR", "IRB", "IBL", "LFBL", "OLF", "OBL", "LFTL", "ILF", "LBBR", "ITL"}; 
   //  color[] colors1 = {color(0, 100, 100), color(50, 100, 0), color(0, 0, 0), color(240, 100, 100), color(170, 100, 100)};
   //  smallCubeEdgeFader = new EdgeFader(edges1_string, 0.0005, colors1);
 
-  int[] edges2 = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
-  color[] colors2 = {color(0, 100, 100), color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
-  largeCubeEdgeFader = new EdgeFader(edges2, 0.005, colors2);
-
-  gradientLineTest = new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(6), "fadeOn", color(0, 0, 100), 0.001, 100, 0);
+  //int[] edges2 = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+  //color[] colors2 = {color(0, 100, 100), color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
+  //largeCubeEdgeFader = new EdgeFader(edges2, 0.005, colors2);
 
 
   //setup plane to volume
@@ -329,38 +263,6 @@ void draw()
   {
   case "PlaneToVolume":
 
-    //old
-    /*
-    if (p2v_pos == 48)
-     {
-     for (int i=0; i<=p2v_pos; i++)
-     {
-     planeToVolume.get(i).Update();
-     }
-     
-     } else
-     {
-     for (int i=0; i<=p2v_pos; i++)
-     {
-     planeToVolume.get(i).Update();
-     
-     if (planeToVolume.get(p2v_pos).finished == true && (p2v_pos+1) < planeToVolume.size())
-     {
-     println(planeToVolume.get(p2v_pos).edgeName);
-     p2v_pos++;
-     
-     if (p2v_pos == 48)
-     {
-     for(int j=24; j<p2v_pos; j++)
-     {
-     planeToVolume.get(p2v_pos).next();
-     }
-     }
-     }
-     }
-     }
-     */
-
     if (p2v_scene == 0) //light up volume 1 & 2
     {
       for (int i=0; i<=p2v_pos; i++)
@@ -380,7 +282,7 @@ void draw()
       }
     } else if (p2v_scene == 1) //hold for 5 seconds
     {
-      for (int i=0; i<=24; i++)
+      for (int i=0; i<24; i++)
       {
         planeToVolume.get(i).Update();
       }
@@ -1048,41 +950,6 @@ boolean fadingEdges(int[] edges, float fadePos, float fadeSpeed, color from, col
   return false;
 }
 
-void fadingBoxes(float fadeSpeed)
-{
-  colorFadePos += fadeSpeed;
-
-  color c = fadeToColor(color(0, 100, 100), color(200, 100, 100), colorFadePos);
-
-  for (int i=0; i<=11; i++)
-  {
-    //timeProjectorForm.drawEdge(i, fadeToColor(fadeColors.get(b1%fadeColors.size()), fadeColors.get((b1+1)%fadeColors.size()), 0.05));
-
-    timeProjectorForm.drawEdge(i, c);
-  }
-  /*
-  for (int i=12; i<=23; i++)
-   {
-   timeProjectorForm.drawEdge(i, fadeToColor(fadeColors.get(b2%fadeColors.size()), fadeColors.get((b2+1)%fadeColors.size()), 0.05));
-   }
-   
-   */
-}
-
-color fadeToColor(color from, color to, float colorFadePos)
-{
-
-  if (colorFadePos >= 1)
-  {
-    colorFadePos = 0;
-    b1++;
-    b2++;
-  }
-
-  return lerpColor(from, to, colorFadePos);
-}
-
-
 void drawBlockers()
 {
   PShape verticalSlice = createShape();
@@ -1475,80 +1342,6 @@ void drawPixels()
   ledSquare(width/2 - 35, 225, 20, 20);
   ledSquare(width/2 - 10, 250, 20, 20);
   ledSquare(width/2 - 10, 275, 20, 20);
-}
-
-void snakeAnimation()
-{
-  if (frameCount%speed == 0)
-  {
-    int tempIndex;
-    do
-    {
-      tempIndex = timeProjectorForm.Vertices.get(currentVertexIndex).getRandomConnectingVertex().index;
-    }
-    while (tempIndex == lastVertexIndex);
-
-    lastVertexIndex = currentVertexIndex;
-    currentVertexIndex = tempIndex;
-  }
-
-  //drawMovingVertex();
-
-  addPointToSnake(PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed));
-  drawSnake();
-}
-
-void addPointToSnake(PVector point)
-{
-  //move out of function
-  int maxLength = 255;
-
-  snake.add(point);
-  if (snake.size() > maxLength)
-  {
-    snake.remove(0);
-  }
-}
-
-void drawSnake()
-{
-  noStroke();
-  for (int i=0; i<tesseractPerspectives.length; i++)
-  {
-    tesseractPerspectives[i].setupPerspective();
-
-    for (int j=0; j<snake.size(); j++)
-    {
-      fill((j%255), 255-(j%255), (j%255));
-      //fill(255);
-
-      pushMatrix();
-      translate(snake.get(j).x, snake.get(j).y, snake.get(j).z);
-      box(2);
-      popMatrix();
-    }
-
-    tesseractPerspectives[i].resetPerspective();
-  }
-}
-
-
-void drawMovingVertex()
-{
-  for (int i=0; i<tesseractPerspectives.length; i++)
-  {
-    tesseractPerspectives[i].setupPerspective();
-
-    noStroke();
-    fill(255, 0, 0);
-    pushMatrix();
-    PVector movingVertexPos = PVector.lerp(timeProjectorForm.Vertices.get(lastVertexIndex).coordinate, timeProjectorForm.Vertices.get(currentVertexIndex).coordinate, frameCount%speed/(float)speed);
-    translate(movingVertexPos.x, movingVertexPos.y, movingVertexPos.z);
-    box(10);
-    popMatrix();
-
-    tesseractPerspectives[i].resetPerspective();
-  }
 }
 
 
