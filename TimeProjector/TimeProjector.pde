@@ -1,8 +1,8 @@
 //DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run //<>// //<>// //<>//
 
 boolean controlCameraWithMouse = false;
-String SCENE = "PlaneToVolume";
-//4D_Rotation, PlaneToVolume
+String SCENE = "RotatingLight";
+//4D_Rotation, PlaneToVolume, RotatingLight
 
 boolean increaseFourDeeSpeed = false;
 
@@ -33,7 +33,15 @@ ArrayList<EdgeFader> fourDeeSquares;
 int fourD_pos = 0;
 ArrayList<GradientLine> fourDeeEdges;
 float fourD_speed;
+////
 
+////movingPointTest
+ArrayList<GradientLine> rotatingLight_bottom;
+ArrayList<GradientLine> rotatingLight_top;
+
+ArrayList<ArrayList<GradientLine>> rotatingLights;
+
+int rotatingLight_pos = 0;
 
 void setup()
 {
@@ -61,10 +69,9 @@ void setup()
 
   timeProjectorForm = new TimeProjectorForm();
 
-  //int[] edges1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  //  String[] edges1_string = {"ORB", "OTL", "LBTR", "IRB", "IBL", "LFBL", "OLF", "OBL", "LFTL", "ILF", "LBBR", "ITL"}; 
-  //  color[] colors1 = {color(0, 100, 100), color(50, 100, 0), color(0, 0, 0), color(240, 100, 100), color(170, 100, 100)};
-  //  smallCubeEdgeFader = new EdgeFader(edges1_string, 0.0005, colors1);
+  //String[] smallCubeEdges = {"ORB", "OTL", "LBTR", "IRB", "IBL", "LFBL", "OLF", "OBL", "LFTL", "ILF", "LBBR", "ITL"}; 
+  //color[] colors1 = {color(0, 100, 100), color(50, 100, 0), color(0, 0, 0), color(240, 100, 100), color(170, 100, 100)};
+  //smallCubeEdgeFader = new EdgeFader(edges1_string, 0.0005, colors1);
 
   //int[] edges2 = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
   //color[] colors2 = {color(0, 100, 100), color(0, 0, 0), color(240, 100, 100), color(0, 0, 0)};
@@ -79,11 +86,16 @@ void setup()
   color[] Brb = {color(240, 100, 100), color(0, 0, 100), color(0, 100, 100)};
   color[] wrb = {color(0, 0, 100), color(0, 100, 100), color(0, 0, 0)};
   color[] wb = {color(0, 0, 100), color(0, 0, 0)};
+  color[] Bb = {color(240, 100, 100), color(0, 0, 0)};
+  color[] brb = {color(0, 0, 0), color(0, 100, 100), color(0, 0, 0)};
 
+  color[] bPb = {color(0, 0, 0), color(0, 100, 100), color(0, 0, 0)};
+  color[] bTb = {color(0, 0, 0), color(340, 100, 100), color(0, 0, 0)}; // 330/340 works well for pinkishRed
 
-  float p2v_speed = 0.05;
+  color[] Pb = {color(0, 100, 100), color(0, 0, 0)};
+  color[] Tb = {color(340, 100, 100), color(0, 0, 0)};
 
-
+  float p2v_speed = 0.01;
 
 
   //1
@@ -143,33 +155,138 @@ void setup()
   planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, wb, true)); 
 
   //3
-  planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("OTF", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("ITF", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("ITB", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OTF", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("ITF", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("ITB", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, bPb, true));
 
   //4
-  planeToVolume.add(new SingleEdgeFader("OBB", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("OBF", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("IBB", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("IBF", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, bBb, true));
-  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, bBb, true));
+  planeToVolume.add(new SingleEdgeFader("OBB", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("OBF", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IBB", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IBF", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, bTb, true));
 
+  //3-off
+  planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OTF", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("ITF", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("ITB", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTR", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("LFTL", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, Pb, true));
+
+  //4-off
+  planeToVolume.add(new SingleEdgeFader("OBB", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("OBF", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IBB", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IBF", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("LBBL", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("LFBR", p2v_speed, Tb, true));
+
+  //innerCube
+  planeToVolume.add(new SingleEdgeFader("IBB", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IBF", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("ITB", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("ITF", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("ILB", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, bTb, true));
+  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, bTb, true));
+
+  //outerCube
+  planeToVolume.add(new SingleEdgeFader("OBB", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OBF", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OTF", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, bPb, true));
+  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, bPb, true));
+
+  //innerCube-off
+  planeToVolume.add(new SingleEdgeFader("IBB", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IBF", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IBL", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("ITB", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("ITR", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("ITF", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IRB", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("ILB", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, Tb, true));
+  planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, Tb, true));
+
+  //outerCube-off
+  planeToVolume.add(new SingleEdgeFader("OBB", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OBR", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OBF", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OTF", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OTL", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("ORF", p2v_speed, Pb, true));
+  planeToVolume.add(new SingleEdgeFader("OLF", p2v_speed, Pb, true));
+
+  /*
+  //link-1
+   planeToVolume.add(new SingleEdgeFader("IBR", p2v_speed, bPb, true));
+   planeToVolume.add(new SingleEdgeFader("IBB", p2v_speed, bPb, true));
+   planeToVolume.add(new SingleEdgeFader("LBBR", p2v_speed, bPb, true));
+   planeToVolume.add(new SingleEdgeFader("OBB", p2v_speed, bPb, true));
+   planeToVolume.add(new SingleEdgeFader("OLB", p2v_speed, bPb, true)); 
+   planeToVolume.add(new SingleEdgeFader("OTR", p2v_speed, bPb, true));
+   planeToVolume.add(new SingleEdgeFader("LFTR", p2v_speed, bPb, true));
+   planeToVolume.add(new SingleEdgeFader("IRF", p2v_speed, bPb, true));
+   
+   //link-2
+   planeToVolume.add(new SingleEdgeFader("ORB", p2v_speed, bTb, true));
+   planeToVolume.add(new SingleEdgeFader("OBL", p2v_speed, bTb, true));
+   planeToVolume.add(new SingleEdgeFader("LFBL", p2v_speed, bTb, true));
+   planeToVolume.add(new SingleEdgeFader("ILF", p2v_speed, bTb, true));
+   planeToVolume.add(new SingleEdgeFader("ITL", p2v_speed, bTb, true));
+   planeToVolume.add(new SingleEdgeFader("ITB", p2v_speed, bTb, true));
+   planeToVolume.add(new SingleEdgeFader("LBTL", p2v_speed, bTb, true));
+   planeToVolume.add(new SingleEdgeFader("OTB", p2v_speed, bTb, true));
+   */
 
   //setup 4d rotation
   fourDeeSquares = new ArrayList<EdgeFader>();
@@ -232,8 +349,29 @@ void setup()
   fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(8), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //LBBR
   fourDeeEdges.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(9), "fadeOff", color(0, 0, 100), fourD_speed, 4));  //LBBL
 
-  setupLedStrings();
 
+  //fadingPointTest
+  rotatingLight_bottom = new ArrayList<GradientLine>();
+
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(1), "fadingPoint", color(0, 0, 100), 0.02, 3)); //OBB
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(2), "fadingPoint", color(0, 0, 100), 0.02, 2)); //OBR
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(2), timeProjectorForm.Vertices.get(3), "fadingPoint", color(0, 0, 100), 0.02, 0)); //OBF
+  rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(3), timeProjectorForm.Vertices.get(0), "fadingPoint", color(0, 0, 100), 0.02, 5)); //OBL
+
+  rotatingLight_top = new ArrayList<GradientLine>();
+
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(4), timeProjectorForm.Vertices.get(5), "fadingPoint", color(0, 0, 100), 0.02, 3)); //OTB
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(3), timeProjectorForm.Vertices.get(6), "fadingPoint", color(0, 0, 100), 0.02, 2)); //OTR
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(6), timeProjectorForm.Vertices.get(7), "fadingPoint", color(0, 0, 100), 0.02, 0)); //OTF
+  rotatingLight_top.add(new GradientLine(timeProjectorForm.Vertices.get(7), timeProjectorForm.Vertices.get(4), "fadingPoint", color(0, 0, 100), 0.02, 5)); //OTL
+
+  rotatingLights = new ArrayList<ArrayList<GradientLine>>();
+
+  rotatingLights.add(rotatingLight_bottom);
+  rotatingLights.add(rotatingLight_top);
+
+
+  setupLedStrings();
   println("LED count: " + ledCount);
 }
 
@@ -261,6 +399,59 @@ void draw()
 
   switch(SCENE)
   {
+  case "RotatingLight":
+
+    switch(rotatingLight_pos)
+    {
+    case 0:
+      rotatingLight.get(0).Update();
+      if (rotatingLight.get(0).finished)
+        rotatingLight_pos++;
+      break;
+
+    case 1:
+      rotatingLight.get(0).Update();
+      rotatingLight.get(1).Update();
+      if (rotatingLight.get(1).finished)
+      {
+        rotatingLight.get(0).reset();
+        rotatingLight_pos++;
+      }
+      break;
+
+    case 2:
+      rotatingLight.get(1).Update();
+      rotatingLight.get(2).Update();
+      if (rotatingLight.get(2).finished)
+      {
+        rotatingLight.get(1).reset();
+        rotatingLight_pos++;
+      }
+      break;
+
+    case 3:
+      rotatingLight.get(2).Update();
+      rotatingLight.get(3).Update();
+      if (rotatingLight.get(3).finished)
+      {
+        rotatingLight.get(2).reset();
+        rotatingLight_pos++;
+      }
+      break;
+
+    case 4:
+      rotatingLight.get(3).Update();
+      rotatingLight.get(0).Update();
+      if (rotatingLight.get(0).finished)
+      {
+        rotatingLight.get(3).reset();
+        rotatingLight_pos=1;
+      }
+      break;
+    }
+
+    break;
+
   case "PlaneToVolume":
 
     if (p2v_scene == 0) //light up volume 1 & 2
@@ -303,7 +494,7 @@ void draw()
           p2v_pos = 48;
         }
       }
-    }  else if (p2v_scene == 3)
+    } else if (p2v_scene == 3) //turn on volume 3 & 4
     {
       for (int i=48; i<=p2v_pos; i++)
       {
@@ -318,9 +509,104 @@ void draw()
       if (p2v_pos == 72)
       {
         p2v_scene++;
+        p2v_timestamp = millis();
+      }
+    } else if (p2v_scene == 4) //hold for 5 seconds
+    {
+      for (int i=48; i<72; i++)
+      {
+        planeToVolume.get(i).Update();
+      }
+
+      if (millis() - p2v_timestamp >= 5000)
+      {
+        p2v_scene++;
+      }
+    } else if (p2v_scene == 5) //turn off volume 1 & 2
+    {
+      for (int i=72; i<96; i++)
+      {
+        planeToVolume.get(i).Update();
+
+        if (planeToVolume.get(95).finished == true)
+        {
+          p2v_scene++;
+          p2v_pos = 96;
+        }
+      }
+    } else if (p2v_scene == 6) //turn on small & big cube
+    {
+      for (int i=96; i<=p2v_pos; i++)
+      {
+        planeToVolume.get(i).Update();
+
+        if (planeToVolume.get(p2v_pos).finished == true && (p2v_pos+1) < planeToVolume.size())
+        {
+          println(planeToVolume.get(p2v_pos).edgeName);
+          p2v_pos++;
+        }
+      }
+      if (p2v_pos == 120)
+      {
+        p2v_scene++;
+        p2v_timestamp = millis();
+      }
+    } else if (p2v_scene == 7) //hold for 5 seconds
+    {
+      for (int i=96; i<120; i++)
+      {
+        planeToVolume.get(i).Update();
+      }
+
+      if (millis() - p2v_timestamp >= 5000)
+      {
+        p2v_scene++;
+      }
+    } else if (p2v_scene == 8) //turn off small & big cube
+    {
+      for (int i=120; i<144; i++)
+      {
+        planeToVolume.get(i).Update();
+
+        if (planeToVolume.get(143).finished == true)
+        {
+          p2v_scene++;
+          p2v_pos = 144;
+        }
       }
     } 
 
+    /*
+    else if (p2v_scene == 9) //turn on link 1 & 2
+     {
+     for (int i=144; i<=p2v_pos; i++)
+     {
+     planeToVolume.get(i).Update();
+     
+     if (planeToVolume.get(p2v_pos).finished == true && (p2v_pos+1) < planeToVolume.size())
+     {
+     println(planeToVolume.get(p2v_pos).edgeName);
+     p2v_pos++;
+     }
+     }
+     if (p2v_pos == 160)
+     {
+     p2v_scene++;
+     p2v_timestamp = millis();
+     }
+     } else if (p2v_scene == 9) //hold for 5 seconds
+     {
+     for (int i=144; i<160; i++)
+     {
+     planeToVolume.get(i).Update();
+     }
+     
+     if (millis() - p2v_timestamp >= 5000)
+     {
+     p2v_scene++;
+     }
+     }
+     */
     break;
 
   case "4D_Rotation":
@@ -504,7 +790,7 @@ void draw()
 
       if (fourDeeEdges.get(28).finished == true)
       {
-        fourD_pos = 2;
+        fourD_pos = 2; 
         fourDeeSquares.get(0).next();
         for (int i=28; i<32; i++)
         {
@@ -684,6 +970,52 @@ public class GradientLine {
       }
 
       if (boxFadePos.get(boxFadePos.size()-1) >= 1)
+      {
+        finished = true;
+      }
+
+      break;
+
+    case "fadingPoint":
+      pos += speed;
+
+      for (int i=0; i<lineBoxes.size(); i++)
+      {
+        tesseractPerspectives[perspective].setupPerspective();
+
+        //if pos has passed the point in which this box's index should turn on
+        if (pos/3 >= ((float)1/lineBoxes.size() * i))
+        {
+          boolean drawBox = false;
+
+          boxFadePos.set(i, boxFadePos.get(i) + speed);
+
+          if (boxFadePos.get(i) <= 1)
+          {
+            fill(color(hue(lineColor), saturation(lineColor), boxFadePos.get(i)*100));
+            drawBox = true;
+          } else if (boxFadePos.get(i) > 1 && boxFadePos.get(i) <= 2)
+          {          
+            fill(color(hue(lineColor), saturation(lineColor), 100-(boxFadePos.get(i)*100)%100));
+            drawBox = true;
+          }
+
+          if (drawBox)
+          {
+            pushMatrix();
+
+            translate(lineBoxes.get(i).x, lineBoxes.get(i).y, lineBoxes.get(i).z);
+            noStroke();
+            box(2);
+
+            popMatrix();
+          }
+        }
+
+        tesseractPerspectives[perspective].resetPerspective();
+      }
+
+      if (boxFadePos.get(boxFadePos.size()-1) >= 0.25)
       {
         finished = true;
       }
@@ -1053,37 +1385,6 @@ void setupTesseractFaces()
 }
 
 
-void cyclingSquare(int speed)
-{
-  stroke(0);
-  fill(255, 0, 0);
-  rect(squareX, squareY, faceWidth, faceHeight);
-
-  if (frameCount%speed == 0)
-  {
-    squareX += faceWidth;
-    if (squareX >= width)
-    {
-      squareX = 0;
-      squareY += faceHeight;
-
-      if (squareY >= height)
-      {
-        squareY = 0;
-      }
-    }
-  }
-}
-
-void drawFaces()
-{
-  stroke(255);
-
-  line(width/3, 0, width/3, height);
-  line(width-width/3, 0, width-width/3, height);
-  line(0, height/2, width, height/2);
-}
-
 //-------------------//
 
 void setupLedStrings() ////TODO: Fix front and back squares
@@ -1140,144 +1441,10 @@ void setupLedStrings() ////TODO: Fix front and back squares
   ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 19, 3);  //ORB
   ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 19, 3);  //OBB
   ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(9).coordinate, 17, 1);   //LBBL
-
-
-  /*
-  //old-unordered
-   
-   //perspective 0
-   
-   //inside front square
-   ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 14, 0); //ITF
-   ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 14, 0); //IRF
-   ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 14, 0); //IBF
-   ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 12, 0); //ILF -2
-   
-   //lateral front connections
-   ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 10, 0);  //LFTL
-   ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 14, 0);  //LFTR
-   ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 11, 0);  //LFBR
-   ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 11, 0);  //LFBL
-   
-   //outside front square
-   
-   ledStrip(timeProjectorForm.Vertices.get(6).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 33, 0);   //ORF
-   ledStrip(timeProjectorForm.Vertices.get(2).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 30, 0);   //OBF
-   ledStrip(timeProjectorForm.Vertices.get(3).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 30, 0);   //OLF
-   ledStrip(timeProjectorForm.Vertices.get(6).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 29, 0);   //OTF
-   
-   
-   //perspective 1
-   
-   ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 15, 1);   //LBBR -1
-   ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 17, 1);   //LBBL
-   ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 12, 1);  //IBL
-   ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 12, 1);  //IBR
-   
-   //outside back to front connections
-   ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 21, 2);  //OTL
-   ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 23, 5);  //OTR
-   ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 23, 2);  //OBL
-   ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 22, 5);  //OBR -1
-   
-   
-   //perspective 3
-   
-   //outside back square
-   ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 19, 3);  //OTB
-   ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 19, 3);  //OLB
-   ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 19, 3);  //OBB
-   ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 19, 3);  //ORB
-   
-   
-   //inside back square
-   ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(13).coordinate, 8, 3); //ITB
-   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(9).coordinate, 8, 3);  //ILB
-   ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(8).coordinate, 8, 3);   //IBB
-   ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(12).coordinate, 8, 3);  //IRB
-   
-   //perspective 4
-   //inside back square top -> lateral
-   ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 16, 4); //LBTR
-   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 15, 4); //LBTL -2
-   ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 10, 4);//ITL -2
-   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 11, 4);//ITR -1
-   */
-
-  /*
-  ////older, wrong pixel count
-   //perspective 0
-   
-   //inside front square
-   ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 27, 0);
-   ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 28, 0);
-   ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 27, 0);
-   ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 27, 0);
-   
-   //lateral front connections
-   ledStrip(timeProjectorForm.Vertices.get(15).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 22, 0);
-   ledStrip(timeProjectorForm.Vertices.get(14).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 27, 0);
-   ledStrip(timeProjectorForm.Vertices.get(10).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 23, 0);
-   ledStrip(timeProjectorForm.Vertices.get(11).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 23, 0);
-   
-   //outside front square
-   ledStrip(timeProjectorForm.Vertices.get(7).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 54, 0);
-   ledStrip(timeProjectorForm.Vertices.get(6).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 60, 0);
-   ledStrip(timeProjectorForm.Vertices.get(2).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 54, 0);
-   ledStrip(timeProjectorForm.Vertices.get(3).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 54, 0);
-   
-   
-   //perspective 1
-   
-   ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 32, 1); //inside bottom back left -> outside bottom back left
-   ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 32, 1);
-   ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(11).coordinate, 24, 1); //inside bottom back left -> inside bottom front left
-   ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(10).coordinate, 24, 1);
-   
-   
-   //perspective 3
-   
-   //outside back square
-   ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 36, 3);
-   ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(1).coordinate, 36, 3);
-   ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(0).coordinate, 36, 3);
-   ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 36, 3);
-   
-   //outside back to front connections
-   ledStrip(timeProjectorForm.Vertices.get(4).coordinate, timeProjectorForm.Vertices.get(7).coordinate, 42, 3);
-   ledStrip(timeProjectorForm.Vertices.get(5).coordinate, timeProjectorForm.Vertices.get(6).coordinate, 43, 3);
-   ledStrip(timeProjectorForm.Vertices.get(0).coordinate, timeProjectorForm.Vertices.get(3).coordinate, 42, 3);
-   ledStrip(timeProjectorForm.Vertices.get(1).coordinate, timeProjectorForm.Vertices.get(2).coordinate, 42, 3);
-   
-   //inside back square
-   ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(13).coordinate, 18, 3);
-   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(9).coordinate, 18, 3);
-   ledStrip(timeProjectorForm.Vertices.get(9).coordinate, timeProjectorForm.Vertices.get(8).coordinate, 18, 3);
-   ledStrip(timeProjectorForm.Vertices.get(8).coordinate, timeProjectorForm.Vertices.get(12).coordinate, 18, 3);
-   
-   //perspective 4
-   //inside back square top -> lateral
-   ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(4).coordinate, 32, 4); //inside top back left -> outside top back left
-   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(5).coordinate, 32, 4);
-   ledStrip(timeProjectorForm.Vertices.get(12).coordinate, timeProjectorForm.Vertices.get(15).coordinate, 24, 4); //inside top back left -> inside top front left
-   ledStrip(timeProjectorForm.Vertices.get(13).coordinate, timeProjectorForm.Vertices.get(14).coordinate, 24, 4);
-   */
 }
 
 void ledStrip(PVector start, PVector end, int numLeds, int perspectiveNum)
 {
-  /*
-  stroke(255,0,0);
-   strokeWeight(1);
-   //debug test to see which edges have been drawn
-   for (int i=0; i<tesseractPerspectives.length; i++)
-   {
-   tesseractPerspectives[i].setupPerspective();
-   line(start.x, start.y, start.z, end.x, end.y, end.z);
-   tesseractPerspectives[i].resetPerspective();
-   }
-   */
-
   float stepValue = (float)(0.9 /  numLeds);
   PVector pixelVector;
 
