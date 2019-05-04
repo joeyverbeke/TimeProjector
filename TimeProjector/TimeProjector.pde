@@ -1,10 +1,10 @@
 //DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run //<>// //<>// //<>//
 
 boolean controlCameraWithMouse = false;
-String SCENE = "RotatingLight_OutsideOnly";
-//4D_Rotation, PlaneToVolume, RotatingLight, RotatingLight_OutsideOnly
+String SCENE = "4D_Rotation";
+//4D_Rotation, PlaneToVolume, RotatingLight
 
-boolean increaseFourDeeSpeed = false;
+boolean increaseFourDeeSpeed = true;
 
 OPC opc;
 TesseractPerspective[] tesseractPerspectives;
@@ -33,18 +33,21 @@ ArrayList<EdgeFader> fourDeeSquares;
 int fourD_pos = 0;
 ArrayList<GradientLine> fourDeeEdges;
 float fourD_speed;
+float fourD_sat = 0.0;
+int fourD_counter = 0;
 ////
 
-////movingPointTest
+////rotatingLight
 ArrayList<GradientLine> rotatingLight_bottom;
 ArrayList<GradientLine> rotatingLight_top;
 ArrayList<GradientLine> rotatingLight_innerBottom;
 ArrayList<GradientLine> rotatingLight_innerTop;
-
-
 ArrayList<ArrayList<GradientLine>> rotatingLights;
-
 int rotatingLight_pos = 0;
+int rotatingLight_counter = 0;
+int rotatingLight_numRotators = 2;
+int rotatingLight_checkIndex = 1;
+boolean rotatingLight_transition = false;
 
 void setup()
 {
@@ -347,6 +350,7 @@ void setup()
   //fadingPointTest
   float rotatingLight_speed = 0.01;
 
+
   rotatingLight_bottom = new ArrayList<GradientLine>();
   rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(0), timeProjectorForm.Vertices.get(1), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 3)); //OBB
   rotatingLight_bottom.add(new GradientLine(timeProjectorForm.Vertices.get(1), timeProjectorForm.Vertices.get(2), "fadingPoint", color(0, 0, 100), rotatingLight_speed, 50, 2)); //OBR
@@ -404,108 +408,44 @@ void draw()
 
   switch(SCENE)
   {
-    
-  case "RotatingLight_OutsideOnly":
 
-    switch(rotatingLight_pos)
-    {
-    case 0:
-      for (int i=0; i<rotatingLights.size()-2; i++)
-      {
-        rotatingLights.get(i).get(0).Update();
-
-        if (rotatingLights.get(rotatingLights.size()-1).get(0).finished)
-          rotatingLight_pos++;
-      }  
-      break;
-
-    case 1:
-      for (int i=0; i<rotatingLights.size()-2; i++)
-      {
-        rotatingLights.get(i).get(0).Update();
-        rotatingLights.get(i).get(1).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(1).finished)
-        {
-          for (int j=0; j<rotatingLights.size(); j++)
-          {
-            rotatingLights.get(j).get(0).reset();
-          }
-          rotatingLight_pos++;
-        }
-      }
-      break;
-
-    case 2:
-      for (int i=0; i<rotatingLights.size()-2; i++)
-      {
-        rotatingLights.get(i).get(1).Update();
-        rotatingLights.get(i).get(2).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(2).finished)
-        {
-          for (int j=0; j<rotatingLights.size(); j++)
-          {
-            rotatingLights.get(j).get(1).reset();
-          }
-          rotatingLight_pos++;
-        }
-      }
-      break;
-
-    case 3:
-      for (int i=0; i<rotatingLights.size()-2; i++)
-      {
-        rotatingLights.get(i).get(2).Update();
-        rotatingLights.get(i).get(3).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(3).finished)
-        {
-          for (int j=0; j<rotatingLights.size(); j++)
-          {
-            rotatingLights.get(j).get(2).reset();
-          }
-          rotatingLight_pos++;
-        }
-      }
-      break;
-
-    case 4:
-      for (int i=0; i<rotatingLights.size()-2; i++)
-      {
-        rotatingLights.get(i).get(3).Update();
-        rotatingLights.get(i).get(0).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(0).finished)
-        {
-          for (int j=0; j<rotatingLights.size(); j++)
-          {
-            rotatingLights.get(j).get(3).reset();
-          }
-          rotatingLight_pos=1;
-        }
-      }
-      break;
-    }
-
-    break;  
-    
   case "RotatingLight":
 
     switch(rotatingLight_pos)
     {
     case 0:
-      for (int i=0; i<rotatingLights.size(); i++)
-      {
+      for (int i=0; i<rotatingLight_numRotators; i++)
+      { 
+        if (rotatingLight_transition)
+        {
+          if (i<2)
+          {
+            rotatingLights.get(i).get(3).Update();
+          }
+        }
+
         rotatingLights.get(i).get(0).Update();
 
-        if (rotatingLights.get(rotatingLights.size()-1).get(0).finished)
+        if (rotatingLights.get(rotatingLight_checkIndex).get(0).finished)
+        {          
+          for (int j=0; j<2; j++)
+          {
+            rotatingLights.get(j).get(3).reset();
+          }
+
           rotatingLight_pos++;
+          rotatingLight_transition = false;
+        }
       }  
       break;
 
     case 1:
-      for (int i=0; i<rotatingLights.size(); i++)
+      for (int i=0; i<rotatingLight_numRotators; i++)
       {
         rotatingLights.get(i).get(0).Update();
         rotatingLights.get(i).get(1).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(1).finished)
+
+        if (rotatingLights.get(rotatingLight_checkIndex).get(1).finished)
         {
           for (int j=0; j<rotatingLights.size(); j++)
           {
@@ -517,11 +457,12 @@ void draw()
       break;
 
     case 2:
-      for (int i=0; i<rotatingLights.size(); i++)
+      for (int i=0; i<rotatingLight_numRotators; i++)
       {
         rotatingLights.get(i).get(1).Update();
         rotatingLights.get(i).get(2).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(2).finished)
+
+        if (rotatingLights.get(rotatingLight_checkIndex).get(2).finished)
         {
           for (int j=0; j<rotatingLights.size(); j++)
           {
@@ -533,27 +474,41 @@ void draw()
       break;
 
     case 3:
-      for (int i=0; i<rotatingLights.size(); i++)
+      for (int i=0; i<rotatingLight_numRotators; i++)
       {
         rotatingLights.get(i).get(2).Update();
         rotatingLights.get(i).get(3).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(3).finished)
+
+        if (rotatingLights.get(rotatingLight_checkIndex).get(3).finished)
         {
           for (int j=0; j<rotatingLights.size(); j++)
           {
             rotatingLights.get(j).get(2).reset();
           }
           rotatingLight_pos++;
+          rotatingLight_counter++;
+
+          if (rotatingLight_counter >= 1 && rotatingLight_numRotators == 2)
+          {
+            rotatingLight_transition = true;
+            rotatingLight_pos = 0;
+            rotatingLight_numRotators = 4;
+            rotatingLight_checkIndex = 3;
+          } else if (rotatingLight_counter >= 3 && rotatingLight_numRotators == 4)
+          {
+            rotatingLight_pos = 99;
+          }
         }
       }
       break;
 
     case 4:
-      for (int i=0; i<rotatingLights.size(); i++)
+      for (int i=0; i<rotatingLight_numRotators; i++)
       {
         rotatingLights.get(i).get(3).Update();
         rotatingLights.get(i).get(0).Update();
-        if (rotatingLights.get(rotatingLights.size()-1).get(0).finished)
+
+        if (rotatingLights.get(rotatingLight_checkIndex).get(0).finished)
         {
           for (int j=0; j<rotatingLights.size(); j++)
           {
@@ -563,9 +518,34 @@ void draw()
         }
       }
       break;
-    }
 
-    break;
+    case 99:
+      for (int i=0; i<rotatingLight_numRotators; i++)
+      {
+        rotatingLights.get(i).get(3).Update();
+
+        if (rotatingLights.get(rotatingLight_checkIndex).get(3).boxFadePos.get(  rotatingLights.get(rotatingLight_checkIndex).get(3).boxFadePos.size() - 1 ) >= 2.2)
+        {
+          rotatingLight_pos = 0;
+          rotatingLight_numRotators = 2;
+          rotatingLight_checkIndex = 1;
+          rotatingLight_counter = 0;
+
+          for (int j=0; j < rotatingLights.size()-1; j++)
+          {
+            for (int k=0; k < rotatingLights.get(j).size()-1; k++)
+            {
+              rotatingLights.get(j).get(k).reset();
+            }
+          }
+
+          SCENE = "PlaneToVolume";
+        }
+      }
+      break;
+    }
+    break;  
+
 
   case "PlaneToVolume":
 
@@ -686,42 +666,17 @@ void draw()
         if (planeToVolume.get(143).finished == true)
         {
           p2v_scene++;
-          p2v_pos = 144;
+          p2v_pos = 0;
+
+          for (int j=0; j<planeToVolume.size(); j++)
+          {
+            planeToVolume.get(j).reset();
+          }
+
+          SCENE = "4D_Rotation";
         }
       }
     } 
-
-    /*
-    else if (p2v_scene == 9) //turn on link 1 & 2
-     {
-     for (int i=144; i<=p2v_pos; i++)
-     {
-     planeToVolume.get(i).Update();
-     
-     if (planeToVolume.get(p2v_pos).finished == true && (p2v_pos+1) < planeToVolume.size())
-     {
-     println(planeToVolume.get(p2v_pos).edgeName);
-     p2v_pos++;
-     }
-     }
-     if (p2v_pos == 160)
-     {
-     p2v_scene++;
-     p2v_timestamp = millis();
-     }
-     } else if (p2v_scene == 9) //hold for 5 seconds
-     {
-     for (int i=144; i<160; i++)
-     {
-     planeToVolume.get(i).Update();
-     }
-     
-     if (millis() - p2v_timestamp >= 5000)
-     {
-     p2v_scene++;
-     }
-     }
-     */
     break;
 
   case "4D_Rotation":
@@ -855,10 +810,23 @@ void draw()
           fourDeeEdges.get(i).reset();
         }
 
-        //increase ze shpeeeeeed
+        //////////increase ze shpeeeeeed
         if (increaseFourDeeSpeed)
         {
-          fourD_speed += 0.01;
+          if (fourD_speed < 0.2)
+            fourD_speed += 0.005;
+
+          if (fourD_speed >= 0.1) 
+          {
+            fourD_sat += 5.0;
+          }
+        }
+
+        fourD_counter++;
+
+        if (fourD_counter >= 50)
+        {
+          fourD_pos = 99;
         }
 
         for (int i=0; i<fourDeeEdges.size(); i++)
@@ -913,6 +881,15 @@ void draw()
         }
       }
       break;
+
+    case 99:
+
+      left off here
+      
+      i think we should fade on every edge to full white
+      or maybe have a combination of colors
+
+      break;
     }
 
     break;
@@ -946,6 +923,7 @@ public class GradientLine {
 
   String mode;
   color lineColor;
+  color colorSaver;
 
   float lineSize;
   ArrayList<PVector> lineBoxes;
@@ -965,6 +943,7 @@ public class GradientLine {
     end=_end;
     mode=_mode;
     lineColor=_lineColor;
+    colorSaver=_lineColor;
     speed=_speed;
 
     lineSize = PVector.dist(start.coordinate, end.coordinate);
@@ -1003,6 +982,14 @@ public class GradientLine {
     }
   }
 
+  void increaseSaturation(float amount)
+  {
+    if (saturation(lineColor) < 100)
+    {
+      lineColor =  color(hue(lineColor), saturation(lineColor) + amount, brightness(lineColor));
+    }
+  }
+
   void setSpeed(float _speed)
   {
     speed = _speed;
@@ -1013,9 +1000,10 @@ public class GradientLine {
     for (int i=0; i < boxFadePos.size(); i++)
     {
       boxFadePos.set(i, 0.0);
-      finished = false;
-      pos = 0;
     }
+    finished = false;
+    pos = 0;
+    lineColor = colorSaver;
   }
 
   //there should always be more boxes than the length
@@ -1042,7 +1030,14 @@ public class GradientLine {
 
           translate(lineBoxes.get(i).x, lineBoxes.get(i).y, lineBoxes.get(i).z);
           noStroke();
-          fill(color(hue(lineColor), saturation(lineColor), boxFadePos.get(i)*100));
+
+          if (fourD_sat ==0)
+          {
+            fill(color(hue(lineColor), saturation(lineColor), boxFadePos.get(i)*100));
+          } else
+          {
+            fill(color(hue(lineColor), fourD_sat, boxFadePos.get(i)*100));
+          }
           box(2);
 
           popMatrix();
@@ -1076,7 +1071,15 @@ public class GradientLine {
 
         translate(lineBoxes.get(i).x, lineBoxes.get(i).y, lineBoxes.get(i).z);
         noStroke();
-        fill(color(hue(lineColor), saturation(lineColor), 100 - (boxFadePos.get(i)*100) ));
+
+        if (fourD_sat == 0)
+        {
+          fill(color(hue(lineColor), saturation(lineColor), 100 - (boxFadePos.get(i)*100) ));
+        } else
+        {
+          fill(color(hue(lineColor), fourD_sat, 100 - (boxFadePos.get(i)*100) ));
+        }
+
         box(2);
 
         popMatrix();
@@ -1178,6 +1181,12 @@ public class SingleEdgeFader {
     fadeSpeed = _speed;
   }
 
+  void reset()
+  {
+    pos = 0;
+    fadePos = 0.0;
+    finished = false;
+  }
 
   void next()
   {
@@ -1261,6 +1270,8 @@ public class EdgeFader {
   float fadeSpeed;
   color colors[];
 
+  color colorsHolder[];
+
   int pos;
   boolean toFromBlack = false;
   boolean stayOn;
@@ -1274,6 +1285,8 @@ public class EdgeFader {
     fadeSpeed = _fadeSpeed;
     colors = new color[_colors.length];
     colors = _colors.clone();
+    colorsHolder = new color[_colors.length];
+    colorsHolder = _colors.clone();
 
     fadePos = 0;
     pos = 0;
@@ -1287,10 +1300,22 @@ public class EdgeFader {
     fadeSpeed = _fadeSpeed;
     colors = new color[_colors.length];
     colors = _colors.clone();
+    colorsHolder = new color[_colors.length];
+    colorsHolder = _colors.clone();
 
     fadePos = 0;
     pos = 0;
     stayOn = _stayOn;
+  }
+
+  void increaseSaturation(int amount)
+  {
+    if (saturation(colors[1]) < 1)
+    {
+      color c = colors[1];
+      c = color(hue(c), saturation(c) + amount, brightness(c));
+      colors[1] = c;
+    }
   }
 
   void setSpeed(float _speed)
@@ -1310,6 +1335,7 @@ public class EdgeFader {
     pos = 0;
     fadePos = 0.0;
     finished = false;
+    colors = colorsHolder.clone();
   }
 
   void Update()
@@ -1339,14 +1365,27 @@ public class EdgeFader {
         {
           brightnessPos = 5;
         }
-        c = color(hue(colors[(pos+1) % (colors.length)]), saturation(colors[(pos+1) % (colors.length)]), brightnessPos);
+
+        if (fourD_sat ==0)
+        {
+          c = color(hue(colors[(pos+1) % (colors.length)]), saturation(colors[(pos+1) % (colors.length)]), brightnessPos);
+        } else
+        {
+          c = color(hue(colors[(pos+1) % (colors.length)]), fourD_sat, brightnessPos);
+        }
       } else
       {
         if (brightnessPos >= 95)
         {
           brightnessPos = 100;
         }
-        c = color(hue(colors[(pos) % (colors.length)]), saturation(colors[(pos) % (colors.length)]), 100-brightnessPos);
+        if (fourD_sat ==0)
+        {
+          c = color(hue(colors[(pos) % (colors.length)]), saturation(colors[(pos) % (colors.length)]), 100-brightnessPos);
+        } else
+        {
+          c = color(hue(colors[(pos) % (colors.length)]), fourD_sat, 100-brightnessPos);
+        }
       }
     }
 
