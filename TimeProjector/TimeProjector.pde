@@ -1,4 +1,4 @@
-//DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run //<>// //<>// //<>//
+//DISPLAY=:0 /usr/local/bin/processing-java --sketch=/home/pi/Documents/TimeProjector/TimeProjector --run //<>//
 
 boolean controlCameraWithMouse = false;
 String SCENE = "RotatingLight";
@@ -94,7 +94,7 @@ void setup()
   color[] Pb = {color(0, 100, 100), color(0, 0, 0)};
   color[] Tb = {color(340, 100, 100), color(0, 0, 0)};
 
-  float p2v_speed = 0.01;
+  float p2v_speed = 0.0125;
 
 
   //1
@@ -291,7 +291,7 @@ void setup()
   fourDeeSquares = new ArrayList<EdgeFader>();
   //color[] bwb = {color(0, 0, 0), color(0, 0, 100), color(0, 0, 0)};
 
-  fourD_speed = 0.01;
+  fourD_speed = 0.02;
 
   String[] innerBack = {"ITB", "ILB", "IBB", "IRB"}; 
   String[] innerFront = {"ITF", "ILF", "IBF", "IRF"}; 
@@ -350,7 +350,7 @@ void setup()
 
   fourDeeFinale = new ArrayList<EdgeFader>();
 
-  String[] alreadyOn = {"OTB", "OLB", "OBB", "ORB", "LBTR", "LBTL", "LBBL", "LBBL"};
+  String[] alreadyOn = {"OTB", "OLB", "OBB", "ORB", "LBTR", "LBTL", "LBBL", "LBBR"};
   String[] notOnYet = {"ITB", "ITL", "ITF", "ITR", "IBB", "IBL", "IBF", "IBR", "IRB", "ILB", "IRF", "ILF", "OTL", "OTR", "OBR", "OBL", "OLF", "ORF", "LFTL", "LFTR", "LFBR", "LFBL", "OTF", "OBF"};
 
   //WB BWB
@@ -362,7 +362,7 @@ void setup()
 
 
   //rotatingLight
-  float rotatingLight_speed = 0.01;
+  float rotatingLight_speed = 0.03;
 
 
   rotatingLight_bottom = new ArrayList<GradientLine>();
@@ -825,10 +825,10 @@ void draw()
         }
 
         //////////increase ze shpeeeeeed
-        if (increaseFourDeeSpeed && fourD_counter >= 5)
+        if (increaseFourDeeSpeed && fourD_counter >= 2)
         {
-          if (fourD_speed < 0.2)
-            fourD_speed += 0.005;
+          if (fourD_speed < 0.3)
+            fourD_speed += 0.0075;
 
           if (fourD_speed >= 0.1) 
           {
@@ -842,6 +842,7 @@ void draw()
         {
           fourD_pos = 99;
           fourDeeFinale.get(0).setSpeed(fourD_speed);
+          fourD_sat = 0.0;
         }
 
         for (int i=0; i<fourDeeEdges.size(); i++)
@@ -950,19 +951,22 @@ void draw()
 
         fourD_pos = 0;
         fourD_counter = 0;
-        fourD_speed = 0.01;
+        fourD_speed = 0.02;
 
         for (int i=0; i < fourDeeFinale.size(); i++)
         {
           fourDeeFinale.get(i).reset();
+          fourDeeFinale.get(i).setSpeed(fourD_speed);
         }
         for (int i=0; i < fourDeeEdges.size(); i++)
         {
           fourDeeEdges.get(i).reset();
+          fourDeeEdges.get(i).setSpeed(fourD_speed);
         }
         for (int i=0; i < fourDeeSquares.size(); i++)
         {
           fourDeeSquares.get(i).reset();
+          fourDeeSquares.get(i).setSpeed(fourD_speed);
         }
       }
 
@@ -974,14 +978,14 @@ void draw()
   }
 
   //mouseTest
-
+  /*
   noStroke();
-  pushMatrix();
-  fill(0, 100, 100);
-  translate(mouseX, mouseY, 500);
-  box(10, 10, 1000);
-  popMatrix();
-
+   pushMatrix();
+   fill(0, 100, 100);
+   translate(mouseX, mouseY, 500);
+   box(10, 10, 1000);
+   popMatrix();
+   */
   if (ghostFade)
   {
     pushMatrix();
